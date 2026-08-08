@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>The Jolly Washer | Quick Links</title>
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for premium typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#0F52BA', // Sapphire Blue
+                            light: '#4B9CD3',
+                            dark: '#0A367D',
+                            accent: '#F9A826', // Warning/Accent Yellow/Orange
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Belt-and-suspenders against horizontal scroll/swipe on mobile:
+           body's overflow-x: hidden alone doesn't stop it on every mobile
+           browser when a fixed/transformed element (e.g. the scaled
+           .bg-truck-wrap background) pushes past the edge — clipping on
+           html too closes that gap without affecting which element ends
+           up as the actual scrolling container (that's decided by the
+           overflow-y setup below, left untouched). */
+        html {
+            overflow-x: hidden;
+        }
+        body {
+            /* Fallback background if particles fail or take a moment */
+            background: linear-gradient(135deg, #000000 0%, #060a12 100%);
+            color: #e6f1ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            /* Explicit, because overflow-x:hidden without this would make the
+               UA resolve overflow-y to "auto" (per spec, when only one axis
+               is "visible" it flips to "auto"), silently turning <body> into
+               its own scroll container. That breaks position:sticky below —
+               sticky descendants would stick to body's scrollport instead of
+               the real viewport, in the exact "sticky just doesn't work" way. */
+            overflow-y: visible;
+            position: relative;
+        }
+        /* Now that viewport-fit=cover lets the page draw under the iPhone
+           notch/status bar (needed for a dark status bar instead of iOS's
+           white fallback), push real content back down below it so the
+           logo/header isn't tucked under the notch. */
+        header {
+            padding-top: env(safe-area-inset-top);
+        }
+
+        /* Glassmorphism utility for buttons and cards */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Premium Link Button Styling */
+        .link-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Initial state for slide-up animation stagger */
+            opacity: 0; 
+        }
+
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: all 0.6s ease;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(15, 82, 186, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .link-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Pré-loading premium "vidro embaçado + rodo": a tela real do site já
+           está montada por baixo (main deixa de ficar display:none quase
+           imediatamente); por cima existe uma camada de "vidro" embaçado
+           com sujeira/gotas que um rodo varre da esquerda para a direita.
+           Um único valor, --wipe-x (número puro, equivalente a vw/%), é
+           atualizado via rAF em JS e pilota TANTO a posição do rodo quanto
+           a mask-image da camada de vidro — isso garante que a área limpa
+           acompanhe exatamente a lâmina, sem dessincronizar. */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            overflow: hidden;
+            /* Transparente: quem cobre a tela é a .fog-layer (translúcida,
+               com blur) por baixo dela está sempre o conteúdo real, então
+               remover/mascarar a fog-layer é o que efetivamente "revela" o
+               site — um fundo sólido aqui bloquearia esse efeito. */
+            background: transparent;
+            --wipe-x: -6; /* rodo começa fora da tela, à esquerda */
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Camada de vidro embaçado: blur do que está por baixo + tingimento
+           + textura de "respingo"/grão + manchas, tudo recortado por uma
+           mask que segue o rodo. */
+        .fog-layer {
+            position: absolute;
+            inset: -2px; /* evita frestas de 1px nas bordas durante o wipe */
+            backdrop-filter: blur(18px) saturate(115%);
+            -webkit-backdrop-filter: blur(18px) saturate(115%);
+            background:
+                /* manchas mais "limpas" (dedo passou ali, fica menos
+                   embaçado, deixando entrever um pouco mais do fundo) */
+                radial-gradient(ellipse 24% 13% at 20% 30%, rgba(255,255,255,0.38), transparent 72%),
+                radial-gradient(ellipse 19% 27% at 80% 20%, rgba(255,255,255,0.30), transparent 74%),
+                radial-gradient(ellipse 30% 16% at 60% 70%, rgba(255,255,255,0.26), transparent 72%),
+                radial-gradient(ellipse 16% 22% at 14% 80%, rgba(255,255,255,0.34), transparent 72%),
+                radial-gradient(ellipse 36% 20% at 90% 55%, rgba(255,255,255,0.22), transparent 74%),
+                /* grão/condensação fina, para textura de vidro embaçado */
+                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMjAnIGhlaWdodD0nMjIwJz48ZmlsdGVyIGlkPSdmJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMicgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjxmZUNvbG9yTWF0cml4IHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDEgIDAgMCAwIDAgMSAgMCAwIDAgMCAxICAwIDAgMCAwLjE0IDAnLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWx0ZXI9J3VybCgjZiknLz48L3N2Zz4='),
+                /* base do vidro embaçado: névoa clara e translúcida (não
+                   escura) — como respiração num vidro frio, com leve
+                   tingimento azul da marca */
+                linear-gradient(160deg, rgba(220,235,250,0.55) 0%, rgba(196,214,232,0.62) 55%, rgba(170,195,220,0.68) 100%);
+            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, no-repeat;
+            background-size: cover, cover, cover, cover, cover, 220px 220px, cover;
+            -webkit-mask-image: linear-gradient(90deg,
+                transparent 0%,
+                transparent calc(var(--wipe-x) * 1% - 2.5%),
+                rgba(0,0,0,0.55) calc(var(--wipe-x) * 1% - 0.6%),
+                #000 calc(var(--wipe-x) * 1%),
+                #000 100%);
+            mask-image: linear-gradient(90deg,
+                transparent 0%,
+                transparent calc(var(--wipe-x) * 1% - 2.5%),
+                rgba(0,0,0,0.55) calc(var(--wipe-x) * 1% - 0.6%),
+                #000 calc(var(--wipe-x) * 1%),
+                #000 100%);
+        }
+
+        /* Gotas escorrendo: pequenos pingos posicionados ao longo da tela;
+           cada um "cai" quando o rodo passa perto da sua posição X (o atraso
+           de cada gota é calculado em JS a partir do mesmo timeline do
+           wipe, então elas escorrem logo depois de serem "descobertas"). */
+        .fog-droplet {
+            position: absolute;
+            top: 0;
+            width: 7px;
+            height: 7px;
+            border-radius: 50% 50% 60% 60%;
+            background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95), rgba(200,225,245,0.55) 45%, rgba(140,180,215,0.25) 75%, transparent 100%);
+            box-shadow: 0 0 4px rgba(255,255,255,0.35);
+            opacity: 0;
+            transform-origin: top center;
+            animation-name: droplet-drip;
+            animation-timing-function: cubic-bezier(0.4, 0.1, 0.6, 1);
+            animation-fill-mode: backwards;
+        }
+        @keyframes droplet-drip {
+            0% { opacity: 0; transform: translateY(-6px) scaleY(1); }
+            12% { opacity: 1; transform: translateY(0) scaleY(1); }
+            100% { opacity: 0; transform: translateY(120px) scaleY(2.6); }
+        }
+
+        /* O rodo: lâmina de borracha vertical + cabo, com um brilho suave
+           logo atrás (no lado já limpo) marcando a passagem. Sua posição é
+           controlada pela MESMA variável --wipe-x usada na mask acima. */
+        .squeegee {
+            position: absolute;
+            top: -4%;
+            height: 108%;
+            width: 0;
+            left: 0;
+            transform: translateX(calc(var(--wipe-x) * 1vw));
+            z-index: 2;
+            pointer-events: none;
+        }
+        /* Todas as peças (brilho, lâmina, cabo) ficam centradas no mesmo
+           eixo X (o ponto de âncora de largura 0 do .squeegee), que é
+           exatamente a fronteira usada pela mask do vidro — assim o brilho
+           fica no lado já limpo, e a lâmina fica bem em cima da linha de
+           corte. */
+        .squeegee-glow {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 90px;
+            background: linear-gradient(90deg, rgba(180, 220, 255, 0) 0%, rgba(180, 220, 255, 0.4) 100%);
+            mix-blend-mode: screen;
+            filter: blur(2px);
+        }
+        .squeegee-blade {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -3px;
+            width: 6px;
+            background: linear-gradient(90deg, #cfd8e3 0%, #8b96a3 35%, #262b33 60%, #0c0e12 100%);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.45), 0 0 14px rgba(255,255,255,0.25);
+            border-radius: 2px;
+        }
+        .squeegee-handle {
+            position: absolute;
+            top: 44%;
+            left: -6px;
+            width: 12px;
+            height: 84px;
+            transform: translateY(-50%);
+            border-radius: 6px;
+            background: linear-gradient(90deg, #F9A826, #c97e0f);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+        }
+        .squeegee-handle::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: -22px;
+            width: 34px;
+            height: 14px;
+            transform: translateX(-50%);
+            border-radius: 7px;
+            background: linear-gradient(180deg, #ffcf70, #F9A826);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        }
+
+        /* Conteúdo central: logo + texto, sempre acima do vidro/rodo */
+        .preloader-center {
+            position: relative;
+            z-index: 3;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+        /* Halo escuro atrás da logo/texto: como o vidro embaçado agora é
+           claro (translúcido), texto e logo claros precisam de contraste
+           próprio, que não dependa do que estiver por baixo. */
+        .preloader-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 320px;
+            height: 320px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,10,18,0.55) 0%, rgba(6,10,18,0.32) 45%, transparent 72%);
+            z-index: -1;
+        }
+        .preloader-inner {
+            position: relative;
+            width: 132px;
+            height: 132px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: preloader-intro 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .preloader-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid rgba(249, 168, 38, 0.15);
+            border-top-color: #F9A826;
+            border-right-color: #F9A826;
+            box-shadow: 0 0 20px rgba(249, 168, 38, 0.4);
+            animation: preloader-spin 1.4s linear infinite;
+        }
+        .preloader-logo {
+            width: 74px;
+            height: 74px;
+            object-fit: contain;
+            border-radius: 50%;
+            padding: 10px;
+            background: radial-gradient(circle, rgba(240, 245, 255, 0.9) 0%, rgba(240, 245, 255, 0.5) 60%, transparent 90%);
+            animation: preloader-pulse 1.8s ease-in-out infinite;
+        }
+        .preloader-text {
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+            font-weight: 300;
+            color: transparent;
+            background: linear-gradient(90deg, #9fb4cc 0%, #ffffff 50%, #9fb4cc 100%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: preloader-shimmer 2.2s linear infinite, preloader-fade-in 0.8s ease 0.15s both;
+        }
+        @keyframes preloader-intro {
+            0% { opacity: 0; transform: scale(0.75); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes preloader-fade-in {
+            0% { opacity: 0; transform: translateY(6px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes preloader-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: -220% 50%; }
+        }
+        @keyframes preloader-spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes preloader-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .preloader-ring { animation: none; }
+            .preloader-logo { animation: none; }
+            .preloader-text { animation: preloader-fade-in 0.4s ease both; }
+        }
+
+        /* Enquanto carrega, só o pré-loading e o fundo do site ficam visíveis;
+           o conteúdo principal fica totalmente oculto até o loading terminar */
+        main.pre-hide {
+            display: none;
+        }
+        /* Garante que os elementos com delay fiquem ocultos (0% do keyframe)
+           durante o próprio atraso, evitando flash antes da cascata */
+        .animate-slide-up {
+            animation-fill-mode: both !important;
+        }
+
+        /* Staggered animation classes generated via JS later, but base is here */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+        .delay-600 { animation-delay: 600ms; }
+
+        /* Foto da caminhonete da equipe como fundo fixo da página, com
+           overlay escuro por cima para manter o texto legível. */
+        /* "Efeito de limpeza": o fundo começa bem escuro/sujo no topo e vai
+           clareando conforme o usuário rola a página, como se estivesse
+           sendo lavado. --clean-progress (0 a 1) é atualizado via JS. */
+        :root {
+            --clean-progress: 0;
+            /* posição de scroll em px (número puro), usada para os efeitos
+               de parallax das camadas de fundo */
+            --scroll-y: 0;
+        }
+        /* Wrapper carries the fixed positioning + scroll effects; the video
+           itself stays position:absolute inside it. iOS/Android Safari and
+           Chrome routinely freeze a <video> that is *directly* position:fixed
+           mid-scroll — keeping the video absolute inside a fixed wrapper is
+           the standard fix so it keeps playing while scrolling on mobile. */
+        .bg-truck-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -4;
+            width: 100%;
+            /* Fixed elements normally resize to the *current* viewport, and
+               mobile browsers change that height as the address bar
+               collapses/expands on scroll — object-fit: cover then recrops,
+               which reads as the background suddenly zooming in. Locking to
+               the large (address-bar-hidden) viewport height keeps it a
+               constant size from first paint, so there's nothing to resize. */
+            height: 100vh;
+            height: 100lvh;
+            overflow: hidden;
+            opacity: calc(0.72 + var(--clean-progress) * 0.25);
+            /* parallax: o vídeo de fundo se move mais devagar que o
+               conteúdo, criando sensação de profundidade ao rolar */
+            transform: translate3d(0, calc(var(--scroll-y) * -0.06px), 0) scale(1.03);
+            /* clareia e ganha cor conforme --clean-progress sobe, como se
+               a cena estivesse sendo lavada em tempo real */
+            filter:
+                saturate(calc(0.7 + var(--clean-progress) * 0.45))
+                brightness(calc(0.92 + var(--clean-progress) * 0.25))
+                contrast(calc(0.95 + var(--clean-progress) * 0.15));
+            transition: opacity 0.15s linear, filter 0.15s linear, transform 0.08s linear;
+        }
+        /* CSS `filter` on a wrapper that contains a playing <video> forces
+           many mobile GPUs to composite it in software instead of using the
+           fast hardware video-decode path — in practice this is what reads
+           as the background video "freezing"/not loading on phones, even
+           though it plays fine on desktop. Recalculating that filter every
+           scroll frame makes it worse. Drop the filter on touch/coarse-
+           pointer devices; the overlay gradients below still carry most of
+           the "wash" color effect, so the loss is mostly the saturation/
+           contrast ramp. */
+        @media (pointer: coarse) {
+            .bg-truck-wrap {
+                filter: none;
+            }
+        }
+        .bg-truck {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+        /* Camada de sujeira/grão que vai sumindo (sendo "lavada") ao rolar */
+        .bg-grime {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxODAnIGhlaWdodD0nMTgwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC43NScgbnVtT2N0YXZlcz0nMycgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjxmZUNvbG9yTWF0cml4IHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDAuMjkgIDAgMCAwIDAgMC4yMiAgMCAwIDAgMCAwLjEzICAwIDAgMCAwLjUgMCcvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbHRlcj0ndXJsKCNuKScvPjwvc3ZnPg==');
+            background-repeat: repeat;
+            background-size: 180px 180px;
+            opacity: calc(0.28 - var(--clean-progress) * 0.28);
+            mix-blend-mode: multiply;
+            /* parallax: camada de sujeira se move um pouco mais rápido que
+               a foto, reforçando a profundidade entre as duas */
+            transform: translate3d(0, calc(var(--scroll-y) * -0.1px), 0);
+            transition: opacity 0.15s linear, transform 0.08s linear;
+            pointer-events: none;
+        }
+        .bg-truck-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                /* holofote sobre a caminhonete, para destacá-la do fundo escuro */
+                radial-gradient(ellipse 78% 48% at 46% 76%, rgba(255, 246, 224, calc(0.32 + var(--clean-progress) * 0.22)), transparent 65%),
+                radial-gradient(ellipse at 50% calc(10% + var(--clean-progress) * 60%), rgba(75, 156, 211, calc(0.1 + var(--clean-progress) * 0.12)), transparent 55%),
+                linear-gradient(180deg,
+                    rgba(0, 0, 0, calc(0.5 - var(--clean-progress) * 0.3)) 0%,
+                    rgba(6, 12, 22, calc(0.42 - var(--clean-progress) * 0.3)) 45%,
+                    rgba(0, 0, 0, calc(0.6 - var(--clean-progress) * 0.28)) 100%);
+            background-blend-mode: screen, normal, normal;
+            transition: background 0.15s linear;
+        }
+
+        /* Animated Background Bubbles/Particles Container */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            /* parallax: partículas se movem mais devagar que o conteúdo,
+               ficando "mais próximas da câmera" que o fundo da caminhonete */
+            transform: translate3d(0, calc(var(--scroll-y) * -0.03px), 0);
+            transition: transform 0.08s linear;
+        }
+
+        /* Vídeo cinematográfico mostrando o serviço em ação */
+        .video-showcase-title {
+            display: inline-block;
+            color: #7f93a8;
+        }
+
+        .video-showcase-frame {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            aspect-ratio: 9 / 16;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.6);
+        }
+        .video-showcase-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .video-mute-toggle {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .video-mute-toggle:hover {
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        /* "See Us In Action" section now scrolls normally (no more
+           position: sticky pin/scroll-jack holding it in place while
+           #services slides over it) — removed per request so the scroll
+           from the video into the Cleaning services section feels fluid
+           instead of getting stuck. */
+        .stack-pin-wrap {
+            margin-top: 5rem;
+        }
+        #video-showcase.stack-pin-inner {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #services {
+            /* breathing room between the "Cleaning" label (its first line
+               of content) and the video section above it */
+            padding-top: 2.5rem;
+        }
+
+        /* Parallax sutil na logo: sobe um pouco mais devagar que o resto do
+           cabeçalho enquanto o usuário começa a rolar a página */
+        .logo-parallax {
+            transform: translate3d(0, calc(min(var(--scroll-y), 480) * -0.12px), 0);
+            transition: transform 0.08s linear;
+        }
+
+        /* Nome da marca com efeito imersivo de cores fluindo (água/oceano) */
+        .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 600;
+            background: linear-gradient(90deg,
+                #4B9CD3 0%, #8fd3ff 18%, #ffffff 32%,
+                #F9A826 48%, #ffffff 62%, #4B9CD3 78%, #0f3296 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: brand-color-flow 7s linear infinite;
+            filter: drop-shadow(0 0 14px rgba(75, 156, 211, 0.45));
+        }
+        @keyframes brand-color-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        /* Highlight animation for primary CTA */
+        .glow-pulse {
+            box-shadow: 0 0 15px rgba(249, 168, 38, 0.6);
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 15px rgba(249, 168, 38, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(249, 168, 38, 0.9); }
+            100% { box-shadow: 0 0 15px rgba(249, 168, 38, 0.6); }
+        }
+
+        /* Perfil do Instagram: cartão com avatar, stats e grid de posts —
+           fundo branco sólido, como o cartão de perfil real do Instagram
+           (em vez do glass-panel escuro usado no resto do site). */
+        .ig-profile-card {
+            border-radius: 1.25rem;
+            padding: 1.25rem 1.1rem;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.45);
+        }
+        .ig-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .ig-avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden;
+            padding: 2px;
+            border: 2px solid transparent;
+            /* brand-gradient ring like a real Instagram avatar */
+            background: linear-gradient(135deg, #F9A826, #4B9CD3) border-box;
+            box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.6);
+        }
+        .ig-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+        .ig-profile-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .ig-name {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #1c1e21;
+        }
+        .ig-verified {
+            font-size: 0.85rem;
+            color: #3897f0;
+        }
+        .ig-handle {
+            display: block;
+            font-weight: 500;
+            font-size: 0.78rem;
+            color: #65676b;
+            margin-bottom: 0.5rem;
+        }
+        .ig-stats {
+            display: flex;
+            gap: 1.1rem;
+        }
+        .ig-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .ig-stat strong {
+            font-size: 0.95rem;
+            color: #1c1e21;
+            font-weight: 800;
+        }
+        .ig-stat span {
+            font-size: 10px;
+            color: #65676b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .ig-follow-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.6rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #F9A826, #e1306c 55%, #4B9CD3);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .ig-follow-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -8px rgba(249, 168, 38, 0.6);
+        }
+        .ig-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+            margin-top: 1.1rem;
+        }
+        .ig-grid-item {
+            position: relative;
+            display: block;
+            aspect-ratio: 1 / 1;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .ig-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .ig-grid-item:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Galeria Antes & Depois */
+        .ba-tile {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+        }
+        .ba-tile img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .ba-tile:hover img {
+            transform: scale(1.06);
+        }
+
+        .ba-carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            width: 34px;
+            height: 34px;
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .ba-carousel-arrow:hover {
+            background: rgba(0, 0, 0, 0.75);
+        }
+        .ba-carousel-arrow-prev { left: 0.35rem; }
+        .ba-carousel-arrow-next { right: 0.35rem; }
+        .ba-carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.35rem;
+            margin-top: 0.75rem;
+        }
+        .ba-carousel-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.25);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .ba-carousel-dot.active {
+            background: #F9A826;
+            transform: scale(1.4);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            justify-content: center;
+        }
+        .section-heading .line {
+            height: 1px;
+            width: 32px;
+            background: linear-gradient(90deg, transparent, rgba(75, 156, 211, 0.6));
+        }
+        .section-heading .line.right {
+            background: linear-gradient(90deg, rgba(75, 156, 211, 0.6), transparent);
+        }
+
+        /* Pills de serviços e cidades atendidas */
+        .service-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Efeito "marcando de branco": pills e nomes de família da sessão Our
+           Services acendem em branco ao atingirem 50% de visibilidade na tela */
+        #services .service-tag,
+        #services .service-family-label {
+            transition: color 0.45s ease, background-color 0.45s ease,
+                border-color 0.45s ease, text-shadow 0.45s ease;
+        }
+        /* Ambos abrem o WhatsApp com uma pergunta sobre o serviço clicado */
+        #services .service-tag,
+        #services .service-family-label {
+            cursor: pointer;
+        }
+        #services .service-tag:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+        #services .service-family-label:hover {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+        }
+        #services .service-tag.lit {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+        #services .service-family-label.lit {
+            color: #ffffff;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Mesmo efeito para os itens de Commercial Services e Service Area */
+        #commercial-services .service-tag,
+        #service-area .area-chip {
+            transition: color 0.45s ease, background-color 0.45s ease,
+                border-color 0.45s ease, text-shadow 0.45s ease, transform 0.45s ease;
+        }
+        #commercial-services .service-tag.lit {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+        #service-area .area-chip.lit {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+        }
+        .area-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4B9CD3;
+            background: rgba(75, 156, 211, 0.1);
+            border: 1px solid rgba(75, 156, 211, 0.25);
+        }
+        .area-chip i {
+            font-size: 10px;
+        }
+
+        /* Formulário de orçamento (abre/fecha dentro do botão principal) */
+        .quote-form {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin 0.4s ease;
+        }
+        .quote-form.open {
+            max-height: 950px;
+            opacity: 1;
+            margin-top: -0.5rem;
+        }
+        .quote-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 0.3rem;
+        }
+        .quote-field {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 0.7rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.9rem;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .quote-field::placeholder { color: rgba(255, 255, 255, 0.3); }
+        .quote-field:focus { border-color: #4B9CD3; box-shadow: 0 0 0 3px rgba(75, 156, 211, 0.2); }
+        .service-check {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 12px;
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 0.6rem;
+            padding: 0.5rem 0.6rem;
+            cursor: pointer;
+        }
+        .service-check input {
+            accent-color: #F9A826;
+        }
+        .quote-submit {
+            width: 100%;
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.1rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+            background: linear-gradient(135deg, #25D366, #128C4A);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .quote-submit:hover:not(:disabled) { transform: translateY(-2px); }
+        .quote-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Botões minimalistas (Work With Us / Save Contact) abaixo das reviews */
+        .mini-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+        }
+        .mini-btn i { font-size: 0.8rem; }
+        .mini-btn:hover {
+            border-color: rgba(75, 156, 211, 0.55);
+            color: #4B9CD3;
+            background-color: rgba(75, 156, 211, 0.08);
+        }
+
+        /* Box com o mapa da área atendida */
+        .area-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .area-modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        /* O script de embed do LeadConnector (form_embed.js) seta
+           "pointer-events: auto" direto no style inline do iframe assim que
+           o formulário termina de carregar — isso vence a regra herdada do
+           modal (inline sempre vence CSS normal), fazendo o iframe continuar
+           clicável mesmo com o modal fechado e sobrepondo outros botões da
+           página. Só !important consegue vencer esse inline aqui. */
+        .area-modal:not(.open) iframe {
+            pointer-events: none !important;
+        }
+        .area-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 6, 14, 0.88);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .area-modal-box {
+            position: relative;
+            background: #0f1c30;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            transform: scale(0.92);
+            transition: transform 0.3s ease;
+        }
+        .area-modal.open .area-modal-box {
+            transform: scale(1);
+        }
+        .area-modal-box img {
+            width: 100%;
+            border-radius: 0.75rem;
+            display: block;
+        }
+        .area-modal-map {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .area-modal-map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+        .area-modal-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+            background: #F9A826;
+            color: #0a192f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Box do formulário de orçamento (mesmo padrão do area-modal, porém
+           com scroll interno já que o iframe do LeadConnector pode crescer
+           mais alto que a tela, especialmente em telas estreitas) */
+        .quote-modal-box {
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0.75rem;
+        }
+        .quote-modal-scroll {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 0.75rem;
+        }
+        .quote-modal-scroll iframe {
+            width: 100%;
+            border: none;
+            display: block;
+            min-height: 70vh;
+        }
+
+        /* ==================================================================
+           PREMIUM EXPERIENCE LAYER — added for the "water / pressure /
+           transformation" redesign brief. Everything below is additive and
+           reuses the existing brand palette (brand-blue #0F52BA, brand-light
+           #4B9CD3, brand-accent #F9A826, navy #0a192f) already defined in
+           the Tailwind config above. Nothing in this block removes or
+           overrides earlier site behavior.
+           ================================================================== */
+
+        /* ---- helper: break a child out of the max-w-md/mx-auto container
+               to full viewport width, without causing horizontal scroll
+               (body already has overflow-x: hidden) ------------------------ */
+        .full-bleed {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+        }
+
+        /* ---- 1 & 9: generic one-time scroll reveal (.reveal-up) --------- */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(24px) scale(0.98);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ---- 5: water-reveal title mask ---------------------------------
+           Text starts blurred/hidden; a translucent blue band sweeps across
+           left-to-right, revealing sharp text behind it. One-time, ~900ms. */
+        .water-reveal {
+            position: relative;
+            display: inline-block;
+            color: #e6f1ff;
+            filter: blur(6px);
+            opacity: 0;
+            clip-path: inset(0 100% 0 0);
+        }
+        .water-reveal.washed {
+            filter: blur(0);
+            opacity: 1;
+            clip-path: inset(0 0 0 0);
+            transition: filter 0.9s cubic-bezier(0.19, 1, 0.22, 1),
+                opacity 0.5s ease,
+                clip-path 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .water-reveal::after {
+            content: '';
+            position: absolute;
+            inset: -6% -4%;
+            background: linear-gradient(100deg, transparent, rgba(75, 156, 211, 0.75) 45%, rgba(255, 255, 255, 0.55) 55%, transparent 75%);
+            transform: translateX(-110%);
+            pointer-events: none;
+        }
+        .water-reveal.washed::after {
+            animation: water-sweep 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+        @keyframes water-sweep {
+            to { transform: translateX(110%); }
+        }
+
+        /* Mesmo efeito de cores fluindo (água/oceano) do título principal
+           "The Jolly Washer" (.brand-name), reaproveitado nos títulos de
+           seção — combina com o .water-reveal (que cuida da revelação
+           inicial ao rolar); por isso só define cor/gradiente/animação,
+           sem mexer em filter/opacity/clip-path. Declarado depois de
+           .water-reveal para que "color: transparent" vença a cascata. */
+        .title-flow {
+            background: linear-gradient(90deg,
+                #4B9CD3 0%, #8fd3ff 18%, #ffffff 32%,
+                #F9A826 48%, #ffffff 62%, #4B9CD3 78%, #0f3296 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* !important: precisa vencer a utility .text-white do Tailwind
+               (injetada via CDN depois deste <style>, então venceria a
+               cascata por ordem mesmo com a mesma especificidade). */
+            color: transparent !important;
+            text-shadow: 0 0 14px rgba(75, 156, 211, 0.35);
+            animation: brand-color-flow 7s linear infinite;
+        }
+
+        /* ---- 4: liquid section dividers (SVG wave, drifts slowly) ------- */
+        .liquid-divider {
+            width: 100%;
+            line-height: 0;
+            overflow: hidden;
+            pointer-events: none;
+            margin: -1px 0;
+        }
+        .liquid-divider svg {
+            width: 200%;
+            height: 46px;
+            display: block;
+            animation: liquid-drift 22s linear infinite;
+        }
+        @keyframes liquid-drift {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ---- 3, 6, 8: premium button (Get a Free Quote) ------------------ */
+        .btn-premium {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #0F52BA, #0A367D);
+            color: #fff;
+            font-weight: 700;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px -8px rgba(15, 82, 186, 0.65);
+            transition: transform 0.15s ease, box-shadow 0.3s ease;
+        }
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+            transform: translateX(-120%);
+            transition: transform 0.7s ease;
+            pointer-events: none;
+        }
+        .btn-premium:hover::before {
+            transform: translateX(120%);
+        }
+        .btn-premium:hover {
+            box-shadow: 0 12px 34px -6px rgba(15, 82, 186, 0.8);
+        }
+        .btn-premium:active {
+            transform: scale(0.97);
+        }
+        .btn-premium:focus-visible {
+            outline: 2px solid #F9A826;
+            outline-offset: 3px;
+        }
+        .btn-premium .btn-arrow {
+            transition: transform 0.3s ease;
+        }
+        .btn-premium:hover .btn-arrow {
+            transform: translateX(4px);
+        }
+        .btn-ripple {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            margin: -6px 0 0 -6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.55);
+            transform: scale(0);
+            animation: btn-ripple-anim 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes btn-ripple-anim {
+            to { transform: scale(14); opacity: 0; }
+        }
+
+        /* ---- 6: 3D tilt service cards ------------------------------------ */
+        .tilt-card {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.35s ease;
+            will-change: transform;
+            overflow: hidden;
+        }
+        .tilt-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(180px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(75, 156, 211, 0.35), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .tilt-card:hover::before {
+            opacity: 1;
+        }
+        .tilt-card-media {
+            transition: transform 0.4s ease;
+        }
+
+        /* ---- 7: Areas We Serve — staggered lit dots + modal entrance ----- */
+        #service-area .area-chip {
+            transition: color 0.4s ease, background-color 0.4s ease,
+                border-color 0.4s ease, box-shadow 0.4s ease,
+                opacity 0.4s ease, transform 0.4s ease;
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        #service-area .area-chip.area-lit-sequence {
+            opacity: 1;
+            transform: translateY(0);
+            box-shadow: 0 0 10px rgba(75, 156, 211, 0.35);
+        }
+        .area-modal-box-enter {
+            animation: area-modal-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes area-modal-in {
+            from { opacity: 0; transform: scale(0.92) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ---- 1: shared premium CTA button sizing (used by the closing CTA) */
+        .hero-cta-primary {
+            padding: 0.9rem 1.5rem;
+            font-size: 0.95rem;
+        }
+        /* Indicador Open/Closed now, abaixo do nome no header (horário de NY) */
+        #openStatus {
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            border: 1px solid currentColor;
+            font-size: 0.8rem;
+        }
+        #openStatus.is-open {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+        #openStatus.is-closed {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+        }
+        #openStatus.is-soon-open {
+            color: #F9A826;
+            background: rgba(249, 168, 38, 0.1);
+        }
+        #openStatus .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 6px currentColor;
+        }
+        #openStatus.is-open .status-dot {
+            animation: status-dot-pulse 1.8s ease-in-out infinite;
+        }
+        @keyframes status-dot-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Botão "Call Us Now" da CTA de fechamento — preenchido e pulsante
+           para ter destaque equivalente ao botão premium ao lado dele */
+        .call-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            font-size: 0.9rem;
+            font-weight: 800;
+            border-radius: 9999px;
+            text-decoration: none;
+            color: #0a192f;
+            background: linear-gradient(135deg, #ffcf70, #F9A826);
+            box-shadow: 0 8px 24px -6px rgba(249, 168, 38, 0.6);
+            animation: call-cta-pulse 2.2s ease-in-out infinite;
+            transition: transform 0.15s ease, box-shadow 0.3s ease;
+        }
+        .call-cta:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 28px -4px rgba(249, 168, 38, 0.8);
+        }
+        .call-cta:active {
+            transform: scale(0.97);
+        }
+        .call-cta i {
+            font-size: 1rem;
+        }
+        @keyframes call-cta-pulse {
+            0%, 100% { box-shadow: 0 8px 24px -6px rgba(249, 168, 38, 0.6); }
+            50% { box-shadow: 0 8px 28px -2px rgba(249, 168, 38, 0.95); }
+        }
+
+        /* Keeps footer text readable over the background video/photo */
+        .footer-shadow-text {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ---- 3: drag before/after comparator ------------------------------ */
+        .compare-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            border-radius: 1.1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.6);
+            touch-action: pan-y;
+            cursor: ew-resize;
+            user-select: none;
+        }
+        .compare-before,
+        .compare-after {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+        .compare-after {
+            /* clipped from the left so the visible sliver always sits on the
+               RIGHT, matching the "After" label pinned to the right edge */
+            clip-path: inset(0 0 0 50%);
+        }
+        .compare-label {
+            position: absolute;
+            top: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 3;
+        }
+        .compare-label-before { left: 0.75rem; }
+        .compare-label-after { right: 0.75rem; }
+        .compare-project-label {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            z-index: 5;
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            color: #0a192f;
+            background: #F9A826;
+            box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.5);
+        }
+        .compare-handle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            touch-action: none;
+            background: #fff;
+            z-index: 4;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+        }
+        .compare-handle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+        }
+        .compare-handle::after {
+            content: '\2194';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -55%);
+            font-size: 18px;
+            font-weight: 700;
+            color: #0A367D;
+            z-index: 1;
+        }
+        .compare-hint {
+            position: absolute;
+            bottom: 0.85rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.55);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .compare-hint.dismissed {
+            opacity: 0;
+            transform: translate(-50%, 8px);
+            pointer-events: none;
+        }
+
+        /* ---- 11: prefers-reduced-motion — turn off particles, parallax,
+               pinning and tilt across both the existing effects and the
+               new ones added above ---------------------------------------- */
+        @media (prefers-reduced-motion: reduce) {
+            .bg-truck-wrap,
+            .bg-grime,
+            #particles-js,
+            .logo-parallax {
+                transform: none !important;
+            }
+            .liquid-divider svg {
+                animation: none;
+            }
+            .tilt-card {
+                transform: none !important;
+            }
+        }
+
+        /* Same reduction also applied via JS-added class for browsers/paths
+           the media query alone doesn't cover (kept in sync intentionally). */
+        .reduced-motion .tilt-card {
+            transform: none !important;
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col items-center justify-center p-4 sm:p-8">
+
+    <!-- Pré-loading premium: vidro embaçado coberto de manchas/gotas, varrido
+         por um rodo animado da esquerda para a direita, revelando o site real
+         (montado por baixo) conforme a lâmina avança. -->
+    <div id="preloader" aria-hidden="true">
+        <div class="fog-layer"></div>
+        <div id="preloaderDroplets"></div>
+        <div class="squeegee">
+            <div class="squeegee-glow"></div>
+            <div class="squeegee-blade"></div>
+            <div class="squeegee-handle"></div>
+        </div>
+    </div>
+
+    <!-- Fundo principal do site: vídeo hero-fresh em alta resolução, fixo
+         atrás de todo o conteúdo, com o mesmo efeito de "clareando" ao rolar.
+         O vídeo fica position:absolute dentro de um wrapper position:fixed
+         (em vez de fixed diretamente no <video>) porque Safari/Chrome mobile
+         costumam "congelar" um vídeo fixed durante o scroll — assim ele
+         continua rodando normalmente no celular. -->
+    <div class="bg-truck-wrap" aria-hidden="true">
+        <!-- Fonte "mobile" (H.264 Main, ~5MB, sem áudio) primeiro para telas
+             estreitas — o navegador usa a primeira <source> cujo media bate;
+             a de baixo (sem media) é o fallback pra telas maiores/desktop. -->
+        <video id="bgVideo" class="bg-truck" poster="img/hero-poster.webp"
+               autoplay muted loop playsinline webkit-playsinline="true" preload="auto">
+            <source src="video/hero-fresh-start-mobile.mp4" type="video/mp4" media="(max-width: 767px)">
+            <source src="video/hero-fresh-start.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="bg-grime" aria-hidden="true"></div>
+    <div class="bg-truck-overlay" aria-hidden="true"></div>
+
+    <!-- Background element for water bubble effect -->
+    <div id="particles-js"></div>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-md mx-auto z-10 flex flex-col items-center pt-8 pre-hide">
+
+        <!-- Profile/Logo Section -->
+        <header class="flex flex-col items-center mb-10 text-center animate-slide-up">
+            <!-- Logo real da marca: fundo transparente, com um leve brilho claro
+                 atrás só para dar contraste ao desenho preto sobre o fundo escuro.
+                 Envolvida por um wrapper com parallax (se move mais devagar
+                 que o texto abaixo enquanto o usuário começa a rolar). -->
+            <div class="logo-parallax">
+                <div id="headerLogoFrame" class="relative w-32 h-32 mb-4 rounded-full flex items-center justify-center border-2 border-brand-blue animate-float shadow-[0_0_20px_rgba(15,50,150,0.5)] overflow-hidden p-4" style="background: radial-gradient(circle, rgba(240,245,255,0.85) 0%, rgba(240,245,255,0.55) 55%, rgba(240,245,255,0.15) 78%, transparent 92%);">
+                    <img src="img/logo.webp" alt="The Jolly Washer" class="w-full h-full object-contain">
+                </div>
+            </div>
+
+            <h1 class="text-6xl font-normal mb-2 brand-name">
+                The Jolly Washer
+            </h1>
+            <div id="openStatus" class="flex items-center justify-center gap-1.5 text-xs font-semibold mb-2" aria-live="polite">
+                <span class="status-dot"></span>
+                <span id="openStatusText">Checking hours&hellip;</span>
+            </div>
+            <a href="https://www.google.com/search?hl=pt-BR&gl=br&q=The+Jolly+Washer&ludocid=5857143261891729488&lsig=AB86z5X3avwobtqxPDB1lkUotWCk#lrd=0x89c0eb4b66aab003:0x5148c0c3a3a11850,3" target="_blank" rel="noopener noreferrer"
+               class="flex items-center justify-center gap-1.5 text-xs text-gray-300 hover:text-brand-light transition-colors no-underline">
+                <span class="flex items-center gap-0.5 text-yellow-400" aria-hidden="true">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </span>
+                <span class="font-semibold">5.0</span>
+                <span class="text-gray-500">&middot;</span>
+                <span>325 Google reviews</span>
+            </a>
+
+            <div class="flex items-center justify-center gap-3 mt-3">
+                <a href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3A%3BThe%20Jolly%20Washer%3B%3B%3B%0AFN%3AThe%20Jolly%20Washer%0AORG%3AThe%20Jolly%20Washer%0ATITLE%3AExterior%20Cleaning%20Services%0ATEL%3BTYPE%3DCELL%3A%2B16097578847%0AADR%3A%3B%3B1913%20Shore%20Road%3BLinwood%3BNJ%3B08221%3BUSA%0AEMAIL%3Athejollywasher%40gmail.com%0AURL%3Ahttps%3A%2F%2Fwww.thejollywasher.com%2F%0AEND%3AVCARD"
+                   download="TheJollyWasher.vcf" class="mini-btn">
+                    <i class="fa-solid fa-address-book"></i>
+                    <span>Save Contact</span>
+                </a>
+                <a href="https://www.thejollywasher.com/careers" target="_blank" rel="noopener noreferrer" class="mini-btn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Work With Us</span>
+                </a>
+            </div>
+
+            <div class="flex items-center justify-center mt-2">
+                <button type="button" id="areaModalTrigger" class="mini-btn">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Service Area</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Links Section -->
+        <section class="w-full flex flex-col gap-2.5">
+
+            <!-- Link 1: Call to Action (Primary) - Request a Quote (abre em um box na tela) -->
+            <button type="button" id="quoteModalTrigger"
+               class="link-btn animate-slide-up delay-100 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white border border-brand-accent/50 glow-pulse bg-brand-blue/20">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-brand-accent flex items-center justify-center text-[#0a192f] shadow-inner">
+                        <i class="fa-solid fa-clipboard-list text-base"></i>
+                    </div>
+                    <div class="flex flex-col text-left">
+                        <span class="font-bold text-sm">Request a Free Quote</span>
+                        <span class="text-xs text-gray-300">Fast, easy, & no obligation</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-brand-accent opacity-70"></i>
+            </button>
+
+            <!-- Link 2: Direct Call -->
+            <a href="tel:+16097578847"
+               class="link-btn animate-slide-up delay-200 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white no-underline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-brand-light/20 flex items-center justify-center text-brand-light border border-brand-light/30">
+                        <i class="fa-solid fa-phone-volume text-base"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-sm">Call Us Today</span>
+                        <span class="text-xs text-gray-400">609-757-8847</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-500 opacity-50"></i>
+            </a>
+
+            <!-- Link 3: WhatsApp (abre formulário inline com nome e mensagem) -->
+            <button type="button" id="whatsappToggle"
+               class="link-btn animate-slide-up delay-300 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 border border-blue-500/30">
+                        <i class="fa-solid fa-comment-sms text-lg"></i>
+                    </div>
+                    <div class="flex flex-col text-left">
+                        <span class="font-bold text-sm">Text Us</span>
+                        <span class="text-xs text-gray-400">Send us a text message directly</span>
+                    </div>
+                </div>
+                <i id="whatsappToggleIcon" class="fa-solid fa-chevron-down text-gray-500 opacity-50 transition-transform"></i>
+            </button>
+
+            <!-- Formulário de SMS: some até o botão acima ser clicado -->
+            <div id="whatsappForm" class="quote-form">
+                <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3 border border-blue-500/30">
+                    <div>
+                        <label class="quote-label" for="wName">Name</label>
+                        <input type="text" id="wName" class="quote-field" placeholder="Name">
+                    </div>
+                    <div>
+                        <label class="quote-label" for="wMessage">Message</label>
+                        <textarea id="wMessage" class="quote-field" rows="3" placeholder="How can we help?"></textarea>
+                    </div>
+                    <button type="button" id="wSubmit" class="quote-submit" disabled>
+                        <i class="fa-solid fa-comment-sms"></i> Send via Text Message
+                    </button>
+                    <p id="wHint" class="text-[11px] text-gray-500 text-center">Fill in your name and message to continue</p>
+                </div>
+            </div>
+
+
+            <div class="w-full h-px bg-white/10 my-1 animate-slide-up delay-600"></div>
+
+            <!-- Link 8: Google Reviews -->
+            <a href="https://www.google.com/search?q=the+jolly+washer&oq=the+jol&gs_lcrp=EgZjaHJvbWUqBggAECMYJzIGCAAQIxgnMgYIARBFGDkyBwgCEAAYgAQyDAgDEAAYQxiABBiKBTIHCAQQLhiABDIHCAUQLhiABDIMCAYQABhDGIAEGIoFMgcIBxAAGIAEMg0ICBAuGK8BGMcBGIAEMgcICRAuGIAE0gEHOTAzajBqN6gCALACAA&sourceid=chrome&source=chrome.ob&ie=UTF-8#sv=CAESzQEKuQEStgEKd0FKaVQ0dElpcW1pNTZtMnFqMkdsRFFVUFRRM3VoeUR2bThXemxoVHpueHd4QUVuUURET1M1SE5Neno3MnQzb1VfQTJsRVRGSllWVGQzUVdBRnkyNnp3bUdUZnIzbktSTmZ4QUtiSmZMaWZyX1ZmQ3k4OF9ZX0hZEhdPTXRxYXNmY0lhQ2Y1Tm9Qa2QtWjJRZxoiQURzcjlmUTU3NS1kT0hkMlMtU0dGWUtCcXBNSGp1ZE5RZxIEODA1MRoBMyoAMAA4AUAAGAAgtLHW-gZKAhAC" target="_blank" rel="noopener noreferrer"
+               class="link-btn animate-slide-up delay-600 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white no-underline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 border border-yellow-500/30">
+                        <i class="fa-brands fa-google text-base"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-sm">Leave a Review</span>
+                        <span class="text-xs text-gray-400 flex items-center gap-1">
+                            We appreciate your feedback!
+                            <span class="text-yellow-400 text-[10px]">★★★★★</span>
+                        </span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-500 opacity-50"></i>
+            </a>
+
+            <!-- Link 10: Instagram -->
+            <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer"
+               class="link-btn animate-slide-up delay-600 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white no-underline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400 border border-pink-500/30">
+                        <i class="fa-brands fa-instagram text-base"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-sm">Follow on Instagram</span>
+                        <span class="text-xs text-gray-400">@thejollywasher</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-external-link-alt text-gray-500 opacity-50 text-sm"></i>
+            </a>
+
+        </section>
+
+        <!-- Vídeo cinematográfico: clipe curto mostrando o serviço em ação. -->
+        <div class="stack-pin-wrap">
+            <section id="video-showcase" class="w-full stack-pin-inner animate-slide-up delay-600">
+                <div class="section-heading mb-2">
+                    <span class="line"></span>
+                    <span class="video-showcase-title title-flow font-bold text-base uppercase tracking-widest">See Us In Action</span>
+                    <span class="line right"></span>
+                </div>
+                <p class="text-gray-400 text-xs text-center mb-5">A quick look at the transformation in motion</p>
+                <div class="video-showcase-frame">
+                    <video id="showcaseVideo" class="video-showcase-media" src="video/cleaning-showcase.mp4" poster="img/cleaning-showcase-poster.webp" autoplay muted loop playsinline preload="auto"></video>
+                    <button type="button" class="video-mute-toggle" aria-label="Toggle video sound">
+                        <i class="fa-solid fa-volume-xmark"></i>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Serviços Residenciais -->
+        <section id="services" class="w-full mb-12 animate-slide-up delay-600">
+            <div class="section-heading mb-2">
+                <span class="line"></span>
+                <span class="water-reveal title-flow font-bold text-base uppercase tracking-widest text-white">Services</span>
+                <span class="line right"></span>
+            </div>
+            <!-- Demais serviços, organizados por família -->
+            <div class="flex flex-col gap-4">
+                <div>
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Cleaning</span>
+                    <span class="block text-[10px] text-gray-500 italic mb-2">Tap a service to learn more</span>
+                    <div class="flex flex-wrap gap-y-4 gap-x-3">
+                        <span class="service-tag">Pool Area Cleaning</span>
+                        <span class="service-tag">Dryer Vent Cleaning</span>
+                        <span class="service-tag">Upholstery Cleaning</span>
+                        <span class="service-tag">Carpet Cleaning</span>
+                        <span class="service-tag">Awning Cleaning</span>
+                        <span class="service-tag">Solar Panel Cleaning</span>
+                        <span class="service-tag">Surface Cleaning</span>
+                        <span class="service-tag">Airbnb / Turnover Cleaning</span>
+                        <span class="service-tag">Full Interior &amp; Exterior Home Cleaning</span>
+                        <span class="service-tag">Junk Removal</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Removal</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="service-tag">Rust Removal</span>
+                        <span class="service-tag">Salt Removal</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Gutters</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="service-tag">Gutter Guard Installation</span>
+                        <span class="service-tag">Gutter Winterization</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Detailing</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="service-tag">Car Detailing</span>
+                        <span class="service-tag">Boat Detailing</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Restoration</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="service-tag">Painting &amp; Staining</span>
+                        <span class="service-tag">Deck &amp; Fence Sealing</span>
+                        <span class="service-tag">Paver Restoration &amp; Sealing</span>
+                        <span class="service-tag">Exterior Caulking &amp; Waterproofing</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Seasonal</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="service-tag">Christmas Light Installation</span>
+                        <span class="service-tag">Christmas Tree Delivery &amp; Setup</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Other</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="service-tag">Dumpster Rentals</span>
+                        <span class="service-tag">Furniture Shrink-Wrapping</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparador interativo antes/depois (arrastar) -->
+        <section id="comparator" class="w-full mb-12 animate-slide-up delay-600">
+            <div class="section-heading mb-2">
+                <span class="line"></span>
+                <span class="water-reveal title-flow font-bold text-base uppercase tracking-widest text-white">See the Jolly Difference</span>
+                <span class="line right"></span>
+            </div>
+            <p class="text-gray-400 text-xs text-center mb-5">Drag the slider to compare — browse all our projects</p>
+            <div class="compare-wrap reveal-up" data-stagger="0" id="compareWrap">
+                <img src="img/ba-walkway-before.webp" alt="Before Paver Walkway" class="compare-before" id="compareBeforeImg" loading="lazy">
+                <img src="img/ba-walkway-after.webp" alt="After Paver Walkway" class="compare-after" id="compareAfterImg" loading="lazy">
+                <span class="compare-label compare-label-before">Before</span>
+                <span class="compare-label compare-label-after">After</span>
+                <span class="compare-project-label" id="compareProjectLabel">Paver Walkway</span>
+                <div class="compare-handle" role="slider" tabindex="0" aria-label="Comparison slider"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></div>
+                <span class="compare-hint">Drag to see the transformation</span>
+                <button type="button" class="ba-carousel-arrow ba-carousel-arrow-prev" id="comparePrev" aria-label="Previous project">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="ba-carousel-arrow ba-carousel-arrow-next" id="compareNext" aria-label="Next project">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="ba-carousel-dots" id="compareDots"></div>
+        </section>
+
+        <!-- Perfil do Instagram: avatar, contadores e grid com as últimas
+             fotos do perfil. Os números de posts/seguidores/seguindo e as
+             imagens (avatar + grid) são placeholders — ver instruções no
+             final da resposta sobre quais arquivos salvar em img/. -->
+        <section id="instagram" class="w-full mb-12 animate-slide-up delay-600">
+            <div class="section-heading mb-2">
+                <span class="line"></span>
+                <span class="water-reveal title-flow font-bold text-base uppercase tracking-widest text-white">Follow Our Work</span>
+                <span class="line right"></span>
+            </div>
+            <p class="text-gray-400 text-xs text-center mb-5">@thejollywasher</p>
+            <div class="ig-profile-card reveal-up" data-stagger="0">
+                <div class="ig-profile-header">
+                    <div class="ig-avatar">
+                        <img src="img/insta-logo.webp" alt="The Jolly Washer logo" loading="lazy">
+                    </div>
+                    <div class="ig-profile-info">
+                        <span class="ig-name">The Jolly Washer <i class="fa-solid fa-circle-check ig-verified" aria-hidden="true" title="Verified"></i></span>
+                        <span class="ig-handle">@thejollywasher</span>
+                        <div class="ig-stats">
+                            <div class="ig-stat"><strong>320</strong><span>Posts</span></div>
+                            <div class="ig-stat"><strong>1,200</strong><span>Followers</span></div>
+                            <div class="ig-stat"><strong>802</strong><span>Following</span></div>
+                        </div>
+                    </div>
+                </div>
+                <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-follow-btn">
+                    <i class="fa-brands fa-instagram"></i> Follow
+                </a>
+                <div class="ig-grid">
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item">
+                        <img src="img/insta1.webp" alt="The Jolly Washer Instagram post 1" loading="lazy">
+                    </a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item">
+                        <img src="img/insta2.webp" alt="The Jolly Washer Instagram post 2" loading="lazy">
+                    </a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item">
+                        <img src="img/insta3.webp" alt="The Jolly Washer Instagram post 3" loading="lazy">
+                    </a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item">
+                        <img src="img/insta4.webp" alt="The Jolly Washer Instagram post 4" loading="lazy">
+                    </a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item">
+                        <img src="img/insta5.webp" alt="The Jolly Washer Instagram post 5" loading="lazy">
+                    </a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item">
+                        <img src="img/insta6.webp" alt="The Jolly Washer Instagram post 6" loading="lazy">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA de fechamento -->
+        <section class="w-full mb-4 text-center reveal-up" data-stagger="0">
+            <h2 class="water-reveal title-flow font-extrabold text-white text-xl mb-4 block">Ready to Make Your Property Look Jolly Again?</h2>
+            <button type="button" class="btn-premium hero-cta-primary" id="closingQuoteBtn" style="padding: 0.85rem 1.75rem; font-size: 0.9rem;">
+                Get a Free Quote <i class="fa-solid fa-arrow-right btn-arrow" aria-hidden="true"></i>
+            </button>
+            <div class="flex items-center justify-center mt-3">
+                <a href="tel:+16097578847" class="call-cta">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <span>Call Us Now</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer info -->
+        <footer class="w-full mt-10 text-center animate-slide-up delay-600 py-6 px-4">
+            <!-- Social Media Row -->
+            <div class="flex gap-6 justify-center mb-5">
+                <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-gray-300 hover:text-white hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-600 transition-all duration-300 hover:scale-110">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                </a>
+                <a href="https://facebook.com/TheJollyWasher" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-gray-300 hover:text-white hover:bg-blue-600 transition-all duration-300 hover:scale-110">
+                    <i class="fa-brands fa-facebook-f text-xl"></i>
+                </a>
+                <a href="https://www.google.com/search?hl=pt-BR&gl=br&q=The+Jolly+Washer&ludocid=5857143261891729488&lsig=AB86z5X3avwobtqxPDB1lkUotWCk#lrd=0x89c0eb4b66aab003:0x5148c0c3a3a11850,3" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-gray-300 hover:text-white hover:bg-yellow-500 transition-all duration-300 hover:scale-110">
+                    <i class="fa-brands fa-google text-xl"></i>
+                </a>
+            </div>
+            <p class="text-xs text-gray-200 font-medium footer-shadow-text">1913 Shore Road, Linwood, NJ 08221</p>
+            <a href="tel:+16097578847" class="text-xs text-gray-300 hover:text-brand-light transition-colors footer-shadow-text">609-757-8847</a>
+            <p class="text-[10px] text-gray-400 mt-2 footer-shadow-text">
+                © 2026 The Jolly Washer. All Rights Reserved.
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- Box com o formulário de orçamento, abre ao clicar em "Request a Free Quote" -->
+    <div id="quoteModal" class="area-modal" aria-hidden="true">
+        <div class="area-modal-backdrop" data-quote-close></div>
+        <div class="area-modal-box quote-modal-box">
+            <button type="button" class="area-modal-close" data-quote-close aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="quote-modal-scroll">
+                <iframe
+                    src="https://api.leadconnectorhq.com/widget/form/Ug4mGGWAdr2N6TyacxdG"
+                    style="width:100%;height:100%;border:none;border-radius:4px"
+                    id="inline-Ug4mGGWAdr2N6TyacxdG"
+                    data-layout="{'id':'INLINE'}"
+                    data-trigger-type="alwaysShow"
+                    data-trigger-value=""
+                    data-activation-type="alwaysActivated"
+                    data-activation-value=""
+                    data-deactivation-type="neverDeactivate"
+                    data-deactivation-value=""
+                    data-form-name="Website Form"
+                    data-height="902"
+                    data-layout-iframe-id="inline-Ug4mGGWAdr2N6TyacxdG"
+                    data-form-id="Ug4mGGWAdr2N6TyacxdG"
+                    title="Website Form"
+                ></iframe>
+            </div>
+        </div>
+    </div>
+    <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+
+    <!-- Box com o mapa da área atendida, abre ao clicar no botão "Service Area" -->
+    <div id="areaModal" class="area-modal" aria-hidden="true">
+        <div class="area-modal-backdrop" data-area-close></div>
+        <div class="area-modal-box">
+            <button type="button" class="area-modal-close" data-area-close aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="area-modal-map">
+                <iframe
+                    src="https://www.google.com/maps/d/u/0/embed?mid=1rh6Avu9KOafKfa38OAAyM_nTlHs4gRY&ehbc=2E312F&noprof=1"
+                    title="The Jolly Washer service area map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <p class="text-center text-[11px] text-gray-400 mt-3 px-1 leading-relaxed">
+                If you don't see your town listed, give us a call and ask if you're in our territory.
+            </p>
+        </div>
+    </div>
+
+    <!-- Open/Closed now: Mon-Sun 08:00-18:00, horário de New York -->
+    <script>
+        (function () {
+            const textEl = document.getElementById('openStatusText');
+            const boxEl = document.getElementById('openStatus');
+            if (!textEl || !boxEl) return;
+
+            const OPEN_SECONDS = 8 * 3600;
+            const CLOSE_SECONDS = 18 * 3600;
+            const DAY_SECONDS = 24 * 3600;
+            const SOON_WINDOW = 20 * 60; // 20 min countdown window
+
+            function update() {
+                const parts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: 'America/New_York',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric',
+                    hour12: false
+                }).formatToParts(new Date());
+                const get = (type) => parseInt(parts.find(p => p.type === type).value, 10);
+                const nowSeconds = (get('hour') % 24) * 3600 + get('minute') * 60 + get('second');
+
+                const isOpen = nowSeconds >= OPEN_SECONDS && nowSeconds < CLOSE_SECONDS;
+                let isSoonOpen = false;
+
+                if (isOpen) {
+                    const secondsToClose = CLOSE_SECONDS - nowSeconds;
+                    const minsToClose = Math.ceil(secondsToClose / 60);
+                    textEl.textContent = minsToClose <= SOON_WINDOW / 60
+                        ? `Closing in ${minsToClose} min`
+                        : 'Open Now';
+                } else {
+                    const secondsToOpen = nowSeconds < OPEN_SECONDS
+                        ? OPEN_SECONDS - nowSeconds
+                        : (DAY_SECONDS - nowSeconds) + OPEN_SECONDS;
+                    const minsToOpen = Math.ceil(secondsToOpen / 60);
+                    isSoonOpen = minsToOpen <= SOON_WINDOW / 60;
+                    textEl.textContent = isSoonOpen
+                        ? `Opening in ${minsToOpen} min`
+                        : 'Closed Now';
+                }
+
+                boxEl.classList.toggle('is-open', isOpen);
+                boxEl.classList.toggle('is-soon-open', !isOpen && isSoonOpen);
+                boxEl.classList.toggle('is-closed', !isOpen && !isSoonOpen);
+            }
+
+            update();
+            setInterval(update, 1000);
+        })();
+    </script>
+
+    <!-- Box com o mapa da área atendida -->
+    <script>
+        (function () {
+            const trigger = document.getElementById('areaModalTrigger');
+            const modal = document.getElementById('areaModal');
+            if (!trigger || !modal) return;
+
+            function open() {
+                modal.classList.add('open');
+                modal.setAttribute('aria-hidden', 'false');
+            }
+            function close() {
+                modal.classList.remove('open');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+
+            trigger.addEventListener('click', open);
+            modal.querySelectorAll('[data-area-close]').forEach(el => el.addEventListener('click', close));
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('open')) close();
+            });
+        })();
+    </script>
+
+    <!-- Efeito de limpeza: fundo escurece no topo e clareia conforme rola.
+         Também atualiza --scroll-y, usado pelos efeitos de parallax. -->
+    <script>
+        (function () {
+            const root = document.documentElement;
+            let ticking = false;
+            function updateCleanProgress() {
+                const scrollable = document.body.scrollHeight - window.innerHeight;
+                const progress = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
+                root.style.setProperty('--clean-progress', progress.toFixed(3));
+                root.style.setProperty('--scroll-y', window.scrollY.toFixed(1));
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(updateCleanProgress);
+                    ticking = true;
+                }
+            }, { passive: true });
+            window.addEventListener('resize', updateCleanProgress);
+            updateCleanProgress();
+        })();
+    </script>
+
+    <!-- Our Services: cada pill e nome de família "acende" em branco ao
+         atingir 50% de visibilidade na tela -->
+    <script>
+        (function () {
+            const items = document.querySelectorAll('#services .service-tag, #services .service-family-label');
+            if (!items.length) return;
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('lit');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            items.forEach(item => observer.observe(item));
+        })();
+    </script>
+
+    <!-- Our Services: clicar em uma pill ou nome de família abre o WhatsApp
+         perguntando sobre aquele serviço específico -->
+    <script>
+        (function () {
+            const items = document.querySelectorAll('#services .service-tag, #services .service-family-label');
+            if (!items.length) return;
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    const service = item.textContent.trim();
+                    const msg = "Hi! I'd like to know more about the " + service + " service.";
+                    window.open('https://wa.me/16097578847?text=' + encodeURIComponent(msg), '_blank');
+                });
+            });
+        })();
+    </script>
+
+    <!-- Commercial Services e Service Area: mesmo efeito de "acender" em
+         branco ao atingir 50% de visibilidade na tela -->
+    <script>
+        (function () {
+            const items = document.querySelectorAll('#commercial-services .service-tag, #service-area .area-chip');
+            if (!items.length) return;
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('lit');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            items.forEach(item => observer.observe(item));
+        })();
+    </script>
+
+
+    <!-- Vídeo cinematográfico: botão de mudo/som -->
+    <script>
+        (function () {
+            const video = document.querySelector('.video-showcase-media');
+            const btn = document.querySelector('.video-mute-toggle');
+            if (!video || !btn) return;
+            btn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                btn.innerHTML = video.muted
+                    ? '<i class="fa-solid fa-volume-xmark"></i>'
+                    : '<i class="fa-solid fa-volume-high"></i>';
+            });
+        })();
+    </script>
+
+    <!-- Box com o formulário de orçamento -->
+    <script>
+        (function () {
+            const trigger = document.getElementById('quoteModalTrigger');
+            const modal = document.getElementById('quoteModal');
+            if (!trigger || !modal) return;
+
+            function open() {
+                modal.classList.add('open');
+                modal.setAttribute('aria-hidden', 'false');
+            }
+            function close() {
+                modal.classList.remove('open');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+
+            trigger.addEventListener('click', open);
+            modal.querySelectorAll('[data-quote-close]').forEach(el => el.addEventListener('click', close));
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('open')) close();
+            });
+        })();
+    </script>
+
+    <!-- Text Us: abre inline e envia nome + mensagem por SMS -->
+    <script>
+        (function () {
+            const toggleBtn = document.getElementById('whatsappToggle');
+            const toggleIcon = document.getElementById('whatsappToggleIcon');
+            const form = document.getElementById('whatsappForm');
+            if (!toggleBtn || !form) return;
+
+            toggleBtn.addEventListener('click', () => {
+                const isOpen = form.classList.toggle('open');
+                toggleIcon.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                if (isOpen) {
+                    setTimeout(() => form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 200);
+                }
+            });
+
+            const nameInput = document.getElementById('wName');
+            const messageInput = document.getElementById('wMessage');
+            const submitBtn = document.getElementById('wSubmit');
+            const hint = document.getElementById('wHint');
+
+            function validate() {
+                const ok = !!(nameInput.value.trim() && messageInput.value.trim());
+                submitBtn.disabled = !ok;
+                hint.textContent = ok
+                    ? "All set! Tap below to send it as a text."
+                    : "Fill in your name and message to continue";
+            }
+            [nameInput, messageInput].forEach(el => el.addEventListener('input', validate));
+
+            submitBtn.addEventListener('click', () => {
+                if (submitBtn.disabled) return;
+                const msg = "Hi Jolly Washer!\n\n" +
+                    "Name: " + nameInput.value.trim() + "\n" +
+                    "Message: " + messageInput.value.trim();
+                window.open('sms:+16097578847?body=' + encodeURIComponent(msg), '_blank');
+            });
+        })();
+    </script>
+
+    <!-- Pré-loading: um rodo varre a tela da esquerda para a direita,
+         limpando uma camada de vidro embaçado e revelando o site real (já
+         montado por baixo, apenas oculto pelo vidro) exatamente onde a
+         lâmina passa. Uma única variável --wipe-x, atualizada via rAF,
+         controla ao mesmo tempo a posição do rodo e a mask do vidro, então
+         a "área limpa" nunca dessincroniza da lâmina. Ao final, o rodo sai
+         totalmente pela direita, a tela fica 100% revelada e o preloader
+         inteiro faz fade-out. -->
+    <script>
+        (function () {
+            const preloader = document.getElementById('preloader');
+            const main = document.querySelector('main.pre-hide');
+            const dropletsHost = document.getElementById('preloaderDroplets');
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // O conteúdo real já é montado (e começa a animar em cascata)
+            // quase de imediato — ele só não é *visto* até o vidro embaçado
+            // por cima ser limpo pelo rodo.
+            if (main) main.classList.remove('pre-hide');
+
+            if (!preloader) return;
+
+            function fadeOutPreloader() {
+                preloader.classList.add('hidden');
+                setTimeout(() => preloader.remove(), 600);
+            }
+
+            if (reduceMotion) {
+                preloader.style.setProperty('--wipe-x', '106');
+                setTimeout(fadeOutPreloader, 700);
+                return;
+            }
+
+            const START_X = -6;   // rodo começa fora da tela, à esquerda
+            const END_X = 106;    // termina totalmente fora, à direita
+            const WIPE_DURATION = 2400; // ms
+            const HOLD_AFTER = 250; // pequena pausa com a tela já 100% limpa
+
+            // Gotas escorrendo: espalhadas ao longo do eixo X, cada uma
+            // "cai" no instante em que o rodo passa pela sua posição —
+            // calculado a partir do mesmo timeline do wipe, então elas
+            // sempre escorrem logo depois de reveladas, nunca antes.
+            if (dropletsHost) {
+                const DROP_COUNT = 16;
+                const frag = document.createDocumentFragment();
+                for (let i = 0; i < DROP_COUNT; i++) {
+                    const xPct = 4 + Math.random() * 92;
+                    const yPct = 6 + Math.random() * 80;
+                    const delayFrac = Math.max(0, (xPct - START_X) / (END_X - START_X));
+                    const el = document.createElement('div');
+                    el.className = 'fog-droplet';
+                    el.style.left = xPct + '%';
+                    el.style.top = yPct + '%';
+                    el.style.width = el.style.height = (5 + Math.random() * 6) + 'px';
+                    el.style.animationDuration = (900 + Math.random() * 700) + 'ms';
+                    el.style.animationDelay = (delayFrac * WIPE_DURATION) + 'ms';
+                    frag.appendChild(el);
+                }
+                dropletsHost.appendChild(frag);
+            }
+
+            function easeInOutCubic(t) {
+                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            }
+
+            const startTime = performance.now();
+            function tick(now) {
+                const raw = Math.min(1, (now - startTime) / WIPE_DURATION);
+                const eased = easeInOutCubic(raw);
+                const x = START_X + eased * (END_X - START_X);
+                preloader.style.setProperty('--wipe-x', x.toFixed(2));
+                if (raw < 1) {
+                    requestAnimationFrame(tick);
+                } else {
+                    setTimeout(fadeOutPreloader, HOLD_AFTER);
+                }
+            }
+            requestAnimationFrame(tick);
+        })();
+    </script>
+
+    <!-- Scripts for dynamic background -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js to create a "water/bubbles" effect suitable for a washing company
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 40,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": ["#4B9CD3", "#0F52BA", "#ffffff"]
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 8,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": false, // Turn off lines for a "bubble" look rather than "network"
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1.5,
+                        "direction": "top", // Bubbles moving up
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "bubble"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 400,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 200,
+                            "size": 12,
+                            "duration": 2,
+                            "opacity": 0.8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        });
+    </script>
+
+    <!-- Premium animation layer (hero clean reveal, comparator, tilt cards,
+         water-reveal titles, liquid dividers, premium buttons) -->
+    <script src="animations.js" defer></script>
+
+    <!-- Chat widget (LeadConnector) -->
+    <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="668a11e16ae856e1fd745103"></script>
+</body>
+</html>
