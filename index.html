@@ -827,6 +827,29 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Serviços em destaque (Power Washing / Window Cleaning): mesmo
+           formato de pill, porém com borda/fundo na cor de destaque da marca
+           e um pequeno ícone de estrela, para se sobressair logo de cara na
+           lista de Cleaning. */
+        .service-tag-featured {
+            color: #ffd28a;
+            background: rgba(249, 168, 38, 0.14);
+            border-color: rgba(249, 168, 38, 0.5);
+            font-weight: 700;
+            box-shadow: 0 0 12px rgba(249, 168, 38, 0.25);
+        }
+        .service-tag-featured i {
+            font-size: 9px;
+            margin-right: 0.35rem;
+            color: #F9A826;
+        }
+        #services .service-tag-featured.lit {
+            color: #fff3de;
+            background: rgba(249, 168, 38, 0.22);
+            border-color: rgba(249, 168, 38, 0.75);
+            box-shadow: 0 0 16px rgba(249, 168, 38, 0.45);
+        }
+
         /* Efeito "marcando de branco": pills e nomes de família da sessão Our
            Services acendem em branco ao atingirem 50% de visibilidade na tela */
         #services .service-tag,
@@ -1577,7 +1600,7 @@
                 </span>
                 <span class="font-semibold">5.0</span>
                 <span class="text-gray-500">&middot;</span>
-                <span>325 Google reviews</span>
+                <span>335 Google reviews</span>
             </a>
 
             <div class="flex items-center justify-center gap-3 mt-3">
@@ -1735,8 +1758,8 @@
                     <span class="block text-[11px] font-bold uppercase tracking-widest text-brand-accent mb-2 service-family-label">Cleaning</span>
                     <span class="block text-[10px] text-gray-500 italic mb-2">Tap a service to learn more</span>
                     <div class="flex flex-wrap gap-y-4 gap-x-3">
-                        <span class="service-tag">Pool Area Cleaning</span>
-                        <span class="service-tag">Dryer Vent Cleaning</span>
+                        <span class="service-tag service-tag-featured"><i class="fa-solid fa-star"></i>Power Washing</span>
+                        <span class="service-tag service-tag-featured"><i class="fa-solid fa-star"></i>Window Cleaning</span>
                         <span class="service-tag">Upholstery Cleaning</span>
                         <span class="service-tag">Carpet Cleaning</span>
                         <span class="service-tag">Awning Cleaning</span>
@@ -1744,7 +1767,6 @@
                         <span class="service-tag">Surface Cleaning</span>
                         <span class="service-tag">Airbnb / Turnover Cleaning</span>
                         <span class="service-tag">Full Interior &amp; Exterior Home Cleaning</span>
-                        <span class="service-tag">Junk Removal</span>
                     </div>
                 </div>
                 <div>
