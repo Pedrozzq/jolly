@@ -1,0 +1,2651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBLZMMHE1V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-DBLZMMHE1V');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050b1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="The Jolly Washer installs your Christmas lights. Custom holiday lighting design, professional installation and takedown in South Jersey. Get a free quote.">
+    <title>The Jolly Washer | Christmas Lights</title>
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter (texto), IM Fell English SC (marca) e
+         Mountains of Christmas (títulos natalinos) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IM+Fell+English+SC&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#0F52BA',
+                            light: '#4B9CD3',
+                            dark: '#0A367D',
+                            accent: '#F9A826',
+                        },
+                        xmas: {
+                            red: '#E23B3B',
+                            green: '#1FA35C',
+                            gold: '#FFC94A',
+                            ice: '#BFE3FF',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==================================================================
+           CHRISTMAS LIGHTS EDITION — página sazonal da The Jolly Washer.
+           Mesma estrutura/links do index.html original (orçamento, ligação,
+           SMS, reviews, Instagram, área atendida), com tema natalino:
+           céu noturno estrelado, neve em canvas, varais de pisca-pisca,
+           trenó do Papai Noel cruzando a tela, casa interativa que "acende"
+           e contagem regressiva para o Natal.
+           ================================================================== */
+        :root {
+            --xmas-red: #E23B3B;
+            --xmas-red-dark: #9e1c1c;
+            --xmas-green: #1FA35C;
+            --xmas-green-dark: #0d5c33;
+            --xmas-gold: #FFC94A;
+            --xmas-ice: #BFE3FF;
+            --night: #050b1a;
+            --scroll-y: 0;
+        }
+        html {
+            overflow-x: hidden;
+        }
+        body {
+            background: var(--night);
+            color: #eef5ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: visible;
+            position: relative;
+        }
+        header {
+            padding-top: env(safe-area-inset-top);
+        }
+
+        /* ---------------- Céu noturno fixo (fundo) ---------------- */
+        .night-sky {
+            position: fixed;
+            inset: 0;
+            z-index: -4;
+            background:
+                radial-gradient(ellipse 90% 45% at 50% 0%, rgba(40, 90, 160, 0.35), transparent 70%),
+                radial-gradient(ellipse 60% 35% at 15% 30%, rgba(31, 163, 92, 0.12), transparent 70%),
+                radial-gradient(ellipse 60% 35% at 85% 55%, rgba(226, 59, 59, 0.10), transparent 70%),
+                linear-gradient(180deg, #030814 0%, #07142c 45%, #0b1d3a 100%);
+        }
+        /* Vídeo de fundo fixo, com véu escuro por cima (::after) para manter
+           textos e botões legíveis. Mesmo z-index do céu, mas vem depois no
+           DOM, então fica por cima dele; estrelas, lua e neve ficam na frente. */
+        .bg-video-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -4;
+            width: 100%;
+            height: 100vh;
+            height: 100lvh;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+        .bg-video-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 45%, rgba(3, 8, 20, 0.1), rgba(3, 8, 20, 0.4) 100%),
+                linear-gradient(180deg, rgba(3, 8, 20, 0.5) 0%, rgba(5, 12, 28, 0.38) 45%, rgba(3, 8, 20, 0.65) 100%);
+        }
+
+        /* Aurora sutil, respirando devagar */
+        .aurora {
+            position: fixed;
+            inset: -10% -10% auto -10%;
+            height: 55vh;
+            z-index: -3;
+            background:
+                radial-gradient(ellipse 50% 40% at 30% 40%, rgba(61, 220, 132, 0.16), transparent 70%),
+                radial-gradient(ellipse 45% 35% at 70% 30%, rgba(77, 171, 255, 0.14), transparent 70%);
+            filter: blur(20px);
+            animation: aurora-drift 16s ease-in-out infinite alternate;
+            pointer-events: none;
+            transform: translate3d(0, calc(var(--scroll-y) * -0.05px), 0);
+        }
+        @keyframes aurora-drift {
+            0% { opacity: 0.6; transform: translateX(-3%) scaleY(1); }
+            100% { opacity: 1; transform: translateX(3%) scaleY(1.12); }
+        }
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            pointer-events: none;
+            transform: translate3d(0, calc(var(--scroll-y) * -0.03px), 0);
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+            animation: star-twinkle var(--d, 3s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+        @keyframes star-twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        /* Lua cheia no canto superior */
+        .moon {
+            position: fixed;
+            top: calc(6vh + env(safe-area-inset-top));
+            right: 7vw;
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            z-index: -2;
+            background: radial-gradient(circle at 38% 36%, #fffdf2 0%, #f3ecd2 55%, #d9cfae 100%);
+            box-shadow: 0 0 40px 10px rgba(255, 246, 214, 0.35), 0 0 120px 40px rgba(255, 246, 214, 0.12);
+            transform: translate3d(0, calc(var(--scroll-y) * -0.08px), 0);
+            pointer-events: none;
+        }
+        .moon::before,
+        .moon::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(190, 178, 140, 0.35);
+        }
+        .moon::before { width: 16px; height: 16px; top: 22px; left: 40px; }
+        .moon::after { width: 10px; height: 10px; top: 46px; left: 24px; }
+
+        /* Canvas da neve: acima do céu, abaixo do conteúdo */
+        #snow {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        main {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---------------- Glass / botões de link (base do original) ------- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+        }
+        .link-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        .link-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(226, 59, 59, 0.3);
+            border-color: rgba(255, 201, 74, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .link-btn:hover::before {
+            left: 100%;
+        }
+        /* Botões "de neve": brancos como neve fresca, com leve brilho
+           cristalino e texto escuro. */
+        .snow-btn {
+            color: #13223d;
+            background:
+                radial-gradient(circle at 12% 30%, rgba(255, 255, 255, 1) 0 1.5px, transparent 2.5px),
+                radial-gradient(circle at 78% 70%, rgba(255, 255, 255, 1) 0 1.5px, transparent 2.5px),
+                radial-gradient(circle at 45% 15%, rgba(200, 225, 250, 0.9) 0 1px, transparent 2px),
+                radial-gradient(circle at 90% 25%, rgba(200, 225, 250, 0.9) 0 1px, transparent 2px),
+                linear-gradient(180deg, #ffffff 0%, #f3f8fe 55%, #e3eefa 100%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.55), inset 0 -3px 6px rgba(170, 200, 235, 0.45), 0 0 14px rgba(191, 227, 255, 0.35);
+        }
+        .link-btn.snow-btn:hover {
+            background:
+                radial-gradient(circle at 12% 30%, rgba(255, 255, 255, 1) 0 1.5px, transparent 2.5px),
+                radial-gradient(circle at 78% 70%, rgba(255, 255, 255, 1) 0 1.5px, transparent 2.5px),
+                linear-gradient(180deg, #ffffff 0%, #f7fbff 55%, #eaf3fc 100%);
+            border-color: #ffffff;
+            box-shadow: 0 14px 28px -8px rgba(0, 0, 0, 0.55), inset 0 -3px 6px rgba(170, 200, 235, 0.45), 0 0 22px rgba(191, 227, 255, 0.6);
+        }
+        .snow-btn .snow-btn-sub { color: #5a6b85; }
+        .snow-btn .snow-btn-chevron { color: #8aa0bd; }
+        .snow-btn::before {
+            background: linear-gradient(90deg, transparent, rgba(191, 227, 255, 0.6), transparent);
+        }
+
+        /* Conteúdo dos botões centralizado; a setinha fica fixa à direita */
+        .btn-chevron {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            margin-top: -0.5em;
+        }
+
+        /* Neve acumulada em cima dos cartões/botões. Fica num wrapper
+           (.snowy) porque o .link-btn tem overflow:hidden e cortaria o
+           montinho de neve. */
+        .snowy {
+            position: relative;
+        }
+        .snowy::before {
+            content: '';
+            position: absolute;
+            z-index: 3;
+            top: -5px;
+            left: 14px;
+            right: 22%;
+            height: 9px;
+            background: #f4f9ff;
+            border-radius: 12px 16px 6px 10px / 9px 9px 4px 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 -2px 2px rgba(170, 205, 240, 0.7);
+            pointer-events: none;
+        }
+        .snowy::after {
+            content: '';
+            position: absolute;
+            z-index: 3;
+            top: -3px;
+            right: 12%;
+            width: 34px;
+            height: 7px;
+            background: #f4f9ff;
+            border-radius: 10px 10px 5px 5px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25), inset 0 -2px 2px rgba(170, 205, 240, 0.7);
+            pointer-events: none;
+        }
+
+        /* ---------------- Tipografia natalina ---------------- */
+        .brand-name {
+            font-family: 'IM Fell English SC', serif;
+            font-weight: 400;
+            background: linear-gradient(90deg,
+                #ff5a5a 0%, #ffd166 18%, #ffffff 32%,
+                #3ddc84 48%, #ffffff 62%, #ffd166 78%, #ff5a5a 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: color-flow 8s linear infinite;
+            filter: drop-shadow(0 0 14px rgba(255, 201, 74, 0.35));
+        }
+        @keyframes color-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+        .xmas-title {
+            font-family: 'Mountains of Christmas', 'IM Fell English SC', serif;
+            font-weight: 700;
+            line-height: 1.05;
+            background: linear-gradient(90deg,
+                #ff5a5a 0%, #ffd166 20%, #fff7e0 35%,
+                #3ddc84 52%, #fff7e0 68%, #ffd166 82%, #ff5a5a 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+            animation: color-flow 9s linear infinite;
+            filter: drop-shadow(0 0 16px rgba(255, 201, 74, 0.35));
+        }
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            justify-content: center;
+        }
+        .section-heading .line {
+            height: 1px;
+            width: 32px;
+            background: linear-gradient(90deg, transparent, rgba(255, 201, 74, 0.7));
+        }
+        .section-heading .line.right {
+            background: linear-gradient(90deg, rgba(255, 201, 74, 0.7), transparent);
+        }
+        .section-heading .xmas-title {
+            font-size: 1.6rem;
+        }
+
+        /* ---------------- Varal de pisca-pisca ----------------
+           Gerado via JS (quantidade de lâmpadas conforme a largura).
+           Cada lâmpada tem um soquete (::before) e o fio até a próxima
+           (::after, um arco com border-bottom). Clicar no varal alterna
+           entre os modos twinkle / chase / steady. */
+        .light-string {
+            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            gap: 26px;
+            padding: 0 0 0 14px;
+            margin: 0;
+            height: 46px;
+            overflow: hidden;
+            list-style: none;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .light-string.compact {
+            height: 38px;
+            gap: 22px;
+        }
+        .light-string li {
+            position: relative;
+            flex-shrink: 0;
+            width: 12px;
+            height: 20px;
+            margin-top: 15px;
+            border-radius: 50%;
+            background: var(--c);
+            box-shadow: 0 4px 18px 3px var(--c);
+            animation: bulb-twinkle var(--t, 1.4s) ease-in-out infinite alternate;
+            animation-delay: var(--delay, 0s);
+        }
+        .light-string li:nth-child(even) {
+            margin-top: 18px;
+        }
+        .light-string li::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 2px;
+            width: 8px;
+            height: 7px;
+            border-radius: 2px;
+            background: #1d2a22;
+        }
+        .light-string li::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 6px;
+            width: 38px;
+            height: 14px;
+            border-bottom: 2px solid #22362b;
+            border-radius: 50%;
+        }
+        .light-string.compact li::after {
+            width: 34px;
+        }
+        @keyframes bulb-twinkle {
+            0% { opacity: 1; box-shadow: 0 4px 18px 3px var(--c); }
+            100% { opacity: 0.35; box-shadow: 0 2px 6px 0 var(--c); }
+        }
+        /* modo "chase": uma onda de luz correndo pelo varal */
+        .light-string.mode-chase li {
+            animation: bulb-chase 1.2s linear infinite;
+            animation-delay: calc(var(--i) * 0.08s);
+        }
+        @keyframes bulb-chase {
+            0%, 60%, 100% { opacity: 0.3; box-shadow: 0 2px 5px 0 var(--c); }
+            20% { opacity: 1; box-shadow: 0 4px 22px 5px var(--c); }
+        }
+        /* modo "steady": todas acesas */
+        .light-string.mode-steady li {
+            animation: none;
+            opacity: 1;
+        }
+        .light-hint {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            margin-top: -4px;
+        }
+
+        /* ---------------- Logo com gorro do Papai Noel ---------------- */
+        .logo-wrap {
+            position: relative;
+            transform: translate3d(0, calc(min(var(--scroll-y), 480) * -0.12px), 0);
+        }
+        /* Gorro "pendurado" na borda superior direita da moldura: só a
+           aba encosta no aro, sem cobrir o desenho da logo. */
+        .logo-hat {
+            position: absolute;
+            top: -26px;
+            right: -28px;
+            width: 56px;
+            height: 45px;
+            transform: rotate(24deg);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+            z-index: 2;
+            pointer-events: none;
+        }
+        .logo-frame {
+            background: radial-gradient(circle, rgba(255, 250, 240, 0.9) 0%, rgba(255, 250, 240, 0.55) 55%, rgba(255, 250, 240, 0.15) 78%, transparent 92%);
+            border: 2px solid var(--xmas-gold);
+            box-shadow: 0 0 22px rgba(255, 201, 74, 0.45), 0 0 50px rgba(226, 59, 59, 0.25);
+        }
+
+        /* Status Open/Closed (mesma lógica do original) */
+        #openStatus {
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            border: 1px solid currentColor;
+            font-size: 0.8rem;
+        }
+        #openStatus.is-open { color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+        #openStatus.is-closed { color: #f87171; background: rgba(248, 113, 113, 0.1); }
+        #openStatus.is-soon-open { color: #F9A826; background: rgba(249, 168, 38, 0.1); }
+        #openStatus .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 6px currentColor;
+        }
+        #openStatus.is-open .status-dot {
+            animation: status-dot-pulse 1.8s ease-in-out infinite;
+        }
+        @keyframes status-dot-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .season-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #fff3d6;
+            background: linear-gradient(135deg, rgba(226, 59, 59, 0.35), rgba(31, 163, 92, 0.35));
+            border: 1px solid rgba(255, 201, 74, 0.55);
+            box-shadow: 0 0 18px rgba(255, 201, 74, 0.25);
+        }
+
+        .mini-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            background: transparent;
+            transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+        }
+        .mini-btn i { font-size: 0.8rem; }
+        .mini-btn:hover {
+            border-color: rgba(255, 201, 74, 0.55);
+            color: var(--xmas-gold);
+            background-color: rgba(255, 201, 74, 0.08);
+        }
+
+        /* ---------------- Papai Noel (hero) ---------------- */
+        .santa-hero {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.6rem;
+        }
+        .santa-figure {
+            width: 92px;
+            flex-shrink: 0;
+            transform-origin: 50% 90%;
+            animation: santa-wobble 3.2s ease-in-out infinite;
+            filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
+            cursor: pointer;
+        }
+        @keyframes santa-wobble {
+            0%, 100% { transform: rotate(-4deg) translateY(0); }
+            50% { transform: rotate(4deg) translateY(-4px); }
+        }
+        .speech-bubble {
+            position: relative;
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 1.1rem 1.1rem 1.1rem 0.25rem;
+            background: #fffaf0;
+            color: #3a1010;
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.35;
+            box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.6);
+            margin-bottom: 1.4rem;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            left: -9px;
+            bottom: 8px;
+            border-width: 8px 12px 8px 0;
+            border-style: solid;
+            border-color: transparent #fffaf0 transparent transparent;
+        }
+        .speech-bubble strong {
+            color: var(--xmas-red);
+        }
+        .ho-ho {
+            display: inline-block;
+            font-family: 'Mountains of Christmas', serif;
+            font-size: 1.1rem;
+            color: var(--xmas-red);
+        }
+        .ho-ho.bounce {
+            animation: ho-bounce 0.7s ease;
+        }
+        @keyframes ho-bounce {
+            0%, 100% { transform: scale(1); }
+            30% { transform: scale(1.35) rotate(-6deg); }
+            60% { transform: scale(0.95) rotate(4deg); }
+        }
+
+        /* ---------------- CTA principal "candy cane" ----------------
+           Borda listrada de bengala de doce, animada, envolvendo o botão
+           vermelho principal de orçamento. */
+        .candy-wrap {
+            position: relative;
+            padding: 3px;
+            border-radius: 1.1rem;
+            background: repeating-linear-gradient(45deg, #E23B3B 0 10px, #ffffff 10px 20px);
+            background-size: 200% 200%;
+            animation: candy-move 3s linear infinite, candy-glow 2s ease-in-out infinite;
+        }
+        @keyframes candy-move {
+            to { background-position: 56.57px 0; }
+        }
+        @keyframes candy-glow {
+            0%, 100% { box-shadow: 0 0 16px rgba(226, 59, 59, 0.45); }
+            50% { box-shadow: 0 0 32px rgba(255, 201, 74, 0.75); }
+        }
+        .candy-btn {
+            background: linear-gradient(135deg, #c52525 0%, #8f1515 100%) !important;
+            border: none !important;
+            border-radius: 0.95rem !important;
+        }
+        .candy-btn:hover {
+            background: linear-gradient(135deg, #d93030 0%, #a31a1a 100%) !important;
+        }
+
+        /* Botão premium (vermelho/verde) usado em CTAs secundárias */
+        .btn-xmas {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            padding: 0.9rem 1.6rem;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 0.92rem;
+            color: #fff;
+            border: 1px solid rgba(255, 201, 74, 0.6);
+            background: linear-gradient(135deg, #d62d2d, #8f1515);
+            box-shadow: 0 10px 30px -8px rgba(226, 59, 59, 0.75);
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.3s ease;
+        }
+        .btn-xmas.green {
+            background: linear-gradient(135deg, #22b366, #0d5c33);
+            box-shadow: 0 10px 30px -8px rgba(31, 163, 92, 0.75);
+        }
+        .btn-xmas::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+            transform: translateX(-120%);
+            transition: transform 0.7s ease;
+            pointer-events: none;
+        }
+        .btn-xmas:hover::before { transform: translateX(120%); }
+        .btn-xmas:active { transform: scale(0.97); }
+        .btn-xmas:focus-visible { outline: 2px solid var(--xmas-gold); outline-offset: 3px; }
+        .btn-xmas .btn-arrow { transition: transform 0.3s ease; }
+        .btn-xmas:hover .btn-arrow { transform: translateX(4px); }
+
+        .call-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            font-size: 0.9rem;
+            font-weight: 800;
+            border-radius: 9999px;
+            text-decoration: none;
+            color: #2a1400;
+            background: linear-gradient(135deg, #ffe08a, #FFC94A);
+            box-shadow: 0 8px 24px -6px rgba(255, 201, 74, 0.6);
+            animation: call-cta-pulse 2.2s ease-in-out infinite;
+            transition: transform 0.15s ease;
+        }
+        .call-cta:hover { transform: scale(1.03); }
+        @keyframes call-cta-pulse {
+            0%, 100% { box-shadow: 0 8px 24px -6px rgba(255, 201, 74, 0.6); }
+            50% { box-shadow: 0 8px 30px -2px rgba(255, 201, 74, 0.95); }
+        }
+
+        /* ---------------- Contagem regressiva ---------------- */
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+        .cd-cell {
+            position: relative;
+            border-radius: 0.9rem;
+            padding: 0.7rem 0.2rem 0.55rem;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(226, 59, 59, 0.18), rgba(10, 20, 40, 0.5));
+            border: 1px solid rgba(255, 201, 74, 0.3);
+            overflow: hidden;
+        }
+        .cd-cell:nth-child(even) {
+            background: linear-gradient(180deg, rgba(31, 163, 92, 0.2), rgba(10, 20, 40, 0.5));
+        }
+        .cd-num {
+            display: block;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff7e0;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 12px rgba(255, 201, 74, 0.6);
+        }
+        .cd-num.tick {
+            animation: cd-tick 0.35s ease;
+        }
+        @keyframes cd-tick {
+            0% { transform: translateY(-6px); opacity: 0.3; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .cd-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        /* ---------------- Casa interativa ---------------- */
+        .house-card {
+            border-radius: 1.25rem;
+            padding: 1rem;
+        }
+        .house-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 0.9rem;
+            background: linear-gradient(180deg, #0a1733 0%, #122647 70%, #1a3050 100%);
+        }
+        .house-svg .hb {
+            fill: #3a4660;
+            opacity: 0.55;
+            transition: fill 0.25s ease, opacity 0.25s ease;
+        }
+        .house-svg.on .hb {
+            opacity: 1;
+            animation: hb-twinkle var(--t, 1.6s) ease-in-out infinite alternate;
+            animation-delay: var(--tw, 0s);
+        }
+        @keyframes hb-twinkle {
+            0% { opacity: 1; }
+            100% { opacity: 0.45; }
+        }
+        .house-svg .win {
+            fill: #0d1629;
+            transition: fill 0.8s ease;
+        }
+        .house-svg.on .win {
+            fill: #ffd98a;
+        }
+        .house-svg .tree-star {
+            fill: #4a4a3a;
+            transition: fill 0.4s ease;
+        }
+        .house-svg.on .tree-star {
+            fill: #ffd166;
+            animation: star-pulse 1.6s ease-in-out infinite;
+            transform-origin: 300px 66px;
+        }
+        @keyframes star-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+        }
+        .house-svg .house-glow {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .house-svg.on .house-glow {
+            opacity: 1;
+        }
+
+        /* Interruptor "Flip the switch" */
+        .light-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.5rem 0.9rem 0.5rem 0.5rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .switch-track {
+            position: relative;
+            width: 46px;
+            height: 26px;
+            border-radius: 9999px;
+            background: #374151;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .switch-track::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .light-switch[aria-pressed="true"] .switch-track {
+            background: var(--xmas-green);
+            box-shadow: 0 0 14px rgba(61, 220, 132, 0.6);
+        }
+        .light-switch[aria-pressed="true"] .switch-track::after {
+            transform: translateX(20px);
+        }
+        .style-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+        }
+        .style-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .style-chip .dots {
+            display: inline-flex;
+            gap: 2px;
+        }
+        .style-chip .dots i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: block;
+        }
+        .style-chip.active {
+            color: #fff;
+            border-color: rgba(255, 201, 74, 0.7);
+            background: rgba(255, 201, 74, 0.14);
+            box-shadow: 0 0 12px rgba(255, 201, 74, 0.3);
+        }
+
+        /* ---------------- Serviços ---------------- */
+        .service-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.85rem;
+            border-radius: 1rem;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            color: #fff;
+            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 201, 74, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .service-icon {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .service-icon.red { background: rgba(226, 59, 59, 0.2); color: #ff7a7a; border: 1px solid rgba(226, 59, 59, 0.4); }
+        .service-icon.green { background: rgba(31, 163, 92, 0.2); color: #5ee39b; border: 1px solid rgba(31, 163, 92, 0.4); }
+        .service-icon.gold { background: rgba(255, 201, 74, 0.18); color: #ffd166; border: 1px solid rgba(255, 201, 74, 0.4); }
+
+        /* ---------------- Passo a passo ---------------- */
+        .steps {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+        .steps::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 20px;
+            bottom: 20px;
+            width: 2px;
+            background: repeating-linear-gradient(180deg, #E23B3B 0 8px, #ffffff 8px 16px);
+            opacity: 0.6;
+        }
+        .step {
+            position: relative;
+            display: flex;
+            gap: 0.85rem;
+            align-items: flex-start;
+        }
+        .step-num {
+            position: relative;
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #2a1400;
+            background: radial-gradient(circle at 35% 30%, #fff1c2, #FFC94A 60%, #c9921a);
+            box-shadow: 0 0 16px rgba(255, 201, 74, 0.5);
+        }
+        .step-num::before {
+            /* "gancho" do enfeite de árvore */
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            width: 10px;
+            height: 7px;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            background: #b8c2cc;
+        }
+
+        /* Showcase da caminhonete */
+        .showcase-frame {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border: 2px solid rgba(255, 201, 74, 0.45);
+            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(226, 59, 59, 0.25);
+        }
+        .showcase-frame img {
+            width: 100%;
+            display: block;
+        }
+
+        .video-frame {
+            aspect-ratio: 9 / 16;
+        }
+        .video-frame video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .video-mute-toggle {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .video-mute-toggle:hover {
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        /* ---------------- Instagram (igual ao original) ---------------- */
+        .ig-profile-card {
+            border-radius: 1.25rem;
+            padding: 1.25rem 1.1rem;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.45);
+        }
+        .ig-profile-header { display: flex; align-items: center; gap: 1rem; }
+        .ig-avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden;
+            padding: 2px;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, #E23B3B, #1FA35C) border-box;
+        }
+        .ig-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+        .ig-profile-info { flex: 1; min-width: 0; }
+        .ig-name { display: flex; align-items: center; gap: 0.3rem; font-weight: 800; font-size: 0.95rem; color: #1c1e21; }
+        .ig-verified { font-size: 0.85rem; color: #3897f0; }
+        .ig-handle { display: block; font-weight: 500; font-size: 0.78rem; color: #65676b; margin-bottom: 0.5rem; }
+        .ig-stats { display: flex; gap: 1.1rem; }
+        .ig-stat { display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.2; }
+        .ig-stat strong { font-size: 0.95rem; color: #1c1e21; font-weight: 800; }
+        .ig-stat span { font-size: 10px; color: #65676b; text-transform: uppercase; letter-spacing: 0.04em; }
+        .ig-follow-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.6rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #E23B3B, #e1306c 55%, #1FA35C);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+        .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-top: 1.1rem; }
+        .ig-grid-item { position: relative; display: block; aspect-ratio: 1 / 1; border-radius: 0.5rem; overflow: hidden; }
+        .ig-grid-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+        .ig-grid-item:hover img { transform: scale(1.08); }
+
+        /* ---------------- Formulário SMS inline (igual ao original) ------- */
+        .quote-form {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin 0.4s ease;
+        }
+        .quote-form.open {
+            max-height: 950px;
+            opacity: 1;
+        }
+        .quote-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 0.3rem;
+        }
+        .quote-field {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 0.7rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.9rem;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .quote-field::placeholder { color: rgba(255, 255, 255, 0.3); }
+        .quote-field:focus { border-color: var(--xmas-gold); box-shadow: 0 0 0 3px rgba(255, 201, 74, 0.2); }
+        .quote-submit {
+            width: 100%;
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.1rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: linear-gradient(135deg, #25D366, #128C4A);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .quote-submit:hover:not(:disabled) { transform: translateY(-2px); }
+        .quote-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* ---------------- Modais (iguais ao original) ---------------- */
+        .area-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .area-modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        /* O form_embed.js do LeadConnector força pointer-events inline no
+           iframe; só !important vence isso com o modal fechado. */
+        .area-modal:not(.open) iframe {
+            pointer-events: none !important;
+        }
+        .area-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 6, 14, 0.88);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .area-modal-box {
+            position: relative;
+            background: #0f1c30;
+            border: 1px solid rgba(255, 201, 74, 0.3);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            transform: scale(0.92);
+            transition: transform 0.3s ease;
+        }
+        .area-modal.open .area-modal-box { transform: scale(1); }
+        .area-modal-map {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .area-modal-map iframe { width: 100%; height: 100%; border: 0; display: block; }
+        .area-modal-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+            background: var(--xmas-red);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+        .quote-modal-box {
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0.75rem;
+        }
+        .quote-modal-scroll {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 0.75rem;
+        }
+        .quote-modal-scroll iframe {
+            width: 100%;
+            border: none;
+            display: block;
+            min-height: 70vh;
+        }
+
+        /* ---------------- Trenó do Papai Noel cruzando o céu -------------
+           Cruza a tela da esquerda para a direita de tempos em tempos,
+           deixando um rastro de brilhos. Clicar nele solta um "Ho ho ho!". */
+        .sleigh-flight {
+            position: fixed;
+            top: calc(13vh + env(safe-area-inset-top));
+            left: 0;
+            z-index: 30;
+            width: 230px;
+            transform: translateX(-260px);
+            pointer-events: none;
+            visibility: hidden;
+        }
+        .sleigh-flight.flying {
+            visibility: visible;
+            animation: sleigh-cross 11s linear forwards;
+        }
+        .sleigh-flight .sleigh-bob {
+            animation: sleigh-bob 1.6s ease-in-out infinite;
+        }
+        .sleigh-flight svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: auto;
+            cursor: pointer;
+            filter: drop-shadow(0 0 6px rgba(255, 230, 160, 0.7));
+        }
+        @keyframes sleigh-cross {
+            0% { transform: translateX(-260px) translateY(30px) rotate(-6deg); }
+            50% { transform: translateX(calc(50vw - 115px)) translateY(-10px) rotate(-2deg); }
+            100% { transform: translateX(calc(100vw + 40px)) translateY(-40px) rotate(-8deg); }
+        }
+        @keyframes sleigh-bob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+        .deer-legs {
+            animation: gallop 0.45s ease-in-out infinite alternate;
+            transform-origin: center;
+            transform-box: fill-box;
+        }
+        @keyframes gallop {
+            from { transform: skewX(-12deg); }
+            to { transform: skewX(12deg); }
+        }
+        .rudolph-nose {
+            animation: nose-glow 0.9s ease-in-out infinite alternate;
+        }
+        @keyframes nose-glow {
+            from { fill: #ff2d2d; }
+            to { fill: #ff9d9d; }
+        }
+        .sparkle {
+            position: fixed;
+            z-index: 29;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            background: #fff6d0;
+            box-shadow: 0 0 8px 2px rgba(255, 220, 130, 0.9);
+            animation: sparkle-fade 1.1s ease-out forwards;
+        }
+        @keyframes sparkle-fade {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, 30px)) scale(0.2); }
+        }
+        .tap-flake {
+            position: fixed;
+            z-index: 250;
+            pointer-events: none;
+            font-size: 14px;
+            line-height: 1;
+            color: #fff;
+            text-shadow: 0 0 8px rgba(191, 227, 255, 0.9);
+            animation: flake-burst 0.9s ease-out forwards;
+        }
+        @keyframes flake-burst {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) rotate(0deg); }
+            100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.1) rotate(180deg); }
+        }
+
+        /* Toast "Ho ho ho!" */
+        .toast {
+            position: fixed;
+            left: 50%;
+            top: calc(18px + env(safe-area-inset-top));
+            z-index: 260;
+            transform: translate(-50%, -140%);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 1.1rem;
+            border-radius: 9999px;
+            background: #fffaf0;
+            color: #3a1010;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--xmas-red);
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-width: calc(100vw - 32px);
+        }
+        .toast.show {
+            transform: translate(-50%, 0);
+        }
+
+        /* ---------------- Barra fixa de CTA (mobile) ----------------
+           Aparece depois que o CTA principal sai da tela. Deixa espaço à
+           direita para a bolha do chat do LeadConnector. */
+        .sticky-cta {
+            position: fixed;
+            left: 12px;
+            right: 88px;
+            bottom: calc(14px + env(safe-area-inset-bottom));
+            z-index: 90;
+            max-width: 420px;
+            display: flex;
+            gap: 0.5rem;
+            transform: translateY(160%);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .sticky-cta.show {
+            transform: translateY(0);
+        }
+        .sticky-cta .btn-xmas {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            font-size: 0.82rem;
+        }
+        .sticky-cta .sticky-call {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a1400;
+            background: linear-gradient(135deg, #ffe08a, #FFC94A);
+            box-shadow: 0 8px 20px -6px rgba(255, 201, 74, 0.7);
+        }
+
+        /* ---------------- Rodapé com morro de neve ---------------- */
+        .snow-hill {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+            line-height: 0;
+            margin-top: 2rem;
+        }
+        .snow-hill svg {
+            width: 100%;
+            height: 120px;
+            display: block;
+        }
+        .footer-snow {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+            background: linear-gradient(180deg, #e9f2fc 0%, #d4e4f5 100%);
+            color: #1b2a44;
+            padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+        }
+
+        .full-bleed {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+        }
+
+        /* ---------------- Reveal ao rolar ---------------- */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(24px) scale(0.98);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .animate-slide-up {
+            animation-fill-mode: both !important;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+
+        /* ---------------- Pré-loading: "ligando o pisca-pisca" ----------
+           Logo no centro e um varal cujas lâmpadas acendem uma a uma; ao
+           final o preloader some com fade. */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            background: radial-gradient(ellipse at 50% 40%, #0d1f3f 0%, #040914 70%);
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .pre-logo {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(255, 250, 240, 0.92) 0%, rgba(255, 250, 240, 0.5) 60%, transparent 90%);
+            animation: pre-pop 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        .pre-logo img {
+            width: 76px;
+            height: 76px;
+            object-fit: contain;
+        }
+        .pre-logo .logo-hat {
+            top: -26px;
+            right: -28px;
+            width: 56px;
+            height: 45px;
+        }
+        .pre-ring {
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--xmas-red);
+            border-right-color: var(--xmas-green);
+            border-bottom-color: var(--xmas-gold);
+            animation: pre-spin 1.4s linear infinite;
+        }
+        @keyframes pre-pop {
+            0% { opacity: 0; transform: scale(0.7); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pre-spin {
+            to { transform: rotate(360deg); }
+        }
+        .pre-lights {
+            display: flex;
+            gap: 14px;
+        }
+        .pre-lights span {
+            width: 12px;
+            height: 18px;
+            border-radius: 50%;
+            background: #2a3348;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+        .pre-lights span.on {
+            background: var(--c);
+            box-shadow: 0 0 16px 4px var(--c);
+        }
+        .pre-text {
+            font-family: 'Mountains of Christmas', serif;
+            font-size: 1.35rem;
+            color: #fff3d6;
+            text-shadow: 0 0 12px rgba(255, 201, 74, 0.6);
+        }
+
+        /* Bolha do chat (LeadConnector) em vermelho natalino em vez do azul
+           padrão. O widget lê essas variáveis dentro do shadow DOM; regras
+           da página no elemento host vencem as do próprio widget. */
+        chat-widget {
+            --chat-widget-primary-color: #d62828 !important;
+            --chat-widget-primary-solid-color: #d62828 !important;
+            --chat-widget-active-color: #d62828 !important;
+            --chat-widget-bubble-color: #d62828 !important;
+            --chat-widget-button-color: #d62828 !important;
+        }
+
+        /* ---------------- Movimento reduzido ---------------- */
+        @media (prefers-reduced-motion: reduce) {
+            /* Neve, pisca-pisca e trenó continuam (são o tema da página),
+               só que mais suaves; o resto do movimento decorativo para. */
+            .aurora, .candy-wrap, .call-cta, .brand-name, .xmas-title, .pre-ring {
+                animation: none !important;
+            }
+            .sleigh-flight.flying { animation-duration: 16s; }
+            .stars, .aurora, .moon, .logo-wrap { transform: none !important; }
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col items-center p-4 pb-0 sm:p-8 sm:pb-0">
+
+    <!-- Símbolos SVG reutilizados (gorro, rosto do Papai Noel) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <symbol id="santa-hat" viewBox="0 0 100 80">
+                <path d="M10 60 Q28 8 68 10 Q94 12 90 44 Q80 30 66 34 Q74 48 90 60 Z" fill="#d62828"/>
+                <path d="M22 52 Q36 20 62 16" stroke="#ff6b6b" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.55"/>
+                <rect x="4" y="54" width="92" height="18" rx="9" fill="#ffffff"/>
+                <rect x="4" y="64" width="92" height="8" rx="4" fill="#dde8f3"/>
+                <circle cx="90" cy="44" r="10" fill="#ffffff"/>
+                <circle cx="87" cy="41" r="3.5" fill="#eef4fa"/>
+            </symbol>
+            <symbol id="santa-face" viewBox="0 0 120 130">
+                <circle cx="60" cy="74" r="25" fill="#f7cfb0"/>
+                <path d="M31 70 Q28 106 60 126 Q92 106 89 70 Q80 92 60 94 Q40 92 31 70 Z" fill="#ffffff"/>
+                <path d="M36 96 Q46 112 60 118 Q74 112 84 96" stroke="#e1e9f2" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <ellipse cx="60" cy="95" rx="5" ry="3.2" fill="#b8455a"/>
+                <path d="M60 85 Q49 78 38 87 Q49 94 60 89 Q71 94 82 87 Q71 78 60 85 Z" fill="#ffffff" stroke="#dfe7f0" stroke-width="1"/>
+                <circle cx="60" cy="81" r="5.5" fill="#e98b7c"/>
+                <circle cx="58" cy="79" r="1.6" fill="#f8b3a6"/>
+                <circle cx="50" cy="71" r="3.2" fill="#2b2b2b"/>
+                <circle cx="70" cy="71" r="3.2" fill="#2b2b2b"/>
+                <circle cx="51" cy="70" r="1" fill="#ffffff"/>
+                <circle cx="71" cy="70" r="1" fill="#ffffff"/>
+                <circle cx="42" cy="80" r="5" fill="#f4a4a4" opacity="0.7"/>
+                <circle cx="78" cy="80" r="5" fill="#f4a4a4" opacity="0.7"/>
+                <path d="M43 64 Q50 59 57 64" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <path d="M63 64 Q70 59 77 64" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <path d="M22 52 Q34 6 78 8 Q106 10 103 40 Q92 28 78 32 Q88 44 98 52 Z" fill="#d62828"/>
+                <path d="M34 44 Q44 18 70 14" stroke="#ff6b6b" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.5"/>
+                <rect x="15" y="45" width="90" height="17" rx="8.5" fill="#ffffff"/>
+                <rect x="15" y="54" width="90" height="8" rx="4" fill="#dde8f3"/>
+                <circle cx="103" cy="40" r="10" fill="#ffffff"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <!-- Pré-loading: logo + varal que acende lâmpada por lâmpada -->
+    <div id="preloader" aria-hidden="true">
+        <div class="pre-logo">
+            <div class="pre-ring"></div>
+            <img src="img/logo.webp" alt="">
+            <svg class="logo-hat"><use href="#santa-hat"/></svg>
+        </div>
+        <div class="pre-lights" id="preLights"></div>
+        <div class="pre-text">Plugging in the lights&hellip;</div>
+    </div>
+
+    <!-- Fundo: céu noturno, aurora, estrelas, lua e neve -->
+    <div class="night-sky" aria-hidden="true"></div>
+    <!-- Vídeo de fundo: casa iluminada. Fica position:absolute dentro de um
+         wrapper fixed (celulares costumam congelar <video> fixed direto). -->
+    <div class="bg-video-wrap" aria-hidden="true">
+        <video id="bgVideo" class="bg-video" src="video/holiday-bg.mp4" poster="img/holiday-bg-poster.webp"
+               autoplay muted loop playsinline webkit-playsinline="true" preload="auto"></video>
+    </div>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="stars" id="stars" aria-hidden="true"></div>
+    <div class="moon" aria-hidden="true"></div>
+    <canvas id="snow" aria-hidden="true"></canvas>
+
+    <!-- Trenó do Papai Noel (cruza a tela periodicamente) -->
+    <div class="sleigh-flight" id="sleigh" aria-hidden="true">
+        <div class="sleigh-bob">
+            <svg viewBox="0 0 300 80" id="sleighSvg">
+                <defs>
+                    <g id="deer">
+                        <ellipse cx="20" cy="30" rx="14" ry="7" fill="#f5e3b8"/>
+                        <path d="M31 27 L38 16 L45 15 L46 19 L40 21 L35 31 Z" fill="#f5e3b8"/>
+                        <path d="M39 16 L36 7 M37 11 L32 8 M42 15 L44 6 M43 10 L48 8" stroke="#f5e3b8" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M7 28 L2 25" stroke="#f5e3b8" stroke-width="2.5" stroke-linecap="round"/>
+                        <g class="deer-legs">
+                            <path d="M10 34 L4 43 M14 35 L12 45 M26 35 L32 43 M30 34 L37 40" stroke="#f5e3b8" stroke-width="2.2" stroke-linecap="round"/>
+                        </g>
+                    </g>
+                </defs>
+                <!-- rédeas -->
+                <path d="M86 34 Q150 42 262 30" stroke="#ffd166" stroke-width="1.2" fill="none" opacity="0.8"/>
+                <!-- trenó -->
+                <path d="M14 30 L78 30 Q90 30 86 44 L80 52 L22 52 Q12 52 14 40 Z" fill="#c62828" stroke="#ffd166" stroke-width="1.5"/>
+                <path d="M8 60 L84 60 Q96 60 96 50" stroke="#ffd166" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M26 52 L24 60 M70 52 L72 60" stroke="#ffd166" stroke-width="2"/>
+                <!-- saco de presentes -->
+                <circle cx="28" cy="22" r="11" fill="#8a5a2b"/>
+                <rect x="20" y="10" width="8" height="8" fill="#3ddc84"/>
+                <rect x="30" y="8" width="7" height="9" fill="#4dabff"/>
+                <!-- Papai Noel -->
+                <circle cx="56" cy="22" r="10" fill="#d62828"/>
+                <circle cx="60" cy="10" r="6" fill="#f7cfb0"/>
+                <path d="M55 12 Q60 22 66 12 Z" fill="#ffffff"/>
+                <path d="M54 7 Q60 -2 68 4 L64 7 Z" fill="#d62828"/>
+                <circle cx="68" cy="4" r="2" fill="#ffffff"/>
+                <path d="M62 20 L76 26" stroke="#d62828" stroke-width="4" stroke-linecap="round"/>
+                <!-- renas -->
+                <use href="#deer" x="120" y="2"/>
+                <use href="#deer" x="172" y="0"/>
+                <use href="#deer" x="224" y="-2"/>
+                <circle class="rudolph-nose" cx="270" cy="15" r="2.8" fill="#ff2d2d"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+        <svg width="30" height="32" aria-hidden="true"><use href="#santa-face"/></svg>
+        <span id="toastText">Ho ho ho!</span>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-md mx-auto flex flex-col items-center">
+
+        <!-- Varal de pisca-pisca no topo (largura total) -->
+        <div class="full-bleed -mt-4 sm:-mt-8" style="padding-top: env(safe-area-inset-top);">
+            <ul class="light-string" data-light-string aria-label="Christmas lights — tap to change the pattern" role="button" tabindex="0"></ul>
+        </div>
+
+        <!-- Cabeçalho -->
+        <header class="flex flex-col items-center mb-6 mt-8 text-center animate-slide-up">
+            <div class="logo-wrap mb-3">
+                <div class="logo-frame relative w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center overflow-hidden p-4 animate-float">
+                    <img src="img/logo.webp" alt="The Jolly Washer" class="w-full h-full object-contain">
+                </div>
+            </div>
+
+            <span class="season-badge mb-2"><i class="fa-solid fa-snowflake"></i> Holiday Lighting Season</span>
+
+            <div id="openStatus" class="flex items-center justify-center gap-1.5 text-xs font-semibold mb-2" aria-live="polite">
+                <span class="status-dot"></span>
+                <span id="openStatusText">Checking hours&hellip;</span>
+            </div>
+            <a href="https://www.google.com/search?hl=pt-BR&gl=br&q=The+Jolly+Washer&ludocid=5857143261891729488&lsig=AB86z5X3avwobtqxPDB1lkUotWCk#lrd=0x89c0eb4b66aab003:0x5148c0c3a3a11850,3" target="_blank" rel="noopener noreferrer"
+               class="flex items-center justify-center gap-1.5 text-xs text-gray-300 hover:text-xmas-gold transition-colors no-underline">
+                <span class="flex items-center gap-0.5 text-yellow-400" aria-hidden="true">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </span>
+                <span class="font-semibold">5.0</span>
+                <span class="text-gray-500">&middot;</span>
+                <span>340 Google reviews</span>
+            </a>
+
+            <div class="flex items-center justify-center gap-3 mt-3">
+                <button type="button" id="areaModalTrigger" class="mini-btn">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Service Area</span>
+                </button>
+                <a href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3A%3BThe%20Jolly%20Washer%3B%3B%3B%0AFN%3AThe%20Jolly%20Washer%0AORG%3AThe%20Jolly%20Washer%0ATITLE%3AExterior%20Cleaning%20Services%0ATEL%3BTYPE%3DCELL%3A%2B16097578847%0AADR%3A%3B%3B1913%20Shore%20Road%3BLinwood%3BNJ%3B08221%3BUSA%0AEMAIL%3Athejollywasher%40gmail.com%0AURL%3Ahttps%3A%2F%2Fwww.thejollywasher.com%2F%0AEND%3AVCARD"
+                   download="TheJollyWasher.vcf" class="mini-btn">
+                    <i class="fa-solid fa-address-book"></i>
+                    <span>Save Contact</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Links / CTAs -->
+        <section class="w-full flex flex-col gap-3" id="primaryCtas">
+
+            <div class="candy-wrap animate-slide-up delay-200">
+                <button type="button" data-open-quote
+                   class="link-btn candy-btn flex items-center justify-center p-3.5 pr-10 pl-10 w-full text-white">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xmas-red shadow-inner">
+                            <i class="fa-solid fa-lightbulb text-base"></i>
+                        </div>
+                        <div class="flex flex-col text-center">
+                            <span class="font-extrabold text-sm">Get My Free Lighting Quote</span>
+                            <span class="text-xs text-red-100">Custom design &middot; no obligation</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xmas-gold btn-chevron"></i>
+                </button>
+            </div>
+
+            <div class="animate-slide-up delay-300">
+                <a href="tel:+16097578847"
+                   class="link-btn snow-btn flex items-center justify-center p-3 pr-10 pl-10 rounded-2xl w-full no-underline">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-green-600 flex items-center justify-center text-white shadow">
+                            <i class="fa-solid fa-phone-volume text-base"></i>
+                        </div>
+                        <div class="flex flex-col text-center">
+                            <span class="font-bold text-sm">Call to Book Your Install</span>
+                            <span class="text-xs snow-btn-sub">609-757-8847</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right snow-btn-chevron btn-chevron"></i>
+                </a>
+            </div>
+
+            <div class="animate-slide-up delay-300">
+                <button type="button" id="textToggle"
+                   class="link-btn snow-btn flex items-center justify-center p-3 pr-10 pl-10 rounded-2xl w-full">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-xmas-red flex items-center justify-center text-white shadow">
+                            <i class="fa-solid fa-comment-sms text-lg"></i>
+                        </div>
+                        <div class="flex flex-col text-center">
+                            <span class="font-bold text-sm">Text Us a Photo of Your Home</span>
+                            <span class="text-xs snow-btn-sub">We'll send lighting ideas back</span>
+                        </div>
+                    </div>
+                    <i id="textToggleIcon" class="fa-solid fa-chevron-down snow-btn-chevron transition-transform btn-chevron"></i>
+                </button>
+            </div>
+
+            <div id="textForm" class="quote-form">
+                <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3 border border-blue-500/30">
+                    <div>
+                        <label class="quote-label" for="wName">Name</label>
+                        <input type="text" id="wName" class="quote-field" placeholder="Name">
+                    </div>
+                    <div>
+                        <label class="quote-label" for="wMessage">Message</label>
+                        <textarea id="wMessage" class="quote-field" rows="3" placeholder="I'd love Christmas lights on my roofline and trees&hellip;"></textarea>
+                    </div>
+                    <button type="button" id="wSubmit" class="quote-submit" disabled>
+                        <i class="fa-solid fa-comment-sms"></i> Send via Text Message
+                    </button>
+                    <p id="wHint" class="text-[11px] text-gray-500 text-center">Fill in your name and message to continue</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Hero: título, texto e Papai Noel (abaixo dos botões) -->
+        <section class="w-full text-center mt-10 animate-slide-up delay-400">
+            <h1 class="xmas-title text-[2.6rem] sm:text-5xl mb-3">Be the Brightest House on the Block</h1>
+            <p class="text-sm text-gray-300 leading-relaxed mb-6 px-2">
+                Custom Christmas light design, professional installation and takedown.
+                <span class="text-white font-semibold">You enjoy the glow &mdash; we climb the ladders.</span>
+            </p>
+
+            <div class="santa-hero text-left">
+                <svg class="santa-figure" id="heroSanta" viewBox="0 0 120 130" role="img" aria-label="Santa Claus">
+                    <use href="#santa-face"/>
+                </svg>
+                <div class="speech-bubble">
+                    <span class="ho-ho" id="heroHoHo">Ho ho ho!</span><br>
+                    My sleigh's busy this year &mdash; let <strong>The Jolly Washer</strong> light up your home for Christmas!
+                </div>
+            </div>
+        </section>
+
+        <!-- Contagem regressiva para o Natal -->
+        <section class="w-full mt-12 reveal-up" id="countdownSection">
+            <div class="glass-panel snowy rounded-2xl p-5 text-center">
+                <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-xmas-gold mb-1"><i class="fa-solid fa-gift mr-1"></i> Countdown to Christmas</p>
+                <p class="text-xs text-gray-300 mb-4">Install dates fill up fast every season &mdash; book early to get your spot.</p>
+                <div class="countdown" id="countdown">
+                    <div class="cd-cell"><span class="cd-num" data-cd="days">--</span><span class="cd-label">Days</span></div>
+                    <div class="cd-cell"><span class="cd-num" data-cd="hours">--</span><span class="cd-label">Hours</span></div>
+                    <div class="cd-cell"><span class="cd-num" data-cd="mins">--</span><span class="cd-label">Mins</span></div>
+                    <div class="cd-cell"><span class="cd-num" data-cd="secs">--</span><span class="cd-label">Secs</span></div>
+                </div>
+                <button type="button" data-open-quote class="btn-xmas green mt-5 w-full">
+                    <i class="fa-solid fa-calendar-check"></i> Reserve My Install Date
+                </button>
+            </div>
+        </section>
+
+        <!-- Varal divisor -->
+        <div class="full-bleed mt-10">
+            <ul class="light-string compact" data-light-string aria-hidden="true"></ul>
+        </div>
+
+        <!-- Casa interativa: "Flip the switch" -->
+        <section class="w-full mt-6" id="lightUp">
+            <div class="section-heading mb-1">
+                <span class="line"></span>
+                <h2 class="xmas-title">Light Up Your Home</h2>
+                <span class="line right"></span>
+            </div>
+            <p class="text-gray-400 text-xs text-center mb-4">Flip the switch and pick a style &mdash; imagine this on your house</p>
+
+            <div class="glass-panel house-card reveal-up">
+                <svg class="house-svg" id="houseSvg" viewBox="0 0 340 220" role="img" aria-label="Illustration of a house decorated with Christmas lights">
+                    <defs>
+                        <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="2.2" result="b"/>
+                            <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                        <radialGradient id="warmGlow" cx="50%" cy="60%" r="60%">
+                            <stop offset="0%" stop-color="#ffd98a" stop-opacity="0.35"/>
+                            <stop offset="100%" stop-color="#ffd98a" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <!-- estrelinhas no fundo -->
+                    <g fill="#ffffff" opacity="0.7">
+                        <circle cx="30" cy="22" r="1"/><circle cx="90" cy="14" r="1.2"/><circle cx="210" cy="18" r="1"/>
+                        <circle cx="260" cy="30" r="1.3"/><circle cx="320" cy="16" r="1"/><circle cx="130" cy="28" r="0.8"/>
+                    </g>
+                    <ellipse class="house-glow" cx="170" cy="130" rx="170" ry="90" fill="url(#warmGlow)"/>
+                    <!-- chaminé -->
+                    <rect x="196" y="50" width="18" height="34" fill="#3b2330"/>
+                    <rect x="193" y="46" width="24" height="7" rx="2" fill="#f1f6fc"/>
+                    <!-- casa -->
+                    <rect x="70" y="100" width="170" height="90" fill="#1d2a44"/>
+                    <polygon points="55,102 155,40 255,102" fill="#15213b"/>
+                    <path d="M55 102 L155 40 L255 102" stroke="#f1f6fc" stroke-width="5" fill="none" stroke-linejoin="round"/>
+                    <!-- janelas -->
+                    <rect class="win" x="88" y="120" width="36" height="30" rx="2"/>
+                    <rect class="win" x="186" y="120" width="36" height="30" rx="2"/>
+                    <path d="M106 120 V150 M88 135 H124 M204 120 V150 M186 135 H222" stroke="#1d2a44" stroke-width="2"/>
+                    <rect class="win" x="143" y="66" width="24" height="20" rx="10"/>
+                    <!-- porta com guirlanda -->
+                    <rect x="140" y="140" width="30" height="50" rx="2" fill="#6b2c2c"/>
+                    <circle cx="164" cy="167" r="1.8" fill="#ffd166"/>
+                    <circle cx="155" cy="154" r="8" fill="none" stroke="#1FA35C" stroke-width="4"/>
+                    <path d="M151 161 L155 158 L159 161" stroke="#E23B3B" stroke-width="2.5" fill="none"/>
+                    <!-- árvore -->
+                    <rect x="295" y="182" width="10" height="12" fill="#5a3a22"/>
+                    <polygon points="300,72 332,186 268,186" fill="#0f3d27"/>
+                    <polygon class="tree-star" points="300,58 303,65 311,65 305,70 307,78 300,73 293,78 295,70 289,65 297,65"/>
+                    <!-- arbustos -->
+                    <ellipse cx="84" cy="190" rx="22" ry="13" fill="#123a28"/>
+                    <ellipse cx="226" cy="190" rx="22" ry="13" fill="#123a28"/>
+                    <!-- chão com neve -->
+                    <path d="M0 192 Q90 180 170 190 T340 188 L340 220 L0 220 Z" fill="#e8f1fb"/>
+                    <path d="M140 190 L130 220 L180 220 L170 190 Z" fill="#c9d7e6"/>
+                    <!-- lâmpadas (geradas via JS) -->
+                    <g id="houseBulbs" filter="url(#bulbGlow)"></g>
+                </svg>
+
+                <div class="flex flex-col items-center gap-3 mt-4">
+                    <button type="button" class="light-switch" id="lightSwitch" aria-pressed="false">
+                        <span class="switch-track"></span>
+                        <span id="lightSwitchLabel">Flip the switch</span>
+                    </button>
+                    <div class="style-chips" id="styleChips" role="radiogroup" aria-label="Lighting style">
+                        <button type="button" class="style-chip active" data-style="multicolor" role="radio" aria-checked="true">
+                            <span class="dots"><i style="background:#ff4d4d"></i><i style="background:#ffd166"></i><i style="background:#3ddc84"></i><i style="background:#4dabff"></i></span> Multicolor
+                        </button>
+                        <button type="button" class="style-chip" data-style="warm" role="radio" aria-checked="false">
+                            <span class="dots"><i style="background:#ffe2a8"></i><i style="background:#ffd88a"></i></span> Warm White
+                        </button>
+                        <button type="button" class="style-chip" data-style="candy" role="radio" aria-checked="false">
+                            <span class="dots"><i style="background:#ff4d4d"></i><i style="background:#ffffff"></i></span> Candy Cane
+                        </button>
+                        <button type="button" class="style-chip" data-style="icy" role="radio" aria-checked="false">
+                            <span class="dots"><i style="background:#bfe6ff"></i><i style="background:#8fd3ff"></i></span> Icy Blue
+                        </button>
+                    </div>
+                    <button type="button" class="btn-xmas w-full mt-1" id="wantThisLook">
+                        I Want This Look! <i class="fa-solid fa-arrow-right btn-arrow" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Serviços de iluminação -->
+        <section class="w-full mt-12" id="services">
+            <div class="section-heading mb-1">
+                <span class="line"></span>
+                <h2 class="xmas-title">What We Decorate</h2>
+                <span class="line right"></span>
+            </div>
+            <p class="text-gray-400 text-xs text-center mb-5">Tap any service to ask us about it</p>
+            <div class="grid grid-cols-1 gap-2.5">
+                <button type="button" class="service-card glass-panel reveal-up" data-service="Roofline & Gutter Lights">
+                    <span class="service-icon red"><i class="fa-solid fa-house-chimney"></i></span>
+                    <span><span class="block font-bold text-sm">Roofline &amp; Gutter Lights</span><span class="block text-xs text-gray-400">Crisp, straight lines that outline your home</span></span>
+                </button>
+                <button type="button" class="service-card glass-panel reveal-up" data-service="Tree & Shrub Wrapping">
+                    <span class="service-icon green"><i class="fa-solid fa-tree"></i></span>
+                    <span><span class="block font-bold text-sm">Tree &amp; Shrub Wrapping</span><span class="block text-xs text-gray-400">Trunks, branches and bushes that sparkle</span></span>
+                </button>
+                <button type="button" class="service-card glass-panel reveal-up" data-service="Wreaths & Garland">
+                    <span class="service-icon gold"><i class="fa-solid fa-ring"></i></span>
+                    <span><span class="block font-bold text-sm">Wreaths &amp; Garland</span><span class="block text-xs text-gray-400">Doors, railings and windows, dressed up</span></span>
+                </button>
+                <button type="button" class="service-card glass-panel reveal-up" data-service="Walkway & Pathway Lights">
+                    <span class="service-icon red"><i class="fa-solid fa-person-walking"></i></span>
+                    <span><span class="block font-bold text-sm">Walkway &amp; Pathway Lights</span><span class="block text-xs text-gray-400">A glowing welcome for every guest</span></span>
+                </button>
+                <button type="button" class="service-card glass-panel reveal-up" data-service="Commercial & Storefront Displays">
+                    <span class="service-icon green"><i class="fa-solid fa-store"></i></span>
+                    <span><span class="block font-bold text-sm">Commercial &amp; Storefront Displays</span><span class="block text-xs text-gray-400">Get your business noticed this season</span></span>
+                </button>
+                <button type="button" class="service-card glass-panel reveal-up" data-service="Christmas Tree Delivery & Setup">
+                    <span class="service-icon gold"><i class="fa-solid fa-truck"></i></span>
+                    <span><span class="block font-bold text-sm">Christmas Tree Delivery &amp; Setup</span><span class="block text-xs text-gray-400">Delivered, set up and ready to decorate</span></span>
+                </button>
+                <button type="button" class="service-card glass-panel reveal-up" data-service="Holiday Light Takedown">
+                    <span class="service-icon red"><i class="fa-solid fa-box-open"></i></span>
+                    <span><span class="block font-bold text-sm">Takedown After the Holidays</span><span class="block text-xs text-gray-400">We take it all down when the season's over</span></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Como funciona -->
+        <section class="w-full mt-12">
+            <div class="section-heading mb-1">
+                <span class="line"></span>
+                <h2 class="xmas-title">How It Works</h2>
+                <span class="line right"></span>
+            </div>
+            <p class="text-gray-400 text-xs text-center mb-6">Four easy steps to a merry, bright home</p>
+            <div class="steps">
+                <div class="step reveal-up">
+                    <span class="step-num">1</span>
+                    <div class="glass-panel rounded-xl p-3 flex-1">
+                        <span class="block font-bold text-sm">Request a free quote</span>
+                        <span class="block text-xs text-gray-400">Tell us about your home or text us a photo.</span>
+                    </div>
+                </div>
+                <div class="step reveal-up">
+                    <span class="step-num">2</span>
+                    <div class="glass-panel rounded-xl p-3 flex-1">
+                        <span class="block font-bold text-sm">We design your display</span>
+                        <span class="block text-xs text-gray-400">Pick your colors and where you want the glow.</span>
+                    </div>
+                </div>
+                <div class="step reveal-up">
+                    <span class="step-num">3</span>
+                    <div class="glass-panel rounded-xl p-3 flex-1">
+                        <span class="block font-bold text-sm">Our crew installs everything</span>
+                        <span class="block text-xs text-gray-400">No ladders, no tangled cords, no cold fingers.</span>
+                    </div>
+                </div>
+                <div class="step reveal-up">
+                    <span class="step-num">4</span>
+                    <div class="glass-panel rounded-xl p-3 flex-1">
+                        <span class="block font-bold text-sm">Enjoy the season</span>
+                        <span class="block text-xs text-gray-400">And when it's over, we come back to take it down.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vídeo: casa transformada com luzes de Natal -->
+        <section class="w-full mt-12 text-center" id="transformVideo">
+            <div class="section-heading mb-1">
+                <span class="line"></span>
+                <h2 class="xmas-title">Transform Your Home</h2>
+                <span class="line right"></span>
+            </div>
+            <p class="text-gray-400 text-xs text-center mb-5">The brightest house on the block could be yours</p>
+            <div class="showcase-frame video-frame reveal-up">
+                <video id="transformVideoEl" src="video/ajudante.mp4" poster="img/ajudante-poster.webp"
+                       autoplay muted loop playsinline webkit-playsinline="true" preload="metadata"></video>
+                <button type="button" class="video-mute-toggle" id="transformMute" aria-label="Turn video sound on">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Instagram -->
+        <section id="instagram" class="w-full mt-12">
+            <div class="section-heading mb-1">
+                <span class="line"></span>
+                <h2 class="xmas-title">Follow Our Work</h2>
+                <span class="line right"></span>
+            </div>
+            <p class="text-gray-400 text-xs text-center mb-5">@thejollywasher</p>
+            <div class="ig-profile-card reveal-up">
+                <div class="ig-profile-header">
+                    <div class="ig-avatar">
+                        <img src="img/insta-logo.webp" alt="The Jolly Washer logo" loading="lazy">
+                    </div>
+                    <div class="ig-profile-info">
+                        <span class="ig-name">The Jolly Washer <i class="fa-solid fa-circle-check ig-verified" aria-hidden="true" title="Verified"></i></span>
+                        <span class="ig-handle">@thejollywasher</span>
+                        <div class="ig-stats">
+                            <div class="ig-stat"><strong>320</strong><span>Posts</span></div>
+                            <div class="ig-stat"><strong>1,200</strong><span>Followers</span></div>
+                            <div class="ig-stat"><strong>802</strong><span>Following</span></div>
+                        </div>
+                    </div>
+                </div>
+                <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-follow-btn">
+                    <i class="fa-brands fa-instagram"></i> Follow
+                </a>
+                <div class="ig-grid">
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta1.webp" alt="The Jolly Washer Instagram post 1" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta2.webp" alt="The Jolly Washer Instagram post 2" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta3.webp" alt="The Jolly Washer Instagram post 3" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta4.webp" alt="The Jolly Washer Instagram post 4" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta5.webp" alt="The Jolly Washer Instagram post 5" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta6.webp" alt="The Jolly Washer Instagram post 6" loading="lazy"></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA de fechamento -->
+        <section class="w-full mt-14 text-center reveal-up">
+            <svg class="santa-figure mx-auto mb-2" style="width:84px" viewBox="0 0 120 130" aria-hidden="true"><use href="#santa-face"/></svg>
+            <h2 class="xmas-title text-4xl mb-2">Don't Get Left in the Dark</h2>
+            <p class="text-sm text-gray-300 mb-5 px-2">Get on our install schedule before the holiday rush &mdash; and make this your merriest, brightest Christmas yet.</p>
+            <button type="button" class="btn-xmas" data-open-quote>
+                Get a Free Quote <i class="fa-solid fa-arrow-right btn-arrow" aria-hidden="true"></i>
+            </button>
+            <div class="flex items-center justify-center mt-3">
+                <a href="tel:+16097578847" class="call-cta">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <span>Call Us Now</span>
+                </a>
+            </div>
+            <div class="flex items-center justify-center gap-3 mt-5">
+                <a href="https://www.google.com/search?q=the+jolly+washer" target="_blank" rel="noopener noreferrer" class="mini-btn">
+                    <i class="fa-brands fa-google"></i><span>Leave a Review</span>
+                </a>
+                <a href="index.html" class="mini-btn">
+                    <i class="fa-solid fa-spray-can-sparkles"></i><span>Cleaning Services</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Rodapé com morro de neve -->
+        <div class="snow-hill" aria-hidden="true">
+            <svg viewBox="0 0 400 120" preserveAspectRatio="none">
+                <g fill="#0f3d27">
+                    <polygon points="40,70 55,20 70,70"/>
+                    <polygon points="330,66 348,8 366,66"/>
+                    <polygon points="365,74 377,36 389,74"/>
+                </g>
+                <g>
+                    <circle cx="50" cy="38" r="2" fill="#ff4d4d"/><circle cx="60" cy="52" r="2" fill="#ffd166"/><circle cx="47" cy="60" r="2" fill="#3ddc84"/>
+                    <circle cx="343" cy="28" r="2" fill="#ffd166"/><circle cx="354" cy="42" r="2" fill="#ff4d4d"/><circle cx="340" cy="54" r="2" fill="#4dabff"/>
+                    <circle cx="377" cy="52" r="1.8" fill="#ff4d4d"/><circle cx="381" cy="64" r="1.8" fill="#ffd166"/>
+                </g>
+                <path d="M0 70 Q60 50 130 66 T260 60 T400 62 L400 120 L0 120 Z" fill="#d4e4f5"/>
+                <path d="M0 82 Q80 64 170 80 T400 76 L400 120 L0 120 Z" fill="#e9f2fc"/>
+            </svg>
+        </div>
+        <footer class="footer-snow text-center pt-2 px-4">
+            <div class="flex gap-6 justify-center mb-4">
+                <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-10 h-10 rounded-full flex items-center justify-center bg-white text-[#9e1c1c] shadow hover:scale-110 transition-transform">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                </a>
+                <a href="https://facebook.com/TheJollyWasher" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-10 h-10 rounded-full flex items-center justify-center bg-white text-[#0d5c33] shadow hover:scale-110 transition-transform">
+                    <i class="fa-brands fa-facebook-f text-xl"></i>
+                </a>
+                <a href="https://www.google.com/search?hl=pt-BR&gl=br&q=The+Jolly+Washer&ludocid=5857143261891729488&lsig=AB86z5X3avwobtqxPDB1lkUotWCk#lrd=0x89c0eb4b66aab003:0x5148c0c3a3a11850,3" target="_blank" rel="noopener noreferrer" aria-label="Google" class="w-10 h-10 rounded-full flex items-center justify-center bg-white text-[#9e1c1c] shadow hover:scale-110 transition-transform">
+                    <i class="fa-brands fa-google text-xl"></i>
+                </a>
+            </div>
+            <p class="text-xs font-semibold">1913 Shore Road, Linwood, NJ 08221</p>
+            <a href="tel:+16097578847" class="text-xs font-semibold hover:underline">609-757-8847</a>
+            <p class="text-[11px] mt-2 opacity-80">Merry Christmas &amp; Happy Holidays from The Jolly Washer!</p>
+            <p class="text-[10px] mt-1 opacity-60">&copy; 2026 The Jolly Washer. All Rights Reserved.</p>
+        </footer>
+
+    </main>
+
+    <!-- Barra fixa de CTA -->
+    <div class="sticky-cta" id="stickyCta">
+        <button type="button" class="btn-xmas" data-open-quote>
+            <i class="fa-solid fa-lightbulb"></i> Free Lighting Quote
+        </button>
+        <a href="tel:+16097578847" class="sticky-call" aria-label="Call The Jolly Washer">
+            <i class="fa-solid fa-phone"></i>
+        </a>
+    </div>
+
+    <!-- Modal do formulário de orçamento (LeadConnector, igual ao original) -->
+    <div id="quoteModal" class="area-modal" aria-hidden="true">
+        <div class="area-modal-backdrop" data-quote-close></div>
+        <div class="area-modal-box quote-modal-box">
+            <button type="button" class="area-modal-close" data-quote-close aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="quote-modal-scroll">
+                <iframe
+                    src="https://api.leadconnectorhq.com/widget/form/Ug4mGGWAdr2N6TyacxdG"
+                    style="width:100%;height:100%;border:none;border-radius:4px"
+                    id="inline-Ug4mGGWAdr2N6TyacxdG"
+                    data-layout="{'id':'INLINE'}"
+                    data-trigger-type="alwaysShow"
+                    data-trigger-value=""
+                    data-activation-type="alwaysActivated"
+                    data-activation-value=""
+                    data-deactivation-type="neverDeactivate"
+                    data-deactivation-value=""
+                    data-form-name="Website Form"
+                    data-height="902"
+                    data-layout-iframe-id="inline-Ug4mGGWAdr2N6TyacxdG"
+                    data-form-id="Ug4mGGWAdr2N6TyacxdG"
+                    title="Website Form"
+                ></iframe>
+            </div>
+        </div>
+    </div>
+    <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+
+    <!-- Modal do mapa da área atendida -->
+    <div id="areaModal" class="area-modal" aria-hidden="true">
+        <div class="area-modal-backdrop" data-area-close></div>
+        <div class="area-modal-box">
+            <button type="button" class="area-modal-close" data-area-close aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="area-modal-map">
+                <iframe
+                    src="https://www.google.com/maps/d/u/0/embed?mid=1rh6Avu9KOafKfa38OAAyM_nTlHs4gRY&ehbc=2E312F&noprof=1"
+                    title="The Jolly Washer service area map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <p class="text-center text-[11px] text-gray-400 mt-3 px-1 leading-relaxed">
+                If you don't see your town listed, give us a call and ask if you're in our territory.
+            </p>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const PALETTE = ['#ff4d4d', '#ffd166', '#3ddc84', '#4dabff', '#ff7ad9'];
+        // Todo contato por mensagem vai por SMS (a empresa não usa WhatsApp)
+        function openSms(msg) {
+            window.location.href = 'sms:+16097578847?body=' + encodeURIComponent(msg);
+        }
+
+        /* ---------- Pré-loading: acende o varal lâmpada por lâmpada ---------- */
+        (function () {
+            const preloader = document.getElementById('preloader');
+            const host = document.getElementById('preLights');
+            if (!preloader || !host) return;
+            const COUNT = 7;
+            const bulbs = [];
+            for (let i = 0; i < COUNT; i++) {
+                const b = document.createElement('span');
+                b.style.setProperty('--c', PALETTE[i % PALETTE.length]);
+                host.appendChild(b);
+                bulbs.push(b);
+            }
+            const step = reduceMotion ? 40 : 190;
+            bulbs.forEach((b, i) => setTimeout(() => b.classList.add('on'), 250 + i * step));
+            const total = 250 + COUNT * step + (reduceMotion ? 150 : 450);
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+                setTimeout(() => preloader.remove(), 700);
+            }, total);
+        })();
+
+        /* ---------- Estrelas ---------- */
+        (function () {
+            const host = document.getElementById('stars');
+            if (!host) return;
+            const frag = document.createDocumentFragment();
+            const count = window.innerWidth < 640 ? 45 : 90;
+            for (let i = 0; i < count; i++) {
+                const s = document.createElement('span');
+                s.className = 'star';
+                s.style.left = (Math.random() * 100) + '%';
+                s.style.top = (Math.random() * 70) + '%';
+                const size = Math.random() < 0.15 ? 3 : (Math.random() < 0.5 ? 2 : 1);
+                s.style.width = s.style.height = size + 'px';
+                s.style.setProperty('--d', (2 + Math.random() * 4).toFixed(2) + 's');
+                s.style.setProperty('--delay', (-Math.random() * 5).toFixed(2) + 's');
+                frag.appendChild(s);
+            }
+            host.appendChild(frag);
+        })();
+
+        /* ---------- Neve (canvas) ---------- */
+        (function () {
+            const canvas = document.getElementById('snow');
+            if (!canvas || !canvas.getContext) return;
+            const ctx = canvas.getContext('2d');
+            let w = 0, h = 0, dpr = 1, flakes = [];
+
+            function makeFlake(randomY) {
+                const depth = Math.random();
+                return {
+                    x: Math.random() * w,
+                    y: randomY ? Math.random() * h : -10,
+                    r: 0.8 + depth * 2.8,
+                    vy: 0.35 + depth * 1.1,
+                    sway: 0.3 + Math.random() * 0.9,
+                    phase: Math.random() * Math.PI * 2,
+                    alpha: 0.35 + depth * 0.6
+                };
+            }
+            function resize() {
+                dpr = Math.min(window.devicePixelRatio || 1, 2);
+                w = window.innerWidth;
+                h = window.innerHeight;
+                canvas.width = w * dpr;
+                canvas.height = h * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                const target = Math.round(Math.min(170, Math.max(60, w * h / 9000)) * (reduceMotion ? 0.7 : 1));
+                while (flakes.length < target) flakes.push(makeFlake(true));
+                flakes.length = target;
+            }
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = '#ffffff';
+                for (const f of flakes) {
+                    ctx.globalAlpha = f.alpha;
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            }
+            let last = performance.now();
+            function tick(now) {
+                // movimento reduzido: neve cai mais devagar, mas continua caindo
+                const dt = Math.min(3, (now - last) / 16.67) * (reduceMotion ? 0.5 : 1);
+                last = now;
+                for (const f of flakes) {
+                    f.phase += 0.012 * dt;
+                    f.y += f.vy * dt;
+                    f.x += Math.sin(f.phase) * f.sway * 0.5 * dt;
+                    if (f.y - f.r > h) Object.assign(f, makeFlake(false));
+                    if (f.x > w + 5) f.x = -5;
+                    if (f.x < -5) f.x = w + 5;
+                }
+                draw();
+                requestAnimationFrame(tick);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            requestAnimationFrame(tick);
+        })();
+
+        /* ---------- Varais de pisca-pisca ---------- */
+        (function () {
+            const strings = document.querySelectorAll('[data-light-string]');
+            const MODES = ['twinkle', 'chase', 'steady'];
+            function build(ul) {
+                const spacing = ul.classList.contains('compact') ? 34 : 38;
+                const count = Math.ceil(window.innerWidth / spacing) + 1;
+                ul.innerHTML = '';
+                for (let i = 0; i < count; i++) {
+                    const li = document.createElement('li');
+                    li.style.setProperty('--c', PALETTE[i % PALETTE.length]);
+                    li.style.setProperty('--i', i);
+                    li.style.setProperty('--t', (0.9 + Math.random() * 1.2).toFixed(2) + 's');
+                    li.style.setProperty('--delay', (-Math.random() * 2).toFixed(2) + 's');
+                    ul.appendChild(li);
+                }
+            }
+            strings.forEach(ul => {
+                build(ul);
+                let modeIndex = 0;
+                if (!ul.hasAttribute('aria-hidden')) {
+                    const cycle = () => {
+                        ul.classList.remove('mode-' + MODES[modeIndex]);
+                        modeIndex = (modeIndex + 1) % MODES.length;
+                        ul.classList.add('mode-' + MODES[modeIndex]);
+                    };
+                    ul.addEventListener('click', cycle);
+                    ul.addEventListener('keydown', e => {
+                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cycle(); }
+                    });
+                } else {
+                    // divisores ficam em "chase" para variar
+                    ul.classList.add('mode-chase');
+                }
+            });
+            let lastW = window.innerWidth;
+            window.addEventListener('resize', () => {
+                if (Math.abs(window.innerWidth - lastW) < 40) return;
+                lastW = window.innerWidth;
+                strings.forEach(build);
+            });
+        })();
+
+        /* ---------- Parallax: --scroll-y ---------- */
+        (function () {
+            const root = document.documentElement;
+            let ticking = false;
+            function update() {
+                root.style.setProperty('--scroll-y', window.scrollY.toFixed(1));
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) { requestAnimationFrame(update); ticking = true; }
+            }, { passive: true });
+            update();
+        })();
+
+        /* ---------- Toast ---------- */
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+        let toastTimer;
+        function showToast(msg) {
+            if (!toast) return;
+            toastText.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+        }
+
+        /* ---------- Trenó do Papai Noel ---------- */
+        (function () {
+            const sleigh = document.getElementById('sleigh');
+            const svg = document.getElementById('sleighSvg');
+            if (!sleigh) return;
+            let trailTimer = null;
+
+            function spawnSparkle() {
+                const r = svg.getBoundingClientRect();
+                if (r.right < 0 || r.left > window.innerWidth) return;
+                const s = document.createElement('span');
+                s.className = 'sparkle';
+                s.style.left = (r.left + r.width * 0.04 + Math.random() * 10) + 'px';
+                s.style.top = (r.top + r.height * (0.55 + Math.random() * 0.3)) + 'px';
+                s.style.setProperty('--dx', (-20 - Math.random() * 30) + 'px');
+                s.style.setProperty('--dy', (15 + Math.random() * 35) + 'px');
+                if (Math.random() < 0.35) s.style.background = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 1150);
+            }
+            function fly() {
+                if (document.hidden) return;
+                sleigh.classList.remove('flying');
+                void sleigh.offsetWidth; // reinicia a animação
+                sleigh.classList.add('flying');
+                clearInterval(trailTimer);
+                trailTimer = setInterval(spawnSparkle, 70);
+            }
+            sleigh.addEventListener('animationend', (e) => {
+                if (e.animationName !== 'sleigh-cross') return;
+                sleigh.classList.remove('flying');
+                clearInterval(trailTimer);
+            });
+            svg.addEventListener('click', () => {
+                showToast("Ho ho ho! You spotted Santa — now let's light up your home!");
+            });
+            setTimeout(fly, 3500);
+            setInterval(fly, 26000);
+        })();
+
+        /* ---------- Papai Noel do hero: "Ho ho ho!" ao tocar ---------- */
+        (function () {
+            const santa = document.getElementById('heroSanta');
+            const hoho = document.getElementById('heroHoHo');
+            if (!santa || !hoho) return;
+            santa.addEventListener('click', () => {
+                hoho.classList.remove('bounce');
+                void hoho.offsetWidth;
+                hoho.classList.add('bounce');
+            });
+        })();
+
+        /* ---------- Flocos ao tocar/clicar em qualquer lugar ---------- */
+        (function () {
+            if (reduceMotion) return;
+            const glyphs = ['❄', '❅', '❆', '✦'];
+            document.addEventListener('pointerdown', (e) => {
+                if (e.target.closest('iframe, input, textarea, .area-modal')) return;
+                for (let i = 0; i < 7; i++) {
+                    const f = document.createElement('span');
+                    f.className = 'tap-flake';
+                    f.textContent = glyphs[i % glyphs.length];
+                    const angle = (Math.PI * 2 * i) / 7 + Math.random() * 0.5;
+                    const dist = 30 + Math.random() * 30;
+                    f.style.left = e.clientX + 'px';
+                    f.style.top = e.clientY + 'px';
+                    f.style.fontSize = (10 + Math.random() * 8) + 'px';
+                    f.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+                    f.style.setProperty('--dy', (Math.sin(angle) * dist).toFixed(1) + 'px');
+                    if (i % 3 === 0) f.style.color = '#ffd166';
+                    document.body.appendChild(f);
+                    setTimeout(() => f.remove(), 950);
+                }
+            }, { passive: true });
+        })();
+
+        /* ---------- Contagem regressiva para o Natal ---------- */
+        (function () {
+            const els = {};
+            document.querySelectorAll('[data-cd]').forEach(el => els[el.dataset.cd] = el);
+            if (!els.days) return;
+            function target() {
+                const now = new Date();
+                let t = new Date(now.getFullYear(), 11, 25);
+                if (now >= new Date(now.getFullYear(), 11, 26)) t = new Date(now.getFullYear() + 1, 11, 25);
+                return t;
+            }
+            function set(key, val) {
+                const txt = String(val).padStart(2, '0');
+                if (els[key].textContent !== txt) {
+                    els[key].textContent = txt;
+                    if (!reduceMotion) {
+                        els[key].classList.remove('tick');
+                        void els[key].offsetWidth;
+                        els[key].classList.add('tick');
+                    }
+                }
+            }
+            function update() {
+                const diff = Math.max(0, target() - new Date());
+                const s = Math.floor(diff / 1000);
+                set('days', Math.floor(s / 86400));
+                set('hours', Math.floor((s % 86400) / 3600));
+                set('mins', Math.floor((s % 3600) / 60));
+                set('secs', s % 60);
+            }
+            update();
+            setInterval(update, 1000);
+        })();
+
+        /* ---------- Casa interativa ---------- */
+        (function () {
+            const svg = document.getElementById('houseSvg');
+            const group = document.getElementById('houseBulbs');
+            const sw = document.getElementById('lightSwitch');
+            const swLabel = document.getElementById('lightSwitchLabel');
+            const chips = document.querySelectorAll('#styleChips .style-chip');
+            const wantBtn = document.getElementById('wantThisLook');
+            if (!svg || !group || !sw) return;
+
+            const STYLES = {
+                multicolor: { name: 'Multicolor', colors: ['#ff4d4d', '#ffd166', '#3ddc84', '#4dabff', '#ff7ad9'] },
+                warm: { name: 'Warm White', colors: ['#ffe2a8', '#ffd88a', '#fff0cc'] },
+                candy: { name: 'Candy Cane (red & white)', colors: ['#ff4d4d', '#ffffff'] },
+                icy: { name: 'Icy Blue', colors: ['#bfe6ff', '#8fd3ff', '#ffffff'] }
+            };
+            let style = 'multicolor';
+            let isOn = false;
+            let userTouched = false;
+            const NS = 'http://www.w3.org/2000/svg';
+            const points = [];
+
+            function line(x1, y1, x2, y2, step) {
+                const len = Math.hypot(x2 - x1, y2 - y1);
+                const n = Math.max(1, Math.round(len / step));
+                for (let i = 0; i <= n; i++) {
+                    points.push([x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n]);
+                }
+            }
+            // telhado (dos dois lados) e beiral
+            line(55, 100, 155, 38, 9);
+            line(155, 38, 255, 100, 9);
+            line(72, 105, 238, 105, 9);
+            // moldura da porta
+            line(137, 190, 137, 137, 7);
+            line(137, 137, 173, 137, 7);
+            line(173, 137, 173, 190, 7);
+            // árvore em zigue-zague
+            const hw = y => (y - 72) / 114 * 32;
+            const rows = [92, 116, 140, 164, 184];
+            for (let i = 0; i < rows.length - 1; i++) {
+                const y1 = rows[i], y2 = rows[i + 1];
+                const leftToRight = i % 2 === 0;
+                line(leftToRight ? 300 - hw(y1) : 300 + hw(y1), y1,
+                     leftToRight ? 300 + hw(y2) : 300 - hw(y2), y2, 7);
+            }
+            // arbustos (arco superior das elipses)
+            [[84, 190], [226, 190]].forEach(([cx, cy]) => {
+                for (let a = 200; a <= 340; a += 20) {
+                    const rad = a * Math.PI / 180;
+                    points.push([cx + Math.cos(rad) * 20, cy + Math.sin(rad) * 11]);
+                }
+                for (let k = 0; k < 4; k++) {
+                    points.push([cx - 12 + Math.random() * 24, cy - 6 + Math.random() * 8]);
+                }
+            });
+
+            const bulbs = points.map(([x, y], i) => {
+                const c = document.createElementNS(NS, 'circle');
+                c.setAttribute('cx', x.toFixed(1));
+                c.setAttribute('cy', y.toFixed(1));
+                c.setAttribute('r', '2.5');
+                c.setAttribute('class', 'hb');
+                c.style.setProperty('--t', (1 + Math.random() * 1.4).toFixed(2) + 's');
+                c.style.setProperty('--tw', (-Math.random() * 2).toFixed(2) + 's');
+                group.appendChild(c);
+                return c;
+            });
+
+            function paint(animated) {
+                const colors = STYLES[style].colors;
+                bulbs.forEach((b, i) => {
+                    b.style.transitionDelay = animated ? (i * 9) + 'ms' : '0ms';
+                    b.style.fill = isOn ? colors[i % colors.length] : '';
+                });
+            }
+            function setOn(on, animated) {
+                isOn = on;
+                svg.classList.toggle('on', on);
+                sw.setAttribute('aria-pressed', on ? 'true' : 'false');
+                swLabel.textContent = on ? 'Lights on! ✨' : 'Flip the switch';
+                paint(animated);
+            }
+            sw.addEventListener('click', () => {
+                userTouched = true;
+                setOn(!isOn, true);
+            });
+            chips.forEach(chip => chip.addEventListener('click', () => {
+                userTouched = true;
+                style = chip.dataset.style;
+                chips.forEach(c => {
+                    const active = c === chip;
+                    c.classList.toggle('active', active);
+                    c.setAttribute('aria-checked', active ? 'true' : 'false');
+                });
+                if (!isOn) setOn(true, true); else paint(false);
+            }));
+            if (wantBtn) {
+                wantBtn.addEventListener('click', () => {
+                    const msg = "Hi Jolly Washer! I'd love a free quote for Christmas light installation. I like the " +
+                        STYLES[style].name + " look!";
+                    openSms(msg);
+                });
+            }
+
+            // Acende sozinha na primeira vez que a casa aparece na tela
+            const io = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        obs.disconnect();
+                        setTimeout(() => { if (!userTouched && !isOn) setOn(true, true); }, 700);
+                    }
+                });
+            }, { threshold: 0.6 });
+            io.observe(svg);
+        })();
+
+        /* ---------- Vídeo de fundo: garante que toque no celular ---------- */
+        (function () {
+            const video = document.getElementById('bgVideo');
+            if (!video) return;
+            const tryPlay = () => { if (video.paused) video.play().catch(() => {}); };
+            tryPlay();
+            // alguns navegadores só liberam o autoplay após um toque
+            ['touchstart', 'pointerdown'].forEach(ev =>
+                document.addEventListener(ev, tryPlay, { once: true, passive: true }));
+            document.addEventListener('visibilitychange', () => { if (!document.hidden) tryPlay(); });
+            // se o navegador "esquecer" de buscar o vídeo, força o carregamento
+            setTimeout(() => {
+                if (video.readyState === 0) { video.load(); tryPlay(); }
+            }, 3000);
+        })();
+
+        /* ---------- Vídeo "Transform Your Home": som liga/desliga ---------- */
+        (function () {
+            const video = document.getElementById('transformVideoEl');
+            const btn = document.getElementById('transformMute');
+            if (!video || !btn) return;
+            // alguns celulares ignoram o autoplay; tenta de novo quando o
+            // vídeo entra na tela
+            new IntersectionObserver(([e]) => {
+                if (e.isIntersecting && video.paused) video.play().catch(() => {});
+            }, { threshold: 0.3 }).observe(video);
+            btn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                if (!video.muted && video.paused) video.play().catch(() => {});
+                btn.innerHTML = video.muted
+                    ? '<i class="fa-solid fa-volume-xmark"></i>'
+                    : '<i class="fa-solid fa-volume-high"></i>';
+                btn.setAttribute('aria-label', video.muted ? 'Turn video sound on' : 'Mute video');
+            });
+        })();
+
+        /* ---------- Serviços → SMS ---------- */
+        document.querySelectorAll('[data-service]').forEach(card => {
+            card.addEventListener('click', () => {
+                const msg = "Hi! I'd like to know more about your " + card.dataset.service + " service for the holidays.";
+                openSms(msg);
+            });
+        });
+
+        /* ---------- Reveal ao rolar ---------- */
+        (function () {
+            const items = document.querySelectorAll('.reveal-up');
+            if (!('IntersectionObserver' in window)) {
+                items.forEach(el => el.classList.add('revealed'));
+                return;
+            }
+            const io = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+            items.forEach(el => io.observe(el));
+        })();
+
+        /* ---------- Barra fixa de CTA ---------- */
+        (function () {
+            const bar = document.getElementById('stickyCta');
+            const hero = document.getElementById('primaryCtas');
+            const footer = document.querySelector('.footer-snow');
+            if (!bar || !hero) return;
+            let heroVisible = true, footerVisible = false;
+            function sync() { bar.classList.toggle('show', !heroVisible && !footerVisible); }
+            new IntersectionObserver(([e]) => {
+                // só mostra depois que o usuário passou dos CTAs (não antes)
+                heroVisible = e.isIntersecting || e.boundingClientRect.top > 0;
+                sync();
+            }).observe(hero);
+            if (footer) {
+                new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; sync(); }).observe(footer);
+            }
+        })();
+
+        /* ---------- Modais (orçamento e área atendida) ---------- */
+        function setupModal(modalId, closeAttr, triggers) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const open = () => { modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); };
+            const close = () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); };
+            triggers.forEach(t => t.addEventListener('click', open));
+            modal.querySelectorAll('[' + closeAttr + ']').forEach(el => el.addEventListener('click', close));
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && modal.classList.contains('open')) close();
+            });
+        }
+        setupModal('quoteModal', 'data-quote-close', document.querySelectorAll('[data-open-quote]'));
+        setupModal('areaModal', 'data-area-close', [document.getElementById('areaModalTrigger')].filter(Boolean));
+
+        /* ---------- Text Us: nome + mensagem por SMS ---------- */
+        (function () {
+            const toggleBtn = document.getElementById('textToggle');
+            const toggleIcon = document.getElementById('textToggleIcon');
+            const form = document.getElementById('textForm');
+            if (!toggleBtn || !form) return;
+            toggleBtn.addEventListener('click', () => {
+                const isOpen = form.classList.toggle('open');
+                toggleIcon.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                if (isOpen) setTimeout(() => form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 200);
+            });
+            const nameInput = document.getElementById('wName');
+            const messageInput = document.getElementById('wMessage');
+            const submitBtn = document.getElementById('wSubmit');
+            const hint = document.getElementById('wHint');
+            function validate() {
+                const ok = !!(nameInput.value.trim() && messageInput.value.trim());
+                submitBtn.disabled = !ok;
+                hint.textContent = ok ? "All set! Tap below to send it as a text." : "Fill in your name and message to continue";
+            }
+            [nameInput, messageInput].forEach(el => el.addEventListener('input', validate));
+            submitBtn.addEventListener('click', () => {
+                if (submitBtn.disabled) return;
+                const msg = "Hi Jolly Washer! (Christmas lights)\n\n" +
+                    "Name: " + nameInput.value.trim() + "\n" +
+                    "Message: " + messageInput.value.trim();
+                openSms(msg);
+            });
+        })();
+
+        /* ---------- Open/Closed now: Mon-Sun 08:00-18:00 (New York) ---------- */
+        (function () {
+            const textEl = document.getElementById('openStatusText');
+            const boxEl = document.getElementById('openStatus');
+            if (!textEl || !boxEl) return;
+            const OPEN_SECONDS = 8 * 3600;
+            const CLOSE_SECONDS = 18 * 3600;
+            const DAY_SECONDS = 24 * 3600;
+            const SOON_WINDOW = 20 * 60;
+            function update() {
+                const parts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: 'America/New_York', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false
+                }).formatToParts(new Date());
+                const get = (type) => parseInt(parts.find(p => p.type === type).value, 10);
+                const nowSeconds = (get('hour') % 24) * 3600 + get('minute') * 60 + get('second');
+                const isOpen = nowSeconds >= OPEN_SECONDS && nowSeconds < CLOSE_SECONDS;
+                let isSoonOpen = false;
+                if (isOpen) {
+                    const minsToClose = Math.ceil((CLOSE_SECONDS - nowSeconds) / 60);
+                    textEl.textContent = minsToClose <= SOON_WINDOW / 60 ? `Closing in ${minsToClose} min` : 'Open Now';
+                } else {
+                    const secondsToOpen = nowSeconds < OPEN_SECONDS ? OPEN_SECONDS - nowSeconds : (DAY_SECONDS - nowSeconds) + OPEN_SECONDS;
+                    const minsToOpen = Math.ceil(secondsToOpen / 60);
+                    isSoonOpen = minsToOpen <= SOON_WINDOW / 60;
+                    textEl.textContent = isSoonOpen ? `Opening in ${minsToOpen} min` : 'Closed Now';
+                }
+                boxEl.classList.toggle('is-open', isOpen);
+                boxEl.classList.toggle('is-soon-open', !isOpen && isSoonOpen);
+                boxEl.classList.toggle('is-closed', !isOpen && !isSoonOpen);
+            }
+            update();
+            setInterval(update, 1000);
+        })();
+    })();
+    </script>
+
+    <!-- Chat widget (LeadConnector) -->
+    <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="668a11e16ae856e1fd745103"></script>
+</body>
+</html>
