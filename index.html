@@ -607,6 +607,25 @@
             animation: glowPulse 2s infinite;
         }
 
+        /* Botão do Google: pulso leve alternando para um amarelo suave */
+        /* .link-btn começa com opacity:0 e só aparece pelo slideUp, então
+           as duas animações precisam rodar juntas */
+        .link-btn.google-pulse {
+            animation: slideUp 0.6s ease-out 0.6s both, googlePulse 2.6s ease-in-out 1.2s infinite;
+        }
+        @keyframes googlePulse {
+            0%, 100% {
+                border-color: rgba(255, 255, 255, 0.12);
+                background-color: rgba(255, 255, 255, 0.05);
+                box-shadow: 0 0 0 rgba(250, 204, 21, 0);
+            }
+            50% {
+                border-color: rgba(250, 204, 21, 0.45);
+                background-color: rgba(250, 204, 21, 0.1);
+                box-shadow: 0 0 22px rgba(250, 204, 21, 0.28);
+            }
+        }
+
         @keyframes glowPulse {
             0% { box-shadow: 0 0 15px rgba(249, 168, 38, 0.6); }
             50% { box-shadow: 0 0 30px rgba(249, 168, 38, 0.9); }
@@ -813,7 +832,6 @@
         .section-heading .line.right {
             background: linear-gradient(90deg, rgba(75, 156, 211, 0.6), transparent);
         }
-
         /* Pills de serviços e cidades atendidas */
         .service-tag {
             display: inline-flex;
@@ -1692,23 +1710,25 @@
 
             <div class="w-full h-px bg-white/10 my-1 animate-slide-up delay-600"></div>
 
-            <!-- Link 8: Google Reviews -->
+            <!-- Link 8: Google Reviews (centralizado, com pulso amarelo suave) -->
             <a href="https://www.google.com/search?q=the+jolly+washer&oq=the+jol&gs_lcrp=EgZjaHJvbWUqBggAECMYJzIGCAAQIxgnMgYIARBFGDkyBwgCEAAYgAQyDAgDEAAYQxiABBiKBTIHCAQQLhiABDIHCAUQLhiABDIMCAYQABhDGIAEGIoFMgcIBxAAGIAEMg0ICBAuGK8BGMcBGIAEMgcICRAuGIAE0gEHOTAzajBqN6gCALACAA&sourceid=chrome&source=chrome.ob&ie=UTF-8#sv=CAESzQEKuQEStgEKd0FKaVQ0dElpcW1pNTZtMnFqMkdsRFFVUFRRM3VoeUR2bThXemxoVHpueHd4QUVuUURET1M1SE5Neno3MnQzb1VfQTJsRVRGSllWVGQzUVdBRnkyNnp3bUdUZnIzbktSTmZ4QUtiSmZMaWZyX1ZmQ3k4OF9ZX0hZEhdPTXRxYXNmY0lhQ2Y1Tm9Qa2QtWjJRZxoiQURzcjlmUTU3NS1kT0hkMlMtU0dGWUtCcXBNSGp1ZE5RZxIEODA1MRoBMyoAMAA4AUAAGAAgtLHW-gZKAhAC" target="_blank" rel="noopener noreferrer"
-               class="link-btn animate-slide-up delay-600 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white no-underline">
+               class="link-btn google-pulse glass-panel flex items-center justify-center p-3 pr-10 pl-10 rounded-2xl w-full text-white no-underline">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 border border-yellow-500/30">
                         <i class="fa-brands fa-google text-base"></i>
                     </div>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col text-center">
                         <span class="font-bold text-sm">Leave a Review</span>
-                        <span class="text-xs text-gray-400 flex items-center gap-1">
+                        <span class="text-xs text-gray-400 flex items-center justify-center gap-1">
                             We appreciate your feedback!
                             <span class="text-yellow-400 text-[10px]">★★★★★</span>
                         </span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-500 opacity-50"></i>
+                <i class="fa-solid fa-chevron-right text-yellow-400/70 absolute right-4 top-1/2 -translate-y-1/2"></i>
             </a>
+
+            <div class="w-full h-px bg-white/10 my-1 animate-slide-up delay-600"></div>
 
             <!-- Link 10: Instagram -->
             <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer"
@@ -1725,22 +1745,7 @@
                 <i class="fa-solid fa-external-link-alt text-gray-500 opacity-50 text-sm"></i>
             </a>
 
-            <!-- Link 11: YouTube -->
-            <a href="https://www.youtube.com/@thejollywasher" target="_blank" rel="noopener noreferrer"
-               class="link-btn animate-slide-up delay-600 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white no-underline">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 border border-red-500/30">
-                        <i class="fa-brands fa-youtube text-base"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-sm">Follow on YouTube</span>
-                        <span class="text-xs text-gray-400">@thejollywasher</span>
-                    </div>
-                </div>
-                <i class="fa-solid fa-external-link-alt text-gray-500 opacity-50 text-sm"></i>
-            </a>
-
-            <!-- Link 12: TikTok -->
+            <!-- Link 11: TikTok -->
             <a href="https://www.tiktok.com/@thejollywasher" target="_blank" rel="noopener noreferrer"
                class="link-btn animate-slide-up delay-600 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white no-underline">
                 <div class="flex items-center gap-3">
@@ -1749,6 +1754,21 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="font-bold text-sm">Follow on TikTok</span>
+                        <span class="text-xs text-gray-400">@thejollywasher</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-external-link-alt text-gray-500 opacity-50 text-sm"></i>
+            </a>
+
+            <!-- Link 12: YouTube -->
+            <a href="https://www.youtube.com/@thejollywasher" target="_blank" rel="noopener noreferrer"
+               class="link-btn animate-slide-up delay-600 glass-panel flex items-center justify-between p-3 rounded-2xl w-full text-white no-underline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 border border-red-500/30">
+                        <i class="fa-brands fa-youtube text-base"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-sm">Follow on YouTube</span>
                         <span class="text-xs text-gray-400">@thejollywasher</span>
                     </div>
                 </div>

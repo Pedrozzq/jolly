@@ -112,7 +112,7 @@
         }
         /* Vídeo de fundo fixo, com véu escuro por cima (::after) para manter
            textos e botões legíveis. Mesmo z-index do céu, mas vem depois no
-           DOM, então fica por cima dele; estrelas, lua e neve ficam na frente. */
+           DOM, então fica por cima dele; estrelas e neve ficam na frente. */
         .bg-video-wrap {
             position: fixed;
             top: 0;
@@ -181,29 +181,6 @@
             0%, 100% { opacity: 0.2; transform: scale(0.8); }
             50% { opacity: 1; transform: scale(1.2); }
         }
-        /* Lua cheia no canto superior */
-        .moon {
-            position: fixed;
-            top: calc(6vh + env(safe-area-inset-top));
-            right: 7vw;
-            width: 78px;
-            height: 78px;
-            border-radius: 50%;
-            z-index: -2;
-            background: radial-gradient(circle at 38% 36%, #fffdf2 0%, #f3ecd2 55%, #d9cfae 100%);
-            box-shadow: 0 0 40px 10px rgba(255, 246, 214, 0.35), 0 0 120px 40px rgba(255, 246, 214, 0.12);
-            transform: translate3d(0, calc(var(--scroll-y) * -0.08px), 0);
-            pointer-events: none;
-        }
-        .moon::before,
-        .moon::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(190, 178, 140, 0.35);
-        }
-        .moon::before { width: 16px; height: 16px; top: 22px; left: 40px; }
-        .moon::after { width: 10px; height: 10px; top: 46px; left: 24px; }
 
         /* Canvas da neve: acima do céu, abaixo do conteúdo */
         #snow {
@@ -518,6 +495,250 @@
             background: linear-gradient(135deg, rgba(226, 59, 59, 0.35), rgba(31, 163, 92, 0.35));
             border: 1px solid rgba(255, 201, 74, 0.55);
             box-shadow: 0 0 18px rgba(255, 201, 74, 0.25);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.3s ease;
+        }
+        .season-badge:hover { box-shadow: 0 0 26px rgba(255, 201, 74, 0.5); }
+        .season-badge:active { transform: scale(0.95); }
+        .season-badge:focus-visible { outline: 2px solid var(--xmas-gold); outline-offset: 3px; }
+
+        /* ---------- Papai Noel surpresa (clique no "Holiday Lighting Season") ----------
+           Ele sobe de dentro de uma chaminé, acena, solta presentes e volta. */
+        .santa-pop {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            z-index: 60;
+            width: 220px;
+            height: 260px;
+            margin-left: -110px;
+            pointer-events: none;
+            visibility: hidden;
+        }
+        .santa-pop.show { visibility: visible; }
+        .santa-pop .pop-santa {
+            position: absolute;
+            left: 50%;
+            bottom: 70px;
+            width: 140px;
+            margin-left: -70px;
+            transform: translateY(170px);
+            transform-origin: 50% 100%;
+            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55));
+        }
+        .santa-pop.show .pop-santa {
+            animation: santa-pop-rise 3.4s cubic-bezier(.34, 1.4, .64, 1) forwards;
+        }
+        @keyframes santa-pop-rise {
+            0%   { transform: translateY(170px) rotate(0); }
+            18%  { transform: translateY(-8px) rotate(0); }
+            26%  { transform: translateY(0) rotate(-9deg); }
+            36%  { transform: translateY(0) rotate(9deg); }
+            46%  { transform: translateY(0) rotate(-7deg); }
+            56%  { transform: translateY(0) rotate(5deg); }
+            64%, 80% { transform: translateY(0) rotate(0); }
+            100% { transform: translateY(170px) rotate(0); }
+        }
+        .santa-pop .pop-chimney {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 150px;
+            height: 80px;
+            margin-left: -75px;
+            border-radius: 6px 6px 0 0;
+            background:
+                linear-gradient(#7a2a1a 0 0) 0 0 / 100% 2px,
+                repeating-linear-gradient(0deg, transparent 0 18px, rgba(0, 0, 0, 0.35) 18px 20px),
+                linear-gradient(135deg, #b5452c, #7c2a18);
+            box-shadow: inset 0 14px 0 #f5f7ff, 0 -4px 12px rgba(0, 0, 0, 0.4);
+            transform: translateY(100%);
+        }
+        .santa-pop.show .pop-chimney { animation: chimney-in 3.4s ease forwards; }
+        @keyframes chimney-in {
+            0%   { transform: translateY(100%); }
+            10%, 88% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+        .santa-pop .pop-bubble {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            padding: 0.45rem 0.9rem;
+            border-radius: 1rem;
+            background: #fffaf0;
+            color: var(--xmas-red);
+            font-family: 'Mountains of Christmas', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.6);
+            transform: translateX(-50%) scale(0);
+            opacity: 0;
+        }
+        .santa-pop.show .pop-bubble { animation: bubble-pop 3.4s ease forwards; }
+        @keyframes bubble-pop {
+            0%, 20% { transform: translateX(-50%) scale(0); opacity: 0; }
+            28% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+            34%, 72% { transform: translateX(-50%) scale(1); opacity: 1; }
+            80%, 100% { transform: translateX(-50%) scale(0.6); opacity: 0; }
+        }
+        .gift-burst {
+            position: fixed;
+            z-index: 61;
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: gift-fly 1.6s cubic-bezier(.2, .7, .4, 1) forwards;
+        }
+        @keyframes gift-fly {
+            0%   { transform: translate(0, 0) rotate(0) scale(0.4); opacity: 1; }
+            45%  { transform: translate(calc(var(--dx) * 0.7), var(--dy)) rotate(calc(var(--rot) * 0.5)) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), calc(var(--dy) + 220px)) rotate(var(--rot)) scale(0.9); opacity: 0; }
+        }
+
+        /* Botão "Cleaning Services": neutro (branco/grafite, sem as cores de
+           Natal), com cara de lavagem — ondas de água pulsando em volta,
+           bolhas de sabão subindo e um jato de água que passa por dentro. */
+        .candy-wrap.duo {
+            padding: 1.5px;
+            border-radius: 1.15rem;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.18) 45%, rgba(255, 255, 255, 0.6));
+            animation: duo-pulse 2.4s ease-in-out infinite;
+        }
+        /* ondas de água saindo do botão */
+        .candy-wrap.duo::before,
+        .candy-wrap.duo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            pointer-events: none;
+            animation: duo-ripple 2.4s ease-out infinite;
+        }
+        .candy-wrap.duo::after { animation-delay: 1.2s; }
+        @keyframes duo-pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 255, 255, 0), 0 10px 30px -10px rgba(0, 0, 0, 0.7); }
+            50% { transform: scale(1.025); box-shadow: 0 0 26px rgba(255, 255, 255, 0.28), 0 10px 30px -10px rgba(0, 0, 0, 0.7); }
+        }
+        @keyframes duo-ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.08, 1.35); opacity: 0; }
+        }
+        .duo-btn {
+            padding-top: 0.9rem !important;
+            padding-bottom: 0.9rem !important;
+            border-radius: 1.05rem !important;
+            border: none !important;
+            background:
+                radial-gradient(120% 90% at 50% -30%, rgba(255, 255, 255, 0.16), transparent 60%),
+                linear-gradient(180deg, #2b3138 0%, #1a1e23 100%) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -6px 14px rgba(0, 0, 0, 0.4);
+        }
+        .duo-btn:hover {
+            background:
+                radial-gradient(120% 90% at 50% -30%, rgba(255, 255, 255, 0.24), transparent 60%),
+                linear-gradient(180deg, #343b43 0%, #1f2429 100%) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -6px 14px rgba(0, 0, 0, 0.35), 0 14px 30px -8px rgba(255, 255, 255, 0.25);
+        }
+        /* jato de água que atravessa o botão sozinho */
+        .duo-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.18) 47%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0.18) 53%, transparent 62%);
+            transform: translateX(-130%);
+            animation: duo-sheen 4.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes duo-sheen {
+            0%, 55% { transform: translateX(-130%); }
+            85%, 100% { transform: translateX(130%); }
+        }
+        /* bolhas de sabão subindo */
+        .duo-bubbles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .duo-bubbles i {
+            position: absolute;
+            bottom: -14px;
+            width: var(--s, 8px);
+            height: var(--s, 8px);
+            border-radius: 9999px;
+            background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.9) 0 18%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.22) 100%);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+            animation: duo-bubble var(--t, 4s) ease-in infinite;
+            animation-delay: var(--d, 0s);
+            opacity: 0;
+        }
+        @keyframes duo-bubble {
+            0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+            15% { opacity: 0.9; }
+            50% { transform: translate(6px, -40px) scale(1); }
+            85% { opacity: 0.7; }
+            100% { transform: translate(-4px, -80px) scale(1.1); opacity: 0; }
+        }
+        .duo-icon {
+            position: relative;
+            width: 2.6rem;
+            height: 2.6rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1e23;
+            background: radial-gradient(circle at 35% 30%, #ffffff, #e6e9ec 60%, #b9c0c7);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45), inset 0 -2px 4px rgba(0, 0, 0, 0.18);
+        }
+        .duo-icon::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 9999px;
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
+            animation: duo-ring 2.4s ease-out infinite;
+        }
+        @keyframes duo-ring {
+            0% { transform: scale(0.85); opacity: 0.9; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        .duo-eyebrow {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #cfd5db;
+            opacity: 0.9;
+        }
+        .duo-title {
+            font-weight: 800;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            color: #ffffff;
+        }
+        .duo-sub { color: rgba(255, 255, 255, 0.7); }
+        .duo-chevron {
+            width: 1.6rem;
+            height: 1.6rem;
+            margin-top: -0.8rem !important;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #1a1e23;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+        .duo-btn:hover .duo-chevron { transform: translateX(3px); }
+        @media (prefers-reduced-motion: reduce) {
+            .candy-wrap.duo, .candy-wrap.duo::before, .candy-wrap.duo::after,
+            .duo-btn::after, .duo-icon::after, .duo-bubbles i { animation: none; }
+            .candy-wrap.duo::before, .candy-wrap.duo::after,
+            .duo-btn::after, .duo-icon::after, .duo-bubbles i { opacity: 0; }
         }
 
         .mini-btn {
@@ -1470,7 +1691,7 @@
                 animation: none !important;
             }
             .sleigh-flight.flying { animation-duration: 16s; }
-            .stars, .aurora, .moon, .logo-wrap { transform: none !important; }
+            .stars, .aurora, .logo-wrap { transform: none !important; }
         }
     </style>
 </head>
@@ -1523,7 +1744,7 @@
         <div class="pre-text">Plugging in the lights&hellip;</div>
     </div>
 
-    <!-- Fundo: céu noturno, aurora, estrelas, lua e neve -->
+    <!-- Fundo: céu noturno, aurora, estrelas e neve -->
     <div class="night-sky" aria-hidden="true"></div>
     <!-- Vídeo de fundo: casa iluminada. Fica position:absolute dentro de um
          wrapper fixed (celulares costumam congelar <video> fixed direto). -->
@@ -1533,10 +1754,15 @@
     </div>
     <div class="aurora" aria-hidden="true"></div>
     <div class="stars" id="stars" aria-hidden="true"></div>
-    <div class="moon" aria-hidden="true"></div>
     <canvas id="snow" aria-hidden="true"></canvas>
 
     <!-- Trenó do Papai Noel (cruza a tela periodicamente) -->
+    <div class="santa-pop" id="santaPop" aria-hidden="true">
+        <div class="pop-bubble">Ho Ho Ho! Merry Christmas!</div>
+        <svg class="pop-santa" viewBox="0 0 120 130"><use href="#santa-face"/></svg>
+        <div class="pop-chimney"></div>
+    </div>
+
     <div class="sleigh-flight" id="sleigh" aria-hidden="true">
         <div class="sleigh-bob">
             <svg viewBox="0 0 300 80" id="sleighSvg">
@@ -1598,7 +1824,7 @@
                 </div>
             </div>
 
-            <span class="season-badge mb-2"><i class="fa-solid fa-snowflake"></i> Holiday Lighting Season</span>
+            <button type="button" id="seasonBadge" class="season-badge mb-2"><i class="fa-solid fa-snowflake"></i> Holiday Lighting Season</button>
 
             <div id="openStatus" class="flex items-center justify-center gap-1.5 text-xs font-semibold mb-2" aria-live="polite">
                 <span class="status-dot"></span>
@@ -1693,6 +1919,37 @@
                     </button>
                     <p id="wHint" class="text-[11px] text-gray-500 text-center">Fill in your name and message to continue</p>
                 </div>
+            </div>
+
+            <div class="candy-wrap duo animate-slide-up delay-300">
+                <a href="https://thejollywasher.site" target="_blank" rel="noopener noreferrer"
+                   class="link-btn duo-btn flex items-center justify-center p-3 pr-10 pl-10 w-full text-white no-underline">
+                    <span class="duo-bubbles" aria-hidden="true">
+                        <i style="left:8%;--s:7px;--t:3.6s;--d:0s"></i>
+                        <i style="left:22%;--s:10px;--t:4.4s;--d:1.1s"></i>
+                        <i style="left:41%;--s:6px;--t:3.2s;--d:2.2s"></i>
+                        <i style="left:63%;--s:9px;--t:4.8s;--d:.6s"></i>
+                        <i style="left:79%;--s:6px;--t:3.8s;--d:1.8s"></i>
+                        <i style="left:91%;--s:11px;--t:5s;--d:3s"></i>
+                    </span>
+                    <div class="relative flex items-center gap-3">
+                        <div class="duo-icon">
+                            <!-- Arminha de lavadora de pressão (não existe no Font Awesome) -->
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                                <path d="M3 6.5h7a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5H8.1l-1.55 6.9a1 1 0 0 1-.98.8H3.7a.6.6 0 0 1-.58-.74L4.7 10.5H3A1.5 1.5 0 0 1 1.5 9V8A1.5 1.5 0 0 1 3 6.5z"/>
+                                <rect x="11" y="7.3" width="7" height="2.4" rx="1"/>
+                                <path d="M8.3 10.6c1.1 1.6.7 3-.6 3.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                                <path d="M19.2 8.5l3.6-3.2M19.2 8.5h3.8M19.2 8.5l3.6 3.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="flex flex-col text-center leading-tight">
+                            <span class="duo-eyebrow">&#10022; Year-Round &#10022;</span>
+                            <span class="duo-title">Cleaning Services</span>
+                            <span class="duo-sub text-[11px] mt-0.5">Pressure washing &amp; exterior cleaning</span>
+                        </div>
+                    </div>
+                    <span class="btn-chevron duo-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
             </div>
 
         </section>
@@ -2306,6 +2563,47 @@
                 hoho.classList.remove('bounce');
                 void hoho.offsetWidth;
                 hoho.classList.add('bounce');
+            });
+        })();
+
+        /* ---------- Papai Noel sai da chaminé ao tocar em "Holiday Lighting Season" ---------- */
+        (function () {
+            const badge = document.getElementById('seasonBadge');
+            const pop = document.getElementById('santaPop');
+            if (!badge || !pop) return;
+            const gifts = ['🎁', '🎄', '⭐', '🍬', '🔔', '❄️'];
+            let busy = false;
+
+            function burstGifts() {
+                const r = pop.getBoundingClientRect();
+                const x = r.left + r.width / 2;
+                const y = r.bottom - 150;
+                for (let i = 0; i < 14; i++) {
+                    const g = document.createElement('span');
+                    g.className = 'gift-burst';
+                    g.textContent = gifts[i % gifts.length];
+                    g.style.left = (x - 12) + 'px';
+                    g.style.top = y + 'px';
+                    g.style.setProperty('--dx', (Math.random() * 300 - 150) + 'px');
+                    g.style.setProperty('--dy', (-120 - Math.random() * 160) + 'px');
+                    g.style.setProperty('--rot', (Math.random() * 540 - 270) + 'deg');
+                    g.style.animationDelay = (i * 0.04) + 's';
+                    document.body.appendChild(g);
+                    setTimeout(() => g.remove(), 2400);
+                }
+            }
+
+            badge.addEventListener('click', () => {
+                if (busy) return;
+                busy = true;
+                pop.classList.remove('show');
+                void pop.offsetWidth; // reinicia a animação
+                pop.classList.add('show');
+                if (!reduceMotion) setTimeout(burstGifts, 700);
+                setTimeout(() => {
+                    pop.classList.remove('show');
+                    busy = false;
+                }, 3500);
             });
         })();
 
