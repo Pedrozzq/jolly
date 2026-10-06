@@ -282,7 +282,6 @@
         if (!beforeImg || !afterImg || !prevBtn || !nextBtn || !dotsWrap) return;
 
         const PROJECTS = [
-            { before: 'img/ba-walkway-before.webp', after: 'img/ba-walkway-after.webp', label: 'Paver Walkway' },
             { before: 'img/ba-wood-deck-before.webp', after: 'img/ba-wood-deck-after.webp', label: 'Wood Deck' },
             { before: 'img/ba-siding-corner-before.webp', after: 'img/ba-siding-corner-after.webp', label: 'Vinyl Siding' },
             { before: 'img/ba-staircase-before.webp', after: 'img/ba-staircase-after.webp', label: 'Staircase' },
@@ -294,6 +293,7 @@
             { before: 'img/ba-driveway-before.webp', after: 'img/ba-driveway-after.webp', label: 'Driveway' },
             { before: 'img/ba-composite-deck-before.webp', after: 'img/ba-composite-deck-after.webp', label: 'Composite Deck' },
             { before: 'img/ba-balcony-floor-before.webp', after: 'img/ba-balcony-floor-after.webp', label: 'Balcony Floor' },
+            { before: 'img/ba-walkway-before.webp', after: 'img/ba-walkway-after.webp', label: 'Paver Walkway' },
         ];
 
         PROJECTS.forEach((_, i) => {
