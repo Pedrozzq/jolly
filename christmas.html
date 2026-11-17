@@ -319,15 +319,20 @@
             font-family: 'Mountains of Christmas', 'IM Fell English SC', serif;
             font-weight: 700;
             line-height: 1.05;
-            background: linear-gradient(90deg,
-                #ff5a5a 0%, #ffd166 20%, #fff7e0 35%,
-                #3ddc84 52%, #fff7e0 68%, #ffd166 82%, #ff5a5a 100%);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent !important;
-            animation: color-flow 9s linear infinite;
-            filter: drop-shadow(0 0 16px rgba(255, 201, 74, 0.35));
+            color: #ffffff !important;
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.28), 0 2px 10px rgba(0, 0, 0, 0.45);
+        }
+        /* Único título em vermelho natalino */
+        .xmas-title.is-red {
+            color: #ff3b3b !important;
+            text-shadow: 0 0 18px rgba(255, 59, 59, 0.45), 0 2px 10px rgba(0, 0, 0, 0.45);
+        }
+        /* Subtítulos das seções em branco suave */
+        .section-sub {
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 0.8rem;
+            line-height: 1.45;
+            text-align: center;
         }
         .section-heading {
             display: flex;
@@ -910,45 +915,112 @@
         }
 
         /* ---------------- Contagem regressiva ---------------- */
+        /* Countdown no estilo dos widgets da Apple: vidro escuro, fonte
+           do sistema, números grandes e finos em largura fixa */
+        .cd-card {
+            position: relative;
+            padding: 22px 18px 18px;
+            border-radius: 28px;
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background: rgba(28, 28, 30, 0.55);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow:
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.3),
+                0 20px 50px -20px rgba(0, 0, 0, 0.7);
+        }
+        .cd-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.03) 65%, rgba(255, 255, 255, 0.2));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+            pointer-events: none;
+        }
+        .cd-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #ff453a;
+            margin-bottom: 6px;
+        }
+        .cd-eyebrow i { font-size: 11px; }
+        .cd-sub {
+            font-size: 13px;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0 auto 18px;
+            max-width: 290px;
+        }
         .countdown {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 2px;
         }
         .cd-cell {
-            position: relative;
-            border-radius: 0.9rem;
-            padding: 0.7rem 0.2rem 0.55rem;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(226, 59, 59, 0.18), rgba(10, 20, 40, 0.5));
-            border: 1px solid rgba(255, 201, 74, 0.3);
-            overflow: hidden;
-        }
-        .cd-cell:nth-child(even) {
-            background: linear-gradient(180deg, rgba(31, 163, 92, 0.2), rgba(10, 20, 40, 0.5));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 62px;
         }
         .cd-num {
             display: block;
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #fff7e0;
+            font-size: clamp(2.2rem, 11vw, 2.9rem);
+            font-weight: 250;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            color: #fff;
             font-variant-numeric: tabular-nums;
-            text-shadow: 0 0 12px rgba(255, 201, 74, 0.6);
         }
-        .cd-num.tick {
-            animation: cd-tick 0.35s ease;
-        }
+        .cd-num.tick { animation: cd-tick 0.45s cubic-bezier(0.32, 0.72, 0, 1); }
         @keyframes cd-tick {
-            0% { transform: translateY(-6px); opacity: 0.3; }
-            100% { transform: translateY(0); opacity: 1; }
+            0% { transform: translateY(-0.18em); opacity: 0; filter: blur(3px); }
+            100% { transform: none; opacity: 1; filter: none; }
+        }
+        .cd-sep {
+            font-size: clamp(1.8rem, 9vw, 2.3rem);
+            font-weight: 200;
+            line-height: 1.1;
+            color: rgba(255, 255, 255, 0.28);
         }
         .cd-label {
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.55);
+            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.45);
         }
+        .cd-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px 20px;
+            border: 0;
+            border-radius: 9999px;
+            font: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #0b0b0d;
+            background: rgba(255, 255, 255, 0.95);
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.2s ease;
+        }
+        .cd-btn:hover { background: #fff; }
+        .cd-btn:active { transform: scale(0.97); }
+        .cd-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
         /* ---------------- Casa interativa ---------------- */
         .house-card {
@@ -1401,43 +1473,6 @@
             min-height: 70vh;
         }
 
-        /* ---------------- Trenó do Papai Noel cruzando o céu -------------
-           Cruza a tela da esquerda para a direita de tempos em tempos,
-           deixando um rastro de brilhos. Clicar nele solta um "Ho ho ho!". */
-        .sleigh-flight {
-            position: fixed;
-            top: calc(13vh + env(safe-area-inset-top));
-            left: 0;
-            z-index: 30;
-            width: 230px;
-            transform: translateX(-260px);
-            pointer-events: none;
-            visibility: hidden;
-        }
-        .sleigh-flight.flying {
-            visibility: visible;
-            animation: sleigh-cross 11s linear forwards;
-        }
-        .sleigh-flight .sleigh-bob {
-            animation: sleigh-bob 1.6s ease-in-out infinite;
-        }
-        .sleigh-flight svg {
-            width: 100%;
-            height: auto;
-            display: block;
-            pointer-events: auto;
-            cursor: pointer;
-            filter: drop-shadow(0 0 6px rgba(255, 230, 160, 0.7));
-        }
-        @keyframes sleigh-cross {
-            0% { transform: translateX(-260px) translateY(30px) rotate(-6deg); }
-            50% { transform: translateX(calc(50vw - 115px)) translateY(-10px) rotate(-2deg); }
-            100% { transform: translateX(calc(100vw + 40px)) translateY(-40px) rotate(-8deg); }
-        }
-        @keyframes sleigh-bob {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-7px); }
-        }
         .deer-legs {
             animation: gallop 0.45s ease-in-out infinite alternate;
             transform-origin: center;
@@ -1591,9 +1626,10 @@
         .delay-300 { animation-delay: 300ms; }
         .delay-400 { animation-delay: 400ms; }
 
-        /* ---------------- Pré-loading: "ligando o pisca-pisca" ----------
-           Logo no centro e um varal cujas lâmpadas acendem uma a uma; ao
-           final o preloader some com fade. */
+        /* ---------------- Pré-loading natalino ----------------
+           Noite de inverno com neve caindo, a logo surge com brilho e um
+           varal de pisca-pisca em arco acende lâmpada por lâmpada conforme
+           a página carrega. No fim, todas piscam juntas e a tela se abre. */
         #preloader {
             position: fixed;
             inset: 0;
@@ -1602,85 +1638,103 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            background: radial-gradient(ellipse at 50% 40%, #0d1f3f 0%, #040914 70%);
-            transition: opacity 0.7s ease, visibility 0.7s ease;
+            overflow: hidden;
+            background:
+                radial-gradient(120% 70% at 50% 110%, rgba(255, 59, 48, 0.22), transparent 60%),
+                radial-gradient(90% 60% at 50% 40%, #0d1a33 0%, #050912 70%);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            transition: opacity 0.55s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.55s;
         }
-        #preloader.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .pre-logo {
-            position: relative;
-            width: 120px;
-            height: 120px;
+        #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* neve */
+        .pre-snow { position: absolute; inset: 0; pointer-events: none; }
+        .pre-snow i {
+            position: absolute;
+            top: -10px;
+            width: var(--sz, 4px);
+            height: var(--sz, 4px);
             border-radius: 50%;
+            background: #fff;
+            opacity: var(--o, 0.8);
+            filter: blur(var(--b, 0px));
+            animation: pre-fall var(--t, 7s) linear var(--d, 0s) infinite;
+        }
+        @keyframes pre-fall {
+            0% { transform: translate3d(0, -10px, 0); }
+            100% { transform: translate3d(var(--x, 20px), 105vh, 0); }
+        }
+
+        .pre-stage {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle, rgba(255, 250, 240, 0.92) 0%, rgba(255, 250, 240, 0.5) 60%, transparent 90%);
-            animation: pre-pop 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+            transition: transform 1s cubic-bezier(0.32, 0.72, 0, 1), filter 1s ease;
         }
-        .pre-logo img {
-            width: 76px;
-            height: 76px;
-            object-fit: contain;
-        }
-        .pre-logo .logo-hat {
-            top: -26px;
-            right: -28px;
-            width: 56px;
-            height: 45px;
-        }
-        .pre-ring {
+        #preloader.hidden .pre-stage { transform: scale(1.15); filter: blur(8px); }
+        .pre-glow {
             position: absolute;
-            inset: -6px;
+            width: 170%;
+            aspect-ratio: 1;
             border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: var(--xmas-red);
-            border-right-color: var(--xmas-green);
-            border-bottom-color: var(--xmas-gold);
-            animation: pre-spin 1.4s linear infinite;
+            background: radial-gradient(circle, rgba(255, 210, 140, 0.35) 0%, rgba(255, 59, 48, 0.18) 40%, transparent 68%);
+            opacity: 0.35;
+            transform: scale(0.85);
+            transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.32, 0.72, 0, 1);
+            animation: pre-breathe 2.4s ease-in-out infinite;
+            pointer-events: none;
         }
-        @keyframes pre-pop {
-            0% { opacity: 0; transform: scale(0.7); }
-            100% { opacity: 1; transform: scale(1); }
+        @keyframes pre-breathe { 50% { opacity: 0.55; } }
+        #preloader.lit .pre-glow { opacity: 1; transform: scale(1.05); animation: none; }
+        .pre-logo {
+            position: relative;
+            width: min(56vw, 240px);
+            height: auto;
+            filter: drop-shadow(0 0 18px rgba(255, 220, 160, 0.35));
+            animation: pre-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
         }
-        @keyframes pre-spin {
-            to { transform: rotate(360deg); }
-        }
-        .pre-lights {
-            display: flex;
-            gap: 14px;
-        }
-        .pre-lights span {
-            width: 12px;
-            height: 18px;
-            border-radius: 50%;
-            background: #2a3348;
-            transition: background 0.2s ease, box-shadow 0.2s ease;
-        }
-        .pre-lights span.on {
-            background: var(--c);
-            box-shadow: 0 0 16px 4px var(--c);
-        }
-        .pre-text {
-            font-family: 'Mountains of Christmas', serif;
-            font-size: 1.35rem;
-            color: #fff3d6;
-            text-shadow: 0 0 12px rgba(255, 201, 74, 0.6);
+        @keyframes pre-in {
+            0% { opacity: 0; transform: scale(0.92) translateY(8px); filter: blur(14px); }
+            100% { opacity: 1; transform: none; filter: drop-shadow(0 0 18px rgba(255, 220, 160, 0.35)); }
         }
 
-        /* Bolha do chat (LeadConnector) em vermelho natalino em vez do azul
-           padrão. O widget lê essas variáveis dentro do shadow DOM; regras
-           da página no elemento host vencem as do próprio widget. */
-        chat-widget {
-            --chat-widget-primary-color: #d62828 !important;
-            --chat-widget-primary-solid-color: #d62828 !important;
-            --chat-widget-active-color: #d62828 !important;
-            --chat-widget-bubble-color: #d62828 !important;
-            --chat-widget-button-color: #d62828 !important;
+        /* varal de pisca-pisca em arco = barra de progresso */
+        .pre-lights {
+            position: relative;
+            width: min(78vw, 300px);
+            margin-top: 22px;
+            animation: pre-fade 0.4s 0.1s ease both;
+        }
+        .pre-lights svg { width: 100%; height: auto; display: block; overflow: visible; }
+        .pre-wire { fill: none; stroke: #2b3a2f; stroke-width: 2; stroke-linecap: round; }
+        .pre-bulb .cap { fill: #6b7480; }
+        .pre-bulb .glass {
+            fill: #2a2f3a;
+            transition: fill 0.35s ease, filter 0.35s ease;
+        }
+        .pre-bulb.on .glass { fill: var(--c); filter: drop-shadow(0 0 5px var(--c)) drop-shadow(0 0 12px var(--c)); }
+        #preloader.lit .pre-bulb.on .glass { animation: pre-twinkle 0.25s ease-in-out 2 alternate; }
+        @keyframes pre-twinkle { to { filter: drop-shadow(0 0 2px var(--c)); opacity: 0.55; } }
+
+        .pre-caption {
+            margin-top: 18px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            animation: pre-fade 0.4s 0.15s ease both;
+        }
+        .pre-caption b { color: #ff453a; font-weight: 600; }
+        @keyframes pre-fade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .pre-logo, .pre-lights, .pre-caption, .pre-glow, .pre-snow i { animation: none; }
+            .pre-snow { display: none; }
         }
 
         /* ---------------- Movimento reduzido ---------------- */
@@ -1690,9 +1744,629 @@
             .aurora, .candy-wrap, .call-cta, .brand-name, .xmas-title, .pre-ring {
                 animation: none !important;
             }
-            .sleigh-flight.flying { animation-duration: 16s; }
             .stars, .aurora, .logo-wrap { transform: none !important; }
         }
+
+        /* ---------------- Vídeo imersivo ---------------- */
+        .immersive-video {
+            position: relative;
+            margin-top: 0.5rem;
+            padding: 1.5rem 0 2rem;
+            display: flex;
+            justify-content: center;
+            isolation: isolate;
+        }
+        /* Brilho ambiente com as cores do vídeo (canvas ampliada + blur) */
+        .iv-ambient {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: min(140vw, 760px);
+            height: 115%;
+            transform: translate(-50%, -50%);
+            filter: blur(70px) saturate(160%);
+            opacity: 0.75;
+            z-index: -1;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+        .iv-stage {
+            --iv-p: 1;
+            position: relative;
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            max-height: 100svh;
+            overflow: hidden;
+            /* celular: de ponta a ponta, entra levemente reduzido e arredondado */
+            transform: scale(calc(0.9 + var(--iv-p) * 0.1));
+            border-radius: calc((1 - var(--iv-p)) * 28px);
+            /* bordas superior e inferior se dissolvem no fundo do site */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 88%, transparent 100%);
+                    mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 88%, transparent 100%);
+            will-change: transform;
+        }
+        .iv-stage video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+        }
+        .iv-sound {
+            position: absolute;
+            right: 14px;
+            bottom: 12%;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 0.5px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 6px 18px rgba(0, 0, 0, 0.35);
+            cursor: pointer;
+        }
+        /* Variante horizontal (16:9): de ponta a ponta no celular, com as
+           bordas laterais também se dissolvendo no fundo */
+        .iv-stage.is-landscape {
+            aspect-ratio: 16 / 9;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
+                    mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
+        }
+        .immersive-video:has(.is-landscape) .iv-ambient { height: 160%; width: min(160vw, 1000px); }
+        .iv-stage.is-landscape .iv-sound { bottom: 16%; }
+        /* telas maiores: vídeo centralizado, em "cartão" com cantos Apple
+           e o brilho ambiente preenchendo as laterais */
+        @media (min-width: 640px) {
+            .iv-stage {
+                width: min(440px, 90vw);
+                border-radius: 32px;
+                -webkit-mask-image: none;
+                        mask-image: none;
+                box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8);
+            }
+            .iv-sound { bottom: 16px; }
+            .iv-stage.is-landscape { width: min(720px, 92vw); -webkit-mask-image: none; mask-image: none; }
+            .iv-stage.is-landscape .iv-sound { bottom: 16px; }
+        }
+
+        /* ---------------- Barra de ferramentas inferior (apps da Apple) ----------------
+           Minimalista: cápsula de vidro "liquid glass" com ícones de linha
+           monocromáticos (estilo SF Symbols) + botão de orçamento separado,
+           como as barras de abas do iOS. Ao rolar para baixo tudo encolhe
+           (rótulos somem, ícones diminuem, o botão vira um círculo) mas
+           continua visível e clicável; ao rolar para cima volta ao normal. */
+        :root {
+            --tb-h: 60px;
+            --tb-h-compact: 44px;
+            --tb-ease: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body { padding-bottom: calc(var(--tb-h) + 28px + env(safe-area-inset-bottom)) !important; }
+        .bottom-toolbar {
+            position: fixed;
+            left: 50%;
+            bottom: calc(14px + env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            z-index: 95;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            transition: bottom 0.45s var(--tb-ease), gap 0.45s var(--tb-ease);
+        }
+        /* Vidro: translúcido, desfoque forte, borda com reflexo especular */
+        .tb-glass {
+            position: relative;
+            height: var(--tb-h);
+            border-radius: 9999px;
+            background: rgba(28, 28, 30, 0.42);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow:
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.35),
+                inset 0 -0.5px 0 rgba(255, 255, 255, 0.08),
+                0 8px 32px rgba(0, 0, 0, 0.38),
+                0 1px 2px rgba(0, 0, 0, 0.25);
+            transition: height 0.45s var(--tb-ease), padding 0.45s var(--tb-ease);
+        }
+        .tb-glass::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.06) 38%, rgba(255, 255, 255, 0.04) 62%, rgba(255, 255, 255, 0.28));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+            pointer-events: none;
+        }
+        .tb-tabs {
+            display: flex;
+            align-items: center;
+            padding: 0 6px;
+        }
+        .tb-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            width: 58px;
+            height: calc(var(--tb-h) - 10px);
+            border-radius: 9999px;
+            color: rgba(255, 255, 255, 0.92);
+            text-decoration: none;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: width 0.45s var(--tb-ease), height 0.45s var(--tb-ease), background-color 0.25s ease, transform 0.3s var(--tb-ease);
+        }
+        .tb-item:hover { background: rgba(255, 255, 255, 0.08); }
+        .tb-item:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.14); }
+        .tb-item svg, .tb-cta svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            transition: width 0.45s var(--tb-ease), height 0.45s var(--tb-ease);
+        }
+        .tb-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            line-height: 1;
+            color: rgba(255, 255, 255, 0.62);
+            max-height: 12px;
+            opacity: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: opacity 0.2s ease, max-height 0.45s var(--tb-ease);
+        }
+        /* Botão de orçamento: pílula branca separada (ação principal) */
+        .tb-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            height: var(--tb-h);
+            padding: 0 20px 0 17px;
+            border: 0;
+            border-radius: 9999px;
+            cursor: pointer;
+            color: #0b0b0d;
+            background: rgba(255, 255, 255, 0.94);
+            font: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08), 0 8px 28px rgba(0, 0, 0, 0.35);
+            -webkit-tap-highlight-color: transparent;
+            transition: height 0.45s var(--tb-ease), padding 0.45s var(--tb-ease), transform 0.3s var(--tb-ease), background-color 0.2s ease;
+        }
+        .tb-cta svg { width: 20px; height: 20px; stroke-width: 1.8; }
+        .tb-cta:hover { background: #fff; }
+        .tb-cta:active { transform: scale(0.94); }
+        .tb-cta-text {
+            max-width: 80px;
+            opacity: 1;
+            overflow: hidden;
+            transition: max-width 0.45s var(--tb-ease), opacity 0.2s ease;
+        }
+        .tb-item:focus-visible, .tb-cta:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            outline-offset: 2px;
+        }
+        /* Estado compacto (rolando para baixo) */
+        .bottom-toolbar.is-compact { bottom: calc(8px + env(safe-area-inset-bottom)); gap: 8px; }
+        .bottom-toolbar.is-compact .tb-glass { height: var(--tb-h-compact); }
+        .bottom-toolbar.is-compact .tb-tabs { padding: 0 4px; }
+        .bottom-toolbar.is-compact .tb-item { width: 48px; height: calc(var(--tb-h-compact) - 8px); gap: 0; }
+        .bottom-toolbar.is-compact .tb-item svg { width: 19px; height: 19px; }
+        .bottom-toolbar.is-compact .tb-label { opacity: 0; max-height: 0; }
+        .bottom-toolbar.is-compact .tb-cta { height: var(--tb-h-compact); padding: 0 12px; gap: 0; }
+        .bottom-toolbar.is-compact .tb-cta-text { max-width: 0; opacity: 0; }
+        /* Telas bem estreitas */
+        @media (max-width: 380px) {
+            .tb-item { width: 52px; }
+            .tb-cta { padding: 0 15px 0 13px; font-size: 13px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .bottom-toolbar, .tb-glass, .tb-item, .tb-item svg, .tb-label, .tb-cta, .tb-cta-text { transition: none; }
+        }
+
+        /* ---------------- See the Jolly Difference (antes/depois) ---------------- */
+        .xc-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            border-radius: 1.4rem;
+            overflow: hidden;
+            border: 2px solid rgba(255, 201, 74, 0.45);
+            box-shadow: 0 22px 50px -15px rgba(0, 0, 0, 0.75), 0 0 34px rgba(255, 201, 74, 0.18);
+            touch-action: pan-y;
+            cursor: ew-resize;
+            user-select: none;
+            -webkit-user-select: none;
+            background: #05070d;
+        }
+        .xc-before, .xc-after {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+        /* "depois" recortado pela esquerda: a parte acesa fica à direita
+           do divisor, embaixo do rótulo "After" */
+        .xc-after { clip-path: inset(0 0 0 50%); }
+        .xc-label {
+            position: absolute;
+            top: 0.75rem;
+            z-index: 3;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .xc-label-before { left: 0.75rem; }
+        .xc-label-after { right: 0.75rem; color: #2a1400; background: #FFC94A; }
+        .xc-project {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            z-index: 5;
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(214, 40, 40, 0.92);
+            box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.5);
+        }
+        .xc-handle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            margin-left: -1.5px;
+            z-index: 4;
+            touch-action: none;
+            background: #FFC94A;
+            box-shadow: 0 0 14px rgba(255, 201, 74, 0.85);
+        }
+        .xc-handle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #FFC94A;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 201, 74, 0.6);
+        }
+        .xc-handle::after {
+            content: '\1F384';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            line-height: 1;
+        }
+        .xc-hint {
+            position: absolute;
+            bottom: 0.85rem;
+            left: 0.75rem;
+            z-index: 5;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.55);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .xc-hint.dismissed { opacity: 0; transform: translateY(8px); pointer-events: none; }
+        .xc-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            width: 34px;
+            height: 34px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #fff;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.16);
+            border: 0.5px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .xc-arrow-prev { left: 0.4rem; }
+        .xc-arrow-next { right: 0.4rem; }
+        .xc-dots { display: flex; justify-content: center; gap: 0.4rem; margin-top: 0.8rem; }
+        .xc-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.25);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .xc-dot.active { background: #FFC94A; transform: scale(1.4); }
+        /* Com uma casa só, setas e pontos ficam escondidos */
+        .xc-single .xc-arrow, .xc-dots:empty { display: none; }
+
+        /* =====================================================================
+           Estética Apple (vermelho + branco) — de "What We Decorate" para baixo
+           ===================================================================== */
+        .apple {
+            --a-red: #ff3b30;
+            --a-red-soft: rgba(255, 59, 48, 0.14);
+            --a-glass: rgba(28, 28, 30, 0.58);
+            --a-hair: rgba(255, 255, 255, 0.1);
+            --a-ease: cubic-bezier(0.32, 0.72, 0, 1);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Títulos: SF Display, branco (vermelho só no .is-red) */
+        .apple .xmas-title {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.08;
+            text-shadow: none;
+        }
+        .apple .section-heading .xmas-title { font-size: 1.75rem; }
+        .apple .xmas-title.is-red { color: var(--a-red) !important; text-shadow: none; }
+        .apple .section-heading .line { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35)); }
+        .apple .section-heading .line.right { background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), transparent); }
+        .apple .section-sub { color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; }
+
+        /* Vidro padrão dos cartões */
+        .apple .glass-panel {
+            background: var(--a-glass) !important;
+            border: 0 !important;
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.22);
+        }
+
+        /* ---- What We Decorate: lista agrupada (Ajustes do iOS) ---- */
+        #services.apple .grid {
+            gap: 0 !important;
+            border-radius: 22px;
+            overflow: hidden;
+            background: var(--a-glass);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.22), 0 20px 50px -24px rgba(0, 0, 0, 0.7);
+        }
+        #services.apple .service-card {
+            position: relative;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 16px;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            transition: background-color 0.2s ease;
+        }
+        #services.apple .service-card + .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 62px;
+            right: 0;
+            height: 0.5px;
+            background: var(--a-hair);
+        }
+        #services.apple .service-card:hover { transform: none; background: rgba(255, 255, 255, 0.05) !important; }
+        #services.apple .service-card:active { background: rgba(255, 255, 255, 0.1) !important; }
+        #services.apple .service-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            border: 0 !important;
+            font-size: 0.9rem;
+            color: #fff !important;
+            background: var(--a-red) !important;
+        }
+        #services.apple .service-card .font-bold { font-weight: 600; font-size: 0.95rem; letter-spacing: -0.01em; }
+        #services.apple .service-card .text-gray-400 { color: rgba(255, 255, 255, 0.5); }
+        #services.apple .service-card > span:nth-child(2) { flex: 1; }
+        .svc-chevron { display: none; }
+        #services.apple .svc-chevron {
+            display: block;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ---- How It Works ---- */
+        .apple .steps::before {
+            left: 15px;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.14);
+            opacity: 1;
+        }
+        .apple .step { align-items: center; }
+        .apple .step-num {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--a-red);
+            box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.16);
+        }
+        .apple .step-num::before { display: none; }
+        .apple .step .glass-panel { border-radius: 18px !important; padding: 14px 16px !important; }
+        .apple .step .font-bold { font-weight: 600; font-size: 0.95rem; letter-spacing: -0.01em; }
+        .apple .step .text-gray-400 { color: rgba(255, 255, 255, 0.55); }
+
+        /* ---- Be the Brightest House: balão estilo iMessage ---- */
+        .apple .speech-bubble {
+            background: #fff;
+            color: #111;
+            font-weight: 500;
+            font-size: 0.9rem;
+            line-height: 1.38;
+            border-radius: 20px 20px 20px 6px;
+            box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+        }
+        .apple .speech-bubble::after { border-color: transparent #fff transparent transparent; }
+        .apple .speech-bubble strong { color: var(--a-red); font-weight: 700; }
+        .apple .ho-ho {
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+            color: var(--a-red);
+        }
+        .apple .text-white\/80 { color: rgba(255, 255, 255, 0.7); }
+
+        /* ---- Instagram: cartão de vidro escuro ---- */
+        .apple .ig-profile-card {
+            border-radius: 26px;
+            background: var(--a-glass);
+            border: 0;
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.22), 0 20px 50px -24px rgba(0, 0, 0, 0.7);
+        }
+        .apple .ig-avatar { background: linear-gradient(135deg, var(--a-red), #fff) border-box; }
+        .apple .ig-name { color: #fff; font-weight: 600; }
+        .apple .ig-verified { color: #fff; }
+        .apple .ig-handle { color: rgba(255, 255, 255, 0.5); }
+        .apple .ig-stat strong { color: #fff; font-weight: 600; }
+        .apple .ig-stat span { color: rgba(255, 255, 255, 0.5); text-transform: none; letter-spacing: 0; font-size: 11px; }
+        .apple .ig-follow-btn {
+            background: var(--a-red);
+            font-weight: 600;
+            padding: 0.7rem;
+            transition: transform 0.3s var(--a-ease);
+        }
+        .apple .ig-follow-btn:active { transform: scale(0.97); }
+        .apple .ig-grid { gap: 3px; border-radius: 14px; overflow: hidden; }
+        .apple .ig-grid-item { border-radius: 0; }
+
+        /* ---- CTA final: pílulas vermelha e branca ---- */
+        .apple .btn-xmas {
+            border: 0;
+            background: var(--a-red);
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+            padding: 0.95rem 1.9rem;
+            box-shadow: 0 12px 30px -10px rgba(255, 59, 48, 0.7);
+        }
+        .apple .btn-xmas::before { display: none; }
+        .apple .call-cta {
+            color: #0b0b0d;
+            background: #fff;
+            font-weight: 600;
+            animation: none;
+            box-shadow: none;
+        }
+        .apple .mini-btn {
+            color: rgba(255, 255, 255, 0.85);
+            border-color: rgba(255, 255, 255, 0.22);
+            font-weight: 500;
+        }
+        .apple .mini-btn:hover { color: #fff; border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.06); }
+        .apple .santa-figure { filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5)); }
+
+        /* ---- Rodapé: preto minimalista ---- */
+        .snow-hill.apple { display: none; }
+        .footer-snow.apple {
+            margin-top: 3.5rem;
+            padding-top: 2rem !important;
+            background: #000;
+            color: rgba(255, 255, 255, 0.55);
+            border-top: 0.5px solid rgba(255, 255, 255, 0.12);
+        }
+        .footer-snow.apple a.rounded-full {
+            background: rgba(255, 255, 255, 0.08) !important;
+            color: #fff !important;
+            box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.2) !important;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.3s ease;
+        }
+        .footer-snow.apple a.rounded-full:hover { background: var(--a-red) !important; }
+        .footer-snow.apple p, .footer-snow.apple a:not(.rounded-full) { color: rgba(255, 255, 255, 0.6); font-weight: 500; }
+
+        /* ---- Revelação ao rolar (estilo Apple) para as seções .apple ----
+           Sobe, sai do desfoque e aparece; itens que entram juntos aparecem
+           em cascata. Ícones entram depois do cartão com um "pop" de mola. */
+        .ap-reveal {
+            opacity: 0;
+            transform: translateY(34px) scale(0.97);
+            filter: blur(10px);
+            transition:
+                opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--ap-d, 0ms),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--ap-d, 0ms),
+                filter 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--ap-d, 0ms);
+        }
+        .ap-reveal.ap-in { opacity: 1; transform: none; filter: none; }
+        .ap-icon {
+            opacity: 0;
+            transform: scale(0.4) rotate(-12deg);
+            transition:
+                opacity 0.4s ease calc(var(--ap-d, 0ms) + 220ms),
+                transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--ap-d, 0ms) + 220ms);
+        }
+        .ap-in .ap-icon, .ap-icon.ap-in { opacity: 1; transform: none; }
+        @media (prefers-reduced-motion: reduce) {
+            .ap-reveal, .ap-icon { opacity: 1; transform: none; filter: none; transition: none; }
+        }
+
+        /* Instagram: vídeos na grade + botão Follow branco */
+        .ig-grid-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .ig-reel {
+            position: absolute; top: 6px; right: 6px;
+            width: 18px; height: 18px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+        }
+        .ig-reel svg { width: 100%; height: 100%; fill: #fff; }
+        .apple .ig-follow-btn { background: #fff; color: #0b0b0d; }
     </style>
 </head>
 <body class="antialiased flex flex-col items-center p-4 pb-0 sm:p-8 sm:pb-0">
@@ -1733,15 +2407,15 @@
         </defs>
     </svg>
 
-    <!-- Pré-loading: logo + varal que acende lâmpada por lâmpada -->
+    <!-- Pré-loading natalino: neve + logo + varal que acende com o carregamento -->
     <div id="preloader" aria-hidden="true">
-        <div class="pre-logo">
-            <div class="pre-ring"></div>
-            <img src="img/logo.webp" alt="">
-            <svg class="logo-hat"><use href="#santa-hat"/></svg>
+        <div class="pre-snow" id="preSnow"></div>
+        <div class="pre-stage">
+            <div class="pre-glow"></div>
+            <img class="pre-logo" src="img/logo-christmas.webp" alt="">
         </div>
-        <div class="pre-lights" id="preLights"></div>
-        <div class="pre-text">Plugging in the lights&hellip;</div>
+        <div class="pre-lights"><svg viewBox="0 0 300 46" id="preLights"></svg></div>
+        <div class="pre-caption">Lighting up <b>Christmas</b></div>
     </div>
 
     <!-- Fundo: céu noturno, aurora, estrelas e neve -->
@@ -1756,52 +2430,13 @@
     <div class="stars" id="stars" aria-hidden="true"></div>
     <canvas id="snow" aria-hidden="true"></canvas>
 
-    <!-- Trenó do Papai Noel (cruza a tela periodicamente) -->
+    <!-- Papai Noel saindo da chaminé -->
     <div class="santa-pop" id="santaPop" aria-hidden="true">
         <div class="pop-bubble">Ho Ho Ho! Merry Christmas!</div>
         <svg class="pop-santa" viewBox="0 0 120 130"><use href="#santa-face"/></svg>
         <div class="pop-chimney"></div>
     </div>
 
-    <div class="sleigh-flight" id="sleigh" aria-hidden="true">
-        <div class="sleigh-bob">
-            <svg viewBox="0 0 300 80" id="sleighSvg">
-                <defs>
-                    <g id="deer">
-                        <ellipse cx="20" cy="30" rx="14" ry="7" fill="#f5e3b8"/>
-                        <path d="M31 27 L38 16 L45 15 L46 19 L40 21 L35 31 Z" fill="#f5e3b8"/>
-                        <path d="M39 16 L36 7 M37 11 L32 8 M42 15 L44 6 M43 10 L48 8" stroke="#f5e3b8" stroke-width="1.8" stroke-linecap="round"/>
-                        <path d="M7 28 L2 25" stroke="#f5e3b8" stroke-width="2.5" stroke-linecap="round"/>
-                        <g class="deer-legs">
-                            <path d="M10 34 L4 43 M14 35 L12 45 M26 35 L32 43 M30 34 L37 40" stroke="#f5e3b8" stroke-width="2.2" stroke-linecap="round"/>
-                        </g>
-                    </g>
-                </defs>
-                <!-- rédeas -->
-                <path d="M86 34 Q150 42 262 30" stroke="#ffd166" stroke-width="1.2" fill="none" opacity="0.8"/>
-                <!-- trenó -->
-                <path d="M14 30 L78 30 Q90 30 86 44 L80 52 L22 52 Q12 52 14 40 Z" fill="#c62828" stroke="#ffd166" stroke-width="1.5"/>
-                <path d="M8 60 L84 60 Q96 60 96 50" stroke="#ffd166" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <path d="M26 52 L24 60 M70 52 L72 60" stroke="#ffd166" stroke-width="2"/>
-                <!-- saco de presentes -->
-                <circle cx="28" cy="22" r="11" fill="#8a5a2b"/>
-                <rect x="20" y="10" width="8" height="8" fill="#3ddc84"/>
-                <rect x="30" y="8" width="7" height="9" fill="#4dabff"/>
-                <!-- Papai Noel -->
-                <circle cx="56" cy="22" r="10" fill="#d62828"/>
-                <circle cx="60" cy="10" r="6" fill="#f7cfb0"/>
-                <path d="M55 12 Q60 22 66 12 Z" fill="#ffffff"/>
-                <path d="M54 7 Q60 -2 68 4 L64 7 Z" fill="#d62828"/>
-                <circle cx="68" cy="4" r="2" fill="#ffffff"/>
-                <path d="M62 20 L76 26" stroke="#d62828" stroke-width="4" stroke-linecap="round"/>
-                <!-- renas -->
-                <use href="#deer" x="120" y="2"/>
-                <use href="#deer" x="172" y="0"/>
-                <use href="#deer" x="224" y="-2"/>
-                <circle class="rudolph-nose" cx="270" cy="15" r="2.8" fill="#ff2d2d"/>
-            </svg>
-        </div>
-    </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite">
         <svg width="30" height="32" aria-hidden="true"><use href="#santa-face"/></svg>
@@ -1819,8 +2454,8 @@
         <!-- Cabeçalho -->
         <header class="flex flex-col items-center mb-6 mt-8 text-center animate-slide-up">
             <div class="logo-wrap mb-3">
-                <div class="logo-frame relative w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center overflow-hidden p-4 animate-float">
-                    <img src="img/logo.webp" alt="The Jolly Washer" class="w-full h-full object-contain">
+                <div class="relative w-56 sm:w-64 flex items-center justify-center animate-float" style="filter: drop-shadow(0 6px 18px rgba(0,0,0,0.55));">
+                    <img src="img/logo-christmas.webp" alt="The Jolly Washer" width="600" height="540" class="w-full h-auto object-contain">
                 </div>
             </div>
 
@@ -1837,7 +2472,7 @@
                 </span>
                 <span class="font-semibold">5.0</span>
                 <span class="text-gray-500">&middot;</span>
-                <span>340 Google reviews</span>
+                <span>360 Google reviews</span>
             </a>
 
             <div class="flex items-center justify-center gap-3 mt-3">
@@ -1853,141 +2488,70 @@
             </div>
         </header>
 
-        <!-- Links / CTAs -->
-        <section class="w-full flex flex-col gap-3" id="primaryCtas">
-
-            <div class="candy-wrap animate-slide-up delay-200">
-                <button type="button" data-open-quote
-                   class="link-btn candy-btn flex items-center justify-center p-3.5 pr-10 pl-10 w-full text-white">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xmas-red shadow-inner">
-                            <i class="fa-solid fa-lightbulb text-base"></i>
-                        </div>
-                        <div class="flex flex-col text-center">
-                            <span class="font-extrabold text-sm">Get My Free Lighting Quote</span>
-                            <span class="text-xs text-red-100">Custom design &middot; no obligation</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-xmas-gold btn-chevron"></i>
+        <!-- Vídeo imersivo (no lugar dos antigos botões; as ações principais
+             agora ficam na barra de ferramentas inferior fixa). Ocupa a
+             largura toda no celular, se dissolve no fundo nas bordas e tem
+             um brilho "ambiente" com as cores do próprio vídeo atrás. -->
+        <section class="immersive-video full-bleed animate-slide-up delay-200" id="primaryCtas">
+            <canvas class="iv-ambient" width="18" height="32" aria-hidden="true"></canvas>
+            <div class="iv-stage">
+                <video id="featuredVideoEl" src="video/1.mp4" poster="img/featured-1-poster.webp"
+                       autoplay muted loop playsinline webkit-playsinline="true" preload="metadata"></video>
+                <button type="button" class="iv-sound" aria-label="Turn video sound on">
+                    <i class="fa-solid fa-volume-xmark"></i>
                 </button>
-            </div>
-
-            <div class="animate-slide-up delay-300">
-                <a href="tel:+16097578847"
-                   class="link-btn snow-btn flex items-center justify-center p-3 pr-10 pl-10 rounded-2xl w-full no-underline">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-full bg-green-600 flex items-center justify-center text-white shadow">
-                            <i class="fa-solid fa-phone-volume text-base"></i>
-                        </div>
-                        <div class="flex flex-col text-center">
-                            <span class="font-bold text-sm">Call to Book Your Install</span>
-                            <span class="text-xs snow-btn-sub">609-757-8847</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right snow-btn-chevron btn-chevron"></i>
-                </a>
-            </div>
-
-            <div class="animate-slide-up delay-300">
-                <button type="button" id="textToggle"
-                   class="link-btn snow-btn flex items-center justify-center p-3 pr-10 pl-10 rounded-2xl w-full">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-full bg-xmas-red flex items-center justify-center text-white shadow">
-                            <i class="fa-solid fa-comment-sms text-lg"></i>
-                        </div>
-                        <div class="flex flex-col text-center">
-                            <span class="font-bold text-sm">Text Us a Photo of Your Home</span>
-                            <span class="text-xs snow-btn-sub">We'll send lighting ideas back</span>
-                        </div>
-                    </div>
-                    <i id="textToggleIcon" class="fa-solid fa-chevron-down snow-btn-chevron transition-transform btn-chevron"></i>
-                </button>
-            </div>
-
-            <div id="textForm" class="quote-form">
-                <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3 border border-blue-500/30">
-                    <div>
-                        <label class="quote-label" for="wName">Name</label>
-                        <input type="text" id="wName" class="quote-field" placeholder="Name">
-                    </div>
-                    <div>
-                        <label class="quote-label" for="wMessage">Message</label>
-                        <textarea id="wMessage" class="quote-field" rows="3" placeholder="I'd love Christmas lights on my roofline and trees&hellip;"></textarea>
-                    </div>
-                    <button type="button" id="wSubmit" class="quote-submit" disabled>
-                        <i class="fa-solid fa-comment-sms"></i> Send via Text Message
-                    </button>
-                    <p id="wHint" class="text-[11px] text-gray-500 text-center">Fill in your name and message to continue</p>
-                </div>
-            </div>
-
-            <div class="candy-wrap duo animate-slide-up delay-300">
-                <a href="https://thejollywasher.site" target="_blank" rel="noopener noreferrer"
-                   class="link-btn duo-btn flex items-center justify-center p-3 pr-10 pl-10 w-full text-white no-underline">
-                    <span class="duo-bubbles" aria-hidden="true">
-                        <i style="left:8%;--s:7px;--t:3.6s;--d:0s"></i>
-                        <i style="left:22%;--s:10px;--t:4.4s;--d:1.1s"></i>
-                        <i style="left:41%;--s:6px;--t:3.2s;--d:2.2s"></i>
-                        <i style="left:63%;--s:9px;--t:4.8s;--d:.6s"></i>
-                        <i style="left:79%;--s:6px;--t:3.8s;--d:1.8s"></i>
-                        <i style="left:91%;--s:11px;--t:5s;--d:3s"></i>
-                    </span>
-                    <div class="relative flex items-center gap-3">
-                        <div class="duo-icon">
-                            <!-- Arminha de lavadora de pressão (não existe no Font Awesome) -->
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                                <path d="M3 6.5h7a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5H8.1l-1.55 6.9a1 1 0 0 1-.98.8H3.7a.6.6 0 0 1-.58-.74L4.7 10.5H3A1.5 1.5 0 0 1 1.5 9V8A1.5 1.5 0 0 1 3 6.5z"/>
-                                <rect x="11" y="7.3" width="7" height="2.4" rx="1"/>
-                                <path d="M8.3 10.6c1.1 1.6.7 3-.6 3.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                                <path d="M19.2 8.5l3.6-3.2M19.2 8.5h3.8M19.2 8.5l3.6 3.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="flex flex-col text-center leading-tight">
-                            <span class="duo-eyebrow">&#10022; Year-Round &#10022;</span>
-                            <span class="duo-title">Cleaning Services</span>
-                            <span class="duo-sub text-[11px] mt-0.5">Pressure washing &amp; exterior cleaning</span>
-                        </div>
-                    </div>
-                    <span class="btn-chevron duo-chevron"><i class="fa-solid fa-chevron-right"></i></span>
-                </a>
-            </div>
-
-        </section>
-
-        <!-- Hero: título, texto e Papai Noel (abaixo dos botões) -->
-        <section class="w-full text-center mt-10 animate-slide-up delay-400">
-            <h1 class="xmas-title text-[2.6rem] sm:text-5xl mb-3">Be the Brightest House on the Block</h1>
-            <p class="text-sm text-gray-300 leading-relaxed mb-6 px-2">
-                Custom Christmas light design, professional installation and takedown.
-                <span class="text-white font-semibold">You enjoy the glow &mdash; we climb the ladders.</span>
-            </p>
-
-            <div class="santa-hero text-left">
-                <svg class="santa-figure" id="heroSanta" viewBox="0 0 120 130" role="img" aria-label="Santa Claus">
-                    <use href="#santa-face"/>
-                </svg>
-                <div class="speech-bubble">
-                    <span class="ho-ho" id="heroHoHo">Ho ho ho!</span><br>
-                    My sleigh's busy this year &mdash; let <strong>The Jolly Washer</strong> light up your home for Christmas!
-                </div>
             </div>
         </section>
 
-        <!-- Contagem regressiva para o Natal -->
+        <!-- Contagem regressiva para o Natal (estilo widget Apple) -->
         <section class="w-full mt-12 reveal-up" id="countdownSection">
-            <div class="glass-panel snowy rounded-2xl p-5 text-center">
-                <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-xmas-gold mb-1"><i class="fa-solid fa-gift mr-1"></i> Countdown to Christmas</p>
-                <p class="text-xs text-gray-300 mb-4">Install dates fill up fast every season &mdash; book early to get your spot.</p>
+            <div class="cd-card">
+                <p class="cd-eyebrow"><i class="fa-solid fa-gift"></i> Countdown to Christmas</p>
+                <p class="cd-sub">Install dates book up fast every year. Reserve yours before the calendar fills.</p>
                 <div class="countdown" id="countdown">
-                    <div class="cd-cell"><span class="cd-num" data-cd="days">--</span><span class="cd-label">Days</span></div>
-                    <div class="cd-cell"><span class="cd-num" data-cd="hours">--</span><span class="cd-label">Hours</span></div>
-                    <div class="cd-cell"><span class="cd-num" data-cd="mins">--</span><span class="cd-label">Mins</span></div>
-                    <div class="cd-cell"><span class="cd-num" data-cd="secs">--</span><span class="cd-label">Secs</span></div>
+                    <div class="cd-cell"><span class="cd-num" data-cd="days">--</span><span class="cd-label">days</span></div>
+                    <span class="cd-sep" aria-hidden="true">:</span>
+                    <div class="cd-cell"><span class="cd-num" data-cd="hours">--</span><span class="cd-label">hours</span></div>
+                    <span class="cd-sep" aria-hidden="true">:</span>
+                    <div class="cd-cell"><span class="cd-num" data-cd="mins">--</span><span class="cd-label">min</span></div>
+                    <span class="cd-sep" aria-hidden="true">:</span>
+                    <div class="cd-cell"><span class="cd-num" data-cd="secs">--</span><span class="cd-label">sec</span></div>
                 </div>
-                <button type="button" data-open-quote class="btn-xmas green mt-5 w-full">
-                    <i class="fa-solid fa-calendar-check"></i> Reserve My Install Date
+                <button type="button" data-open-quote class="cd-btn">
+                    Reserve My Install Date
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
             </div>
+        </section>
+
+        <!-- See the Jolly Difference: antes/depois das casas natalinas.
+             Arraste o divisor (ou role a página: o divisor acompanha a
+             rolagem até o visitante tocar nele). Setas e pontos trocam de
+             casa — basta acrescentar pares em XMAS_PROJECTS no script. -->
+        <section class="w-full mt-12 text-center" id="xmasCompare">
+            <div class="section-heading mb-1">
+                <span class="line"></span>
+                <h2 class="xmas-title">See the Jolly Difference</h2>
+                <span class="line right"></span>
+            </div>
+            <p class="section-sub mb-5">Scroll or drag to flip the lights on</p>
+            <div class="xc-wrap reveal-up" id="xcWrap">
+                <img src="img/xmas-ba-curved-drive-before.webp" alt="Before: house without Christmas lights" class="xc-before" id="xcBeforeImg" loading="lazy">
+                <img src="img/xmas-ba-curved-drive-after.webp" alt="After: house with Christmas lights by The Jolly Washer" class="xc-after" id="xcAfterImg" loading="lazy">
+                <span class="xc-label xc-label-before">Before</span>
+                <span class="xc-label xc-label-after">After</span>
+                <span class="xc-project" id="xcProjectLabel">Roofline &amp; Curved Drive</span>
+                <div class="xc-handle" role="slider" tabindex="0" aria-label="Before and after slider"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></div>
+                <span class="xc-hint" id="xcHint">Drag to turn the lights on</span>
+                <button type="button" class="xc-arrow xc-arrow-prev" id="xcPrev" aria-label="Previous house">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="xc-arrow xc-arrow-next" id="xcNext" aria-label="Next house">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="xc-dots" id="xcDots"></div>
         </section>
 
         <!-- Varal divisor -->
@@ -1995,138 +2559,81 @@
             <ul class="light-string compact" data-light-string aria-hidden="true"></ul>
         </div>
 
-        <!-- Casa interativa: "Flip the switch" -->
-        <section class="w-full mt-6" id="lightUp">
+        <!-- Vídeo imersivo 2: caminhão chega e a casa aparece toda acesa -->
+        <section class="w-full mt-12 text-center">
             <div class="section-heading mb-1">
                 <span class="line"></span>
-                <h2 class="xmas-title">Light Up Your Home</h2>
+                <h2 class="xmas-title">Fresh Off the Ladder</h2>
                 <span class="line right"></span>
             </div>
-            <p class="text-gray-400 text-xs text-center mb-4">Flip the switch and pick a style &mdash; imagine this on your house</p>
-
-            <div class="glass-panel house-card reveal-up">
-                <svg class="house-svg" id="houseSvg" viewBox="0 0 340 220" role="img" aria-label="Illustration of a house decorated with Christmas lights">
-                    <defs>
-                        <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="2.2" result="b"/>
-                            <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
-                        <radialGradient id="warmGlow" cx="50%" cy="60%" r="60%">
-                            <stop offset="0%" stop-color="#ffd98a" stop-opacity="0.35"/>
-                            <stop offset="100%" stop-color="#ffd98a" stop-opacity="0"/>
-                        </radialGradient>
-                    </defs>
-                    <!-- estrelinhas no fundo -->
-                    <g fill="#ffffff" opacity="0.7">
-                        <circle cx="30" cy="22" r="1"/><circle cx="90" cy="14" r="1.2"/><circle cx="210" cy="18" r="1"/>
-                        <circle cx="260" cy="30" r="1.3"/><circle cx="320" cy="16" r="1"/><circle cx="130" cy="28" r="0.8"/>
-                    </g>
-                    <ellipse class="house-glow" cx="170" cy="130" rx="170" ry="90" fill="url(#warmGlow)"/>
-                    <!-- chaminé -->
-                    <rect x="196" y="50" width="18" height="34" fill="#3b2330"/>
-                    <rect x="193" y="46" width="24" height="7" rx="2" fill="#f1f6fc"/>
-                    <!-- casa -->
-                    <rect x="70" y="100" width="170" height="90" fill="#1d2a44"/>
-                    <polygon points="55,102 155,40 255,102" fill="#15213b"/>
-                    <path d="M55 102 L155 40 L255 102" stroke="#f1f6fc" stroke-width="5" fill="none" stroke-linejoin="round"/>
-                    <!-- janelas -->
-                    <rect class="win" x="88" y="120" width="36" height="30" rx="2"/>
-                    <rect class="win" x="186" y="120" width="36" height="30" rx="2"/>
-                    <path d="M106 120 V150 M88 135 H124 M204 120 V150 M186 135 H222" stroke="#1d2a44" stroke-width="2"/>
-                    <rect class="win" x="143" y="66" width="24" height="20" rx="10"/>
-                    <!-- porta com guirlanda -->
-                    <rect x="140" y="140" width="30" height="50" rx="2" fill="#6b2c2c"/>
-                    <circle cx="164" cy="167" r="1.8" fill="#ffd166"/>
-                    <circle cx="155" cy="154" r="8" fill="none" stroke="#1FA35C" stroke-width="4"/>
-                    <path d="M151 161 L155 158 L159 161" stroke="#E23B3B" stroke-width="2.5" fill="none"/>
-                    <!-- árvore -->
-                    <rect x="295" y="182" width="10" height="12" fill="#5a3a22"/>
-                    <polygon points="300,72 332,186 268,186" fill="#0f3d27"/>
-                    <polygon class="tree-star" points="300,58 303,65 311,65 305,70 307,78 300,73 293,78 295,70 289,65 297,65"/>
-                    <!-- arbustos -->
-                    <ellipse cx="84" cy="190" rx="22" ry="13" fill="#123a28"/>
-                    <ellipse cx="226" cy="190" rx="22" ry="13" fill="#123a28"/>
-                    <!-- chão com neve -->
-                    <path d="M0 192 Q90 180 170 190 T340 188 L340 220 L0 220 Z" fill="#e8f1fb"/>
-                    <path d="M140 190 L130 220 L180 220 L170 190 Z" fill="#c9d7e6"/>
-                    <!-- lâmpadas (geradas via JS) -->
-                    <g id="houseBulbs" filter="url(#bulbGlow)"></g>
-                </svg>
-
-                <div class="flex flex-col items-center gap-3 mt-4">
-                    <button type="button" class="light-switch" id="lightSwitch" aria-pressed="false">
-                        <span class="switch-track"></span>
-                        <span id="lightSwitchLabel">Flip the switch</span>
-                    </button>
-                    <div class="style-chips" id="styleChips" role="radiogroup" aria-label="Lighting style">
-                        <button type="button" class="style-chip active" data-style="multicolor" role="radio" aria-checked="true">
-                            <span class="dots"><i style="background:#ff4d4d"></i><i style="background:#ffd166"></i><i style="background:#3ddc84"></i><i style="background:#4dabff"></i></span> Multicolor
-                        </button>
-                        <button type="button" class="style-chip" data-style="warm" role="radio" aria-checked="false">
-                            <span class="dots"><i style="background:#ffe2a8"></i><i style="background:#ffd88a"></i></span> Warm White
-                        </button>
-                        <button type="button" class="style-chip" data-style="candy" role="radio" aria-checked="false">
-                            <span class="dots"><i style="background:#ff4d4d"></i><i style="background:#ffffff"></i></span> Candy Cane
-                        </button>
-                        <button type="button" class="style-chip" data-style="icy" role="radio" aria-checked="false">
-                            <span class="dots"><i style="background:#bfe6ff"></i><i style="background:#8fd3ff"></i></span> Icy Blue
-                        </button>
-                    </div>
-                    <button type="button" class="btn-xmas w-full mt-1" id="wantThisLook">
-                        I Want This Look! <i class="fa-solid fa-arrow-right btn-arrow" aria-hidden="true"></i>
+            <p class="section-sub">Another South Jersey home, ready for the holidays</p>
+            <div class="immersive-video full-bleed">
+                <canvas class="iv-ambient" width="18" height="32" aria-hidden="true"></canvas>
+                <div class="iv-stage">
+                    <video id="revealVideoEl" src="video/house-reveal.mp4" poster="img/house-reveal-poster.webp"
+                           autoplay muted loop playsinline webkit-playsinline="true" preload="metadata"></video>
+                    <button type="button" class="iv-sound" aria-label="Turn video sound on">
+                        <i class="fa-solid fa-volume-xmark"></i>
                     </button>
                 </div>
             </div>
         </section>
 
         <!-- Serviços de iluminação -->
-        <section class="w-full mt-12" id="services">
+        <section class="w-full mt-12 apple" id="services">
             <div class="section-heading mb-1">
                 <span class="line"></span>
-                <h2 class="xmas-title">What We Decorate</h2>
+                <h2 class="xmas-title is-red">What We Decorate</h2>
                 <span class="line right"></span>
             </div>
-            <p class="text-gray-400 text-xs text-center mb-5">Tap any service to ask us about it</p>
+            <p class="section-sub mb-5">Tap a service and we&rsquo;ll text you back with details</p>
             <div class="grid grid-cols-1 gap-2.5">
                 <button type="button" class="service-card glass-panel reveal-up" data-service="Roofline & Gutter Lights">
                     <span class="service-icon red"><i class="fa-solid fa-house-chimney"></i></span>
                     <span><span class="block font-bold text-sm">Roofline &amp; Gutter Lights</span><span class="block text-xs text-gray-400">Crisp, straight lines that outline your home</span></span>
+                    <svg class="svc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
                 <button type="button" class="service-card glass-panel reveal-up" data-service="Tree & Shrub Wrapping">
                     <span class="service-icon green"><i class="fa-solid fa-tree"></i></span>
                     <span><span class="block font-bold text-sm">Tree &amp; Shrub Wrapping</span><span class="block text-xs text-gray-400">Trunks, branches and bushes that sparkle</span></span>
+                    <svg class="svc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
                 <button type="button" class="service-card glass-panel reveal-up" data-service="Wreaths & Garland">
                     <span class="service-icon gold"><i class="fa-solid fa-ring"></i></span>
                     <span><span class="block font-bold text-sm">Wreaths &amp; Garland</span><span class="block text-xs text-gray-400">Doors, railings and windows, dressed up</span></span>
+                    <svg class="svc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
                 <button type="button" class="service-card glass-panel reveal-up" data-service="Walkway & Pathway Lights">
                     <span class="service-icon red"><i class="fa-solid fa-person-walking"></i></span>
                     <span><span class="block font-bold text-sm">Walkway &amp; Pathway Lights</span><span class="block text-xs text-gray-400">A glowing welcome for every guest</span></span>
+                    <svg class="svc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
                 <button type="button" class="service-card glass-panel reveal-up" data-service="Commercial & Storefront Displays">
                     <span class="service-icon green"><i class="fa-solid fa-store"></i></span>
                     <span><span class="block font-bold text-sm">Commercial &amp; Storefront Displays</span><span class="block text-xs text-gray-400">Get your business noticed this season</span></span>
+                    <svg class="svc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
                 <button type="button" class="service-card glass-panel reveal-up" data-service="Christmas Tree Delivery & Setup">
                     <span class="service-icon gold"><i class="fa-solid fa-truck"></i></span>
                     <span><span class="block font-bold text-sm">Christmas Tree Delivery &amp; Setup</span><span class="block text-xs text-gray-400">Delivered, set up and ready to decorate</span></span>
+                    <svg class="svc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
                 <button type="button" class="service-card glass-panel reveal-up" data-service="Holiday Light Takedown">
                     <span class="service-icon red"><i class="fa-solid fa-box-open"></i></span>
                     <span><span class="block font-bold text-sm">Takedown After the Holidays</span><span class="block text-xs text-gray-400">We take it all down when the season's over</span></span>
+                    <svg class="svc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
             </div>
         </section>
 
         <!-- Como funciona -->
-        <section class="w-full mt-12">
+        <section class="w-full mt-12 apple">
             <div class="section-heading mb-1">
                 <span class="line"></span>
                 <h2 class="xmas-title">How It Works</h2>
                 <span class="line right"></span>
             </div>
-            <p class="text-gray-400 text-xs text-center mb-6">Four easy steps to a merry, bright home</p>
+            <p class="section-sub mb-6">Four simple steps to your brightest Christmas yet</p>
             <div class="steps">
                 <div class="step reveal-up">
                     <span class="step-num">1</span>
@@ -2146,7 +2653,7 @@
                     <span class="step-num">3</span>
                     <div class="glass-panel rounded-xl p-3 flex-1">
                         <span class="block font-bold text-sm">Our crew installs everything</span>
-                        <span class="block text-xs text-gray-400">No ladders, no tangled cords, no cold fingers.</span>
+                        <span class="block text-xs text-gray-400">No ladders, no tangled cords, no frozen fingers.</span>
                     </div>
                 </div>
                 <div class="step reveal-up">
@@ -2159,43 +2666,45 @@
             </div>
         </section>
 
-        <!-- Vídeo: casa transformada com luzes de Natal -->
-        <section class="w-full mt-12 text-center" id="transformVideo">
-            <div class="section-heading mb-1">
-                <span class="line"></span>
-                <h2 class="xmas-title">Transform Your Home</h2>
-                <span class="line right"></span>
-            </div>
-            <p class="text-gray-400 text-xs text-center mb-5">The brightest house on the block could be yours</p>
-            <div class="showcase-frame video-frame reveal-up">
-                <video id="transformVideoEl" src="video/ajudante.mp4" poster="img/ajudante-poster.webp"
-                       autoplay muted loop playsinline webkit-playsinline="true" preload="metadata"></video>
-                <button type="button" class="video-mute-toggle" id="transformMute" aria-label="Turn video sound on">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                </button>
+        <!-- Be the Brightest House on the Block -->
+        <section class="w-full text-center mt-12 reveal-up apple">
+            <h1 class="xmas-title text-[2.6rem] sm:text-5xl mb-3">Be the Brightest House on the Block</h1>
+            <p class="text-sm text-white/80 leading-relaxed mb-6 px-2">
+                Custom-designed Christmas lights, installed by our crew and taken down after the holidays.
+                <span class="text-white font-semibold">You enjoy the glow &mdash; we handle the ladders.</span>
+            </p>
+
+            <div class="santa-hero text-left">
+                <svg class="santa-figure" id="heroSanta" viewBox="0 0 120 130" role="img" aria-label="Santa Claus">
+                    <use href="#santa-face"/>
+                </svg>
+                <div class="speech-bubble">
+                    <span class="ho-ho" id="heroHoHo">Ho ho ho!</span><br>
+                    My sleigh's busy this year &mdash; let <strong>The Jolly Washer</strong> light up your home for Christmas!
+                </div>
             </div>
         </section>
 
         <!-- Instagram -->
-        <section id="instagram" class="w-full mt-12">
+        <section id="instagram" class="w-full mt-12 apple">
             <div class="section-heading mb-1">
                 <span class="line"></span>
                 <h2 class="xmas-title">Follow Our Work</h2>
                 <span class="line right"></span>
             </div>
-            <p class="text-gray-400 text-xs text-center mb-5">@thejollywasher</p>
+            <p class="section-sub mb-5">@thejollywasher</p>
             <div class="ig-profile-card reveal-up">
                 <div class="ig-profile-header">
                     <div class="ig-avatar">
-                        <img src="img/insta-logo.webp" alt="The Jolly Washer logo" loading="lazy">
+                        <img src="img/logo-christmas.webp" alt="The Jolly Washer logo" loading="lazy" style="object-fit:contain;background:#ff3b30;padding:5px;">
                     </div>
                     <div class="ig-profile-info">
                         <span class="ig-name">The Jolly Washer <i class="fa-solid fa-circle-check ig-verified" aria-hidden="true" title="Verified"></i></span>
                         <span class="ig-handle">@thejollywasher</span>
                         <div class="ig-stats">
-                            <div class="ig-stat"><strong>320</strong><span>Posts</span></div>
-                            <div class="ig-stat"><strong>1,200</strong><span>Followers</span></div>
-                            <div class="ig-stat"><strong>802</strong><span>Following</span></div>
+                            <div class="ig-stat"><strong>343</strong><span>Posts</span></div>
+                            <div class="ig-stat"><strong>1,425</strong><span>Followers</span></div>
+                            <div class="ig-stat"><strong>827</strong><span>Following</span></div>
                         </div>
                     </div>
                 </div>
@@ -2203,21 +2712,44 @@
                     <i class="fa-brands fa-instagram"></i> Follow
                 </a>
                 <div class="ig-grid">
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta1.webp" alt="The Jolly Washer Instagram post 1" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta2.webp" alt="The Jolly Washer Instagram post 2" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta3.webp" alt="The Jolly Washer Instagram post 3" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta4.webp" alt="The Jolly Washer Instagram post 4" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta5.webp" alt="The Jolly Washer Instagram post 5" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/insta6.webp" alt="The Jolly Washer Instagram post 6" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/img_0628.mp4" poster="img/ig/img_0628-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 1"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2992.webp" alt="Christmas lights installed by The Jolly Washer, post 2" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/333f36eb.mp4" poster="img/ig/333f36eb-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 3"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2987.webp" alt="Christmas lights installed by The Jolly Washer, post 4" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/img_2997.mp4" poster="img/ig/img_2997-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 5"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2991.webp" alt="Christmas lights installed by The Jolly Washer, post 6" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2988.webp" alt="Christmas lights installed by The Jolly Washer, post 7" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/img_2998.mp4" poster="img/ig/img_2998-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 8"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2986.webp" alt="Christmas lights installed by The Jolly Washer, post 9" loading="lazy"></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vídeo imersivo 3: casa colonial toda iluminada (horizontal) -->
+        <section class="w-full mt-12 text-center apple">
+            <div class="section-heading mb-1">
+                <span class="line"></span>
+                <h2 class="xmas-title">Every Line, Every Bulb</h2>
+                <span class="line right"></span>
+            </div>
+            <p class="section-sub">Rooflines, dormers and entryways &mdash; lit with precision</p>
+            <div class="immersive-video full-bleed">
+                <canvas class="iv-ambient" width="32" height="18" aria-hidden="true"></canvas>
+                <div class="iv-stage is-landscape">
+                    <video id="colonialVideoEl" src="video/house-colonial.mp4" poster="img/house-colonial-poster.webp"
+                           autoplay muted loop playsinline webkit-playsinline="true" preload="metadata"></video>
+                    <button type="button" class="iv-sound" aria-label="Turn video sound on">
+                        <i class="fa-solid fa-volume-xmark"></i>
+                    </button>
                 </div>
             </div>
         </section>
 
         <!-- CTA de fechamento -->
-        <section class="w-full mt-14 text-center reveal-up">
+        <section class="w-full mt-14 text-center reveal-up apple cta-final">
             <svg class="santa-figure mx-auto mb-2" style="width:84px" viewBox="0 0 120 130" aria-hidden="true"><use href="#santa-face"/></svg>
             <h2 class="xmas-title text-4xl mb-2">Don't Get Left in the Dark</h2>
-            <p class="text-sm text-gray-300 mb-5 px-2">Get on our install schedule before the holiday rush &mdash; and make this your merriest, brightest Christmas yet.</p>
+            <p class="text-sm text-white/80 mb-5 px-2">Spots on our install schedule go fast. Lock yours in now and make this your brightest Christmas yet.</p>
             <button type="button" class="btn-xmas" data-open-quote>
                 Get a Free Quote <i class="fa-solid fa-arrow-right btn-arrow" aria-hidden="true"></i>
             </button>
@@ -2238,7 +2770,7 @@
         </section>
 
         <!-- Rodapé com morro de neve -->
-        <div class="snow-hill" aria-hidden="true">
+        <div class="snow-hill apple" aria-hidden="true">
             <svg viewBox="0 0 400 120" preserveAspectRatio="none">
                 <g fill="#0f3d27">
                     <polygon points="40,70 55,20 70,70"/>
@@ -2254,7 +2786,7 @@
                 <path d="M0 82 Q80 64 170 80 T400 76 L400 120 L0 120 Z" fill="#e9f2fc"/>
             </svg>
         </div>
-        <footer class="footer-snow text-center pt-2 px-4">
+        <footer class="footer-snow apple text-center pt-2 px-4">
             <div class="flex gap-6 justify-center mb-4">
                 <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-10 h-10 rounded-full flex items-center justify-center bg-white text-[#9e1c1c] shadow hover:scale-110 transition-transform">
                     <i class="fa-brands fa-instagram text-xl"></i>
@@ -2273,16 +2805,6 @@
         </footer>
 
     </main>
-
-    <!-- Barra fixa de CTA -->
-    <div class="sticky-cta" id="stickyCta">
-        <button type="button" class="btn-xmas" data-open-quote>
-            <i class="fa-solid fa-lightbulb"></i> Free Lighting Quote
-        </button>
-        <a href="tel:+16097578847" class="sticky-call" aria-label="Call The Jolly Washer">
-            <i class="fa-solid fa-phone"></i>
-        </a>
-    </div>
 
     <!-- Modal do formulário de orçamento (LeadConnector, igual ao original) -->
     <div id="quoteModal" class="area-modal" aria-hidden="true">
@@ -2341,26 +2863,88 @@
             window.location.href = 'sms:+16097578847?body=' + encodeURIComponent(msg);
         }
 
-        /* ---------- Pré-loading: acende o varal lâmpada por lâmpada ---------- */
+        /* ---------- Pré-loading natalino: neve + varal acende com o progresso ---------- */
         (function () {
             const preloader = document.getElementById('preloader');
-            const host = document.getElementById('preLights');
-            if (!preloader || !host) return;
-            const COUNT = 7;
-            const bulbs = [];
-            for (let i = 0; i < COUNT; i++) {
-                const b = document.createElement('span');
-                b.style.setProperty('--c', PALETTE[i % PALETTE.length]);
-                host.appendChild(b);
-                bulbs.push(b);
+            const svg = document.getElementById('preLights');
+            if (!preloader || !svg) return;
+            const NS = 'http://www.w3.org/2000/svg';
+            const MIN_MS = reduceMotion ? 200 : 700;
+            const MAX_MS = 2500;
+            const start = performance.now();
+
+            // neve
+            const snow = document.getElementById('preSnow');
+            if (snow && !reduceMotion) {
+                for (let i = 0; i < 46; i++) {
+                    const f = document.createElement('i');
+                    const sz = 2 + Math.random() * 4;
+                    f.style.left = (Math.random() * 100) + '%';
+                    f.style.setProperty('--sz', sz + 'px');
+                    f.style.setProperty('--o', (0.35 + Math.random() * 0.6).toFixed(2));
+                    f.style.setProperty('--b', sz > 4.5 ? '1px' : '0px');
+                    f.style.setProperty('--t', (5 + Math.random() * 6).toFixed(1) + 's');
+                    f.style.setProperty('--d', (-Math.random() * 10).toFixed(1) + 's');
+                    f.style.setProperty('--x', (-30 + Math.random() * 60).toFixed(0) + 'px');
+                    snow.appendChild(f);
+                }
             }
-            const step = reduceMotion ? 40 : 190;
-            bulbs.forEach((b, i) => setTimeout(() => b.classList.add('on'), 250 + i * step));
-            const total = 250 + COUNT * step + (reduceMotion ? 150 : 450);
-            setTimeout(() => {
-                preloader.classList.add('hidden');
-                setTimeout(() => preloader.remove(), 700);
-            }, total);
+
+            // varal em arco (curva suave) com lâmpadas
+            const N = 11;
+            const COLORS = ['#ff3b30', '#ffffff', '#ffcc4d', '#ff3b30', '#ffffff', '#ffcc4d'];
+            const P = (t) => {
+                const x = 10 + t * 280;
+                const y = 8 + Math.sin(t * Math.PI) * 18;
+                return [x, y];
+            };
+            const wire = document.createElementNS(NS, 'path');
+            let d = '';
+            for (let k = 0; k <= 40; k++) { const [x, y] = P(k / 40); d += (k ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); }
+            wire.setAttribute('d', d);
+            wire.setAttribute('class', 'pre-wire');
+            svg.appendChild(wire);
+            const bulbs = [];
+            for (let i = 0; i < N; i++) {
+                const [x, y] = P((i + 0.5) / N);
+                const g = document.createElementNS(NS, 'g');
+                g.setAttribute('class', 'pre-bulb');
+                g.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${((i - (N - 1) / 2) * -4).toFixed(1)})`);
+                g.style.setProperty('--c', COLORS[i % COLORS.length]);
+                g.innerHTML = '<rect class="cap" x="-2.6" y="0" width="5.2" height="4" rx="1"/>' +
+                              '<path class="glass" d="M0 3.5 C 5 6, 5.5 13, 0 17 C -5.5 13, -5 6, 0 3.5 Z"/>';
+                svg.appendChild(g);
+                bulbs.push(g);
+            }
+
+            let progress = 0, done = false;
+            function setP(v) {
+                progress = v;
+                const lit = Math.round(v * N);
+                bulbs.forEach((b, i) => b.classList.toggle('on', i < lit));
+            }
+            const tick = setInterval(() => {
+                if (done) return;
+                setP(progress + (0.88 - progress) * 0.16);
+            }, 50);
+
+            function finish() {
+                if (done) return;
+                done = true;
+                clearInterval(tick);
+                const wait = Math.max(0, MIN_MS - (performance.now() - start));
+                setTimeout(() => {
+                    setP(1);
+                    setTimeout(() => preloader.classList.add('lit'), 80);
+                    setTimeout(() => {
+                        preloader.classList.add('hidden');
+                        setTimeout(() => preloader.remove(), 650);
+                    }, reduceMotion ? 150 : 550);
+                }, wait);
+            }
+            if (document.readyState === 'complete') finish();
+            else window.addEventListener('load', finish, { once: true });
+            setTimeout(finish, MAX_MS);
         })();
 
         /* ---------- Estrelas ---------- */
@@ -2514,45 +3098,6 @@
             toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
         }
 
-        /* ---------- Trenó do Papai Noel ---------- */
-        (function () {
-            const sleigh = document.getElementById('sleigh');
-            const svg = document.getElementById('sleighSvg');
-            if (!sleigh) return;
-            let trailTimer = null;
-
-            function spawnSparkle() {
-                const r = svg.getBoundingClientRect();
-                if (r.right < 0 || r.left > window.innerWidth) return;
-                const s = document.createElement('span');
-                s.className = 'sparkle';
-                s.style.left = (r.left + r.width * 0.04 + Math.random() * 10) + 'px';
-                s.style.top = (r.top + r.height * (0.55 + Math.random() * 0.3)) + 'px';
-                s.style.setProperty('--dx', (-20 - Math.random() * 30) + 'px');
-                s.style.setProperty('--dy', (15 + Math.random() * 35) + 'px');
-                if (Math.random() < 0.35) s.style.background = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-                document.body.appendChild(s);
-                setTimeout(() => s.remove(), 1150);
-            }
-            function fly() {
-                if (document.hidden) return;
-                sleigh.classList.remove('flying');
-                void sleigh.offsetWidth; // reinicia a animação
-                sleigh.classList.add('flying');
-                clearInterval(trailTimer);
-                trailTimer = setInterval(spawnSparkle, 70);
-            }
-            sleigh.addEventListener('animationend', (e) => {
-                if (e.animationName !== 'sleigh-cross') return;
-                sleigh.classList.remove('flying');
-                clearInterval(trailTimer);
-            });
-            svg.addEventListener('click', () => {
-                showToast("Ho ho ho! You spotted Santa — now let's light up your home!");
-            });
-            setTimeout(fly, 3500);
-            setInterval(fly, 26000);
-        })();
 
         /* ---------- Papai Noel do hero: "Ho ho ho!" ao tocar ---------- */
         (function () {
@@ -2818,6 +3363,229 @@
             });
         })();
 
+        /* ---------- Vídeos imersivos (todas as seções .immersive-video) ---------- */
+        (function () {
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const items = [];
+            // Som ligado por padrão: o vídeo que está na tela toca com volume
+            // (só um por vez). Se o navegador bloquear o áudio automático, ele
+            // começa mudo e o som liga no primeiro toque/clique/tecla do visitante.
+            let soundOn = true;
+            let unlocked = false;
+            function playWithSound(item) {
+                items.forEach((o) => { if (o !== item && !o.video.muted) { o.video.muted = true; o.setIcon(true); } });
+                const v = item.video;
+                if (!soundOn) { v.muted = true; item.setIcon(true); v.play().catch(() => {}); return; }
+                v.muted = false;
+                v.volume = 1;
+                item.setIcon(false);
+                v.play().catch(() => {
+                    // autoplay com som bloqueado: toca mudo até a 1ª interação
+                    v.muted = true; item.setIcon(true);
+                    v.play().catch(() => {});
+                });
+            }
+            function activeItem() {
+                let best = null, bestArea = 0;
+                const vh = window.innerHeight;
+                items.forEach((it) => {
+                    if (!it.onScreen) return;
+                    const r = it.video.getBoundingClientRect();
+                    const vis = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+                    if (vis > bestArea) { bestArea = vis; best = it; }
+                });
+                return best;
+            }
+            function unlock() {
+                if (unlocked) return;
+                unlocked = true;
+                ['pointerdown', 'touchstart', 'keydown'].forEach((ev) => window.removeEventListener(ev, unlock, true));
+                const it = activeItem();
+                if (it && soundOn) playWithSound(it);
+            }
+            ['pointerdown', 'touchstart', 'keydown'].forEach((ev) => window.addEventListener(ev, unlock, { capture: true, passive: true }));
+
+            document.querySelectorAll('.immersive-video').forEach((section) => {
+                const video = section.querySelector('video');
+                const btn = section.querySelector('.iv-sound');
+                const stage = section.querySelector('.iv-stage');
+                const ambient = section.querySelector('.iv-ambient');
+                if (!video) return;
+                const item = { video, stage, ctx: ambient && ambient.getContext('2d'), ambient, onScreen: false, last: 0 };
+                items.push(item);
+
+                // Som liga/desliga (no botão ou tocando no vídeo). Ao ligar o
+                // som de um vídeo, os outros voltam ao mudo.
+                function setIcon(b, muted) {
+                    if (!b) return;
+                    b.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+                    b.setAttribute('aria-label', muted ? 'Turn video sound on' : 'Mute video');
+                }
+                item.setIcon = (m) => setIcon(btn, m);
+                function toggleSound() {
+                    unlocked = true;
+                    soundOn = video.muted; // estava mudo -> liga; com som -> desliga
+                    playWithSound(item);
+                }
+                if (btn) btn.addEventListener('click', (e) => { e.stopPropagation(); toggleSound(); });
+                video.addEventListener('click', toggleSound);
+
+                // Toca só quando está na tela (economiza bateria/dados)
+                new IntersectionObserver(([e]) => {
+                    item.onScreen = e.isIntersecting;
+                    if (item.onScreen) {
+                        if (activeItem() === item) playWithSound(item);
+                        else video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                        // passa o som para o próximo vídeo visível
+                        const next = activeItem();
+                        if (next && soundOn && next.video.muted) playWithSound(next);
+                    }
+                }, { threshold: 0.35 }).observe(video);
+            });
+            if (!items.length) return;
+
+            // Brilho ambiente: amostra o quadro atual numa canvas minúscula
+            // que, ampliada e desfocada, "vaza" as cores do vídeo pela página
+            function paint(t) {
+                items.forEach((it) => {
+                    if (it.ctx && it.onScreen && it.video.readyState >= 2 && t - it.last > 180) {
+                        try { it.ctx.drawImage(it.video, 0, 0, it.ambient.width, it.ambient.height); } catch (_) {}
+                        it.last = t;
+                    }
+                });
+                requestAnimationFrame(paint);
+            }
+            requestAnimationFrame(paint);
+
+            // Entrada ao rolar: cada vídeo cresce levemente e perde o
+            // arredondamento conforme ocupa a tela
+            if (reduceMotion) return;
+            let ticking = false;
+            function onScroll() {
+                const vh = window.innerHeight;
+                items.forEach(({ stage }) => {
+                    if (!stage) return;
+                    const r = stage.getBoundingClientRect();
+                    const p = Math.min(1, Math.max(0, (vh - r.top) / (vh * 0.9)));
+                    stage.style.setProperty('--iv-p', p.toFixed(3));
+                });
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+            }, { passive: true });
+            window.addEventListener('resize', onScroll);
+            onScroll();
+        })();
+
+        /* ---------- See the Jolly Difference (antes/depois) ---------- */
+        (function () {
+            const wrap = document.getElementById('xcWrap');
+            if (!wrap) return;
+            const afterImg = document.getElementById('xcAfterImg');
+            const beforeImg = document.getElementById('xcBeforeImg');
+            const handle = wrap.querySelector('.xc-handle');
+            const hint = document.getElementById('xcHint');
+            const label = document.getElementById('xcProjectLabel');
+            const dotsWrap = document.getElementById('xcDots');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Para adicionar mais casas, basta incluir pares aqui
+            // (imagens 4:5 com o mesmo enquadramento antes/depois).
+            const XMAS_PROJECTS = [
+                { before: 'img/xmas-ba-curved-drive-before.webp', after: 'img/xmas-ba-curved-drive-after.webp', label: 'Roofline & Curved Drive' },
+                { before: 'img/xmas-ba-gables-before.webp', after: 'img/xmas-ba-gables-after.webp', label: 'Gables & Pathway' },
+                { before: 'img/xmas-ba-driveway-before.webp', after: 'img/xmas-ba-driveway-after.webp', label: 'Driveway Lights' },
+            ];
+
+            let dragging = false;
+            let userTookOver = false; // depois que o visitante arrasta, a rolagem não mexe mais no divisor
+
+            function setPosition(pct) {
+                pct = Math.min(100, Math.max(0, pct));
+                afterImg.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
+                handle.style.left = pct + '%';
+                handle.setAttribute('aria-valuenow', String(Math.round(pct)));
+            }
+            function pctFromX(clientX) {
+                const r = wrap.getBoundingClientRect();
+                return ((clientX - r.left) / r.width) * 100;
+            }
+            function takeOver() {
+                userTookOver = true;
+                if (hint) hint.classList.add('dismissed');
+            }
+
+            wrap.addEventListener('pointerdown', (e) => {
+                if (e.target.closest('.xc-arrow')) return;
+                dragging = true;
+                takeOver();
+                setPosition(pctFromX(e.clientX));
+                if (e.target === handle) handle.setPointerCapture(e.pointerId);
+            });
+            window.addEventListener('pointermove', (e) => { if (dragging) setPosition(pctFromX(e.clientX)); });
+            window.addEventListener('pointerup', () => { dragging = false; });
+            window.addEventListener('pointercancel', () => { dragging = false; });
+
+            handle.addEventListener('keydown', (e) => {
+                const cur = parseFloat(handle.style.left) || 50;
+                const map = { ArrowLeft: cur - 5, ArrowDown: cur - 5, ArrowRight: cur + 5, ArrowUp: cur + 5, Home: 0, End: 100 };
+                if (e.key in map) { takeOver(); setPosition(map[e.key]); e.preventDefault(); }
+            });
+
+            // Rolagem: enquanto a seção atravessa a tela, o divisor varre
+            // da direita (casa apagada) para a esquerda (casa toda acesa)
+            let ticking = false;
+            function onScroll() {
+                ticking = false;
+                if (userTookOver || dragging) return;
+                const r = wrap.getBoundingClientRect();
+                const vh = window.innerHeight;
+                // 0 quando o topo do quadro entra por baixo; 1 quando o centro passa de 30% da tela
+                const start = vh;
+                const end = vh * 0.3 - r.height / 2;
+                const t = Math.min(1, Math.max(0, (start - r.top) / (start - end)));
+                const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+                setPosition(96 - eased * 92);
+            }
+            if (!reduceMotion) {
+                window.addEventListener('scroll', () => {
+                    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+                }, { passive: true });
+                window.addEventListener('resize', onScroll);
+                onScroll();
+            } else {
+                setPosition(50);
+            }
+
+            // Troca de casas (setas e pontos)
+            const prev = document.getElementById('xcPrev');
+            const next = document.getElementById('xcNext');
+            if (XMAS_PROJECTS.length < 2) { wrap.classList.add('xc-single'); return; }
+            XMAS_PROJECTS.forEach((_, i) => {
+                const dot = document.createElement('span');
+                dot.className = 'xc-dot' + (i === 0 ? ' active' : '');
+                dot.addEventListener('click', () => go(i));
+                dotsWrap.appendChild(dot);
+            });
+            const dots = [...dotsWrap.children];
+            let idx = 0;
+            function go(i) {
+                idx = (i + XMAS_PROJECTS.length) % XMAS_PROJECTS.length;
+                const p = XMAS_PROJECTS[idx];
+                beforeImg.src = p.before;
+                afterImg.src = p.after;
+                if (label) label.textContent = p.label;
+                dots.forEach((d, di) => d.classList.toggle('active', di === idx));
+                takeOver();
+                setPosition(50);
+            }
+            prev.addEventListener('click', () => go(idx - 1));
+            next.addEventListener('click', () => go(idx + 1));
+        })();
+
         /* ---------- Serviços → SMS ---------- */
         document.querySelectorAll('[data-service]').forEach(card => {
             card.addEventListener('click', () => {
@@ -2943,7 +3711,132 @@
     })();
     </script>
 
-    <!-- Chat widget (LeadConnector) -->
-    <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="668a11e16ae856e1fd745103"></script>
+    <!-- Barra de ferramentas inferior fixa, estilo apps da Apple (ações principais) -->
+    <nav id="bottomToolbar" class="bottom-toolbar" aria-label="Quick actions">
+        <div class="tb-glass tb-tabs">
+            <a href="tel:+16097578847" class="tb-item" aria-label="Call The Jolly Washer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5h3l1.8 4.6-2.3 1.5a11.5 11.5 0 0 0 6.4 6.4l1.5-2.3 4.6 1.8v3a2 2 0 0 1-2.1 2A16.5 16.5 0 0 1 3.5 5.6a2 2 0 0 1 2-2.1z"/></svg>
+                <span class="tb-label">Call</span>
+            </a>
+            <a href="sms:+16097578847" class="tb-item" aria-label="Text us">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.6c0 4.3-3.8 7.7-8.5 7.7-1.1 0-2.2-.2-3.2-.6L4 20l1.2-3.7a7.3 7.3 0 0 1-1.7-4.7C3.5 7.3 7.3 3.9 12 3.9s8.5 3.4 8.5 7.7z"/></svg>
+                <span class="tb-label">Text</span>
+            </a>
+            <a href="https://thejollywasher.site" target="_blank" rel="noopener noreferrer" class="tb-item" aria-label="Year-round cleaning services">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5s6 6.4 6 10.8a6 6 0 0 1-12 0C6 9.9 12 3.5 12 3.5z"/><path d="M9.3 14.6a2.8 2.8 0 0 0 2.7 2.6"/></svg>
+                <span class="tb-label">Cleaning</span>
+            </a>
+            <a href="https://www.google.com/search?hl=pt-BR&gl=br&q=The+Jolly+Washer&ludocid=5857143261891729488&lsig=AB86z5X3avwobtqxPDB1lkUotWCk#lrd=0x89c0eb4b66aab003:0x5148c0c3a3a11850,3" target="_blank" rel="noopener noreferrer" class="tb-item" aria-label="Google reviews">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+                <span class="tb-label">Reviews</span>
+            </a>
+        </div>
+        <button type="button" data-open-quote class="tb-cta" aria-label="Get a free lighting quote">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.5h5M10.5 20.5h3"/><path d="M12 3.5a5.8 5.8 0 0 0-3.4 10.5c.6.5.9 1.1.9 1.9v.1h5v-.1c0-.8.3-1.4.9-1.9A5.8 5.8 0 0 0 12 3.5z"/></svg>
+            <span class="tb-cta-text">Quote</span>
+        </button>
+    </nav>
+
+    <script>
+        (function () {
+            const bar = document.getElementById('bottomToolbar');
+            if (!bar) return;
+            let lastY = window.scrollY, ticking = false;
+            function update() {
+                const y = window.scrollY;
+                const dy = y - lastY;
+                // Encolhe ao rolar para baixo; volta ao tamanho cheio ao subir
+                // ou perto do topo. A tolerância evita "piscar" em micro-scrolls.
+                if (y < 40) bar.classList.remove('is-compact');
+                else if (dy > 6) bar.classList.add('is-compact');
+                else if (dy < -6) bar.classList.remove('is-compact');
+                if (Math.abs(dy) > 6 || y < 40) lastY = y;
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) { ticking = true; requestAnimationFrame(update); }
+            }, { passive: true });
+            update();
+        })();
+    </script>
+
+    <!-- Revelação ao rolar (estilo Apple) para "What We Decorate" e abaixo -->
+    <script>
+        (function () {
+            if (!('IntersectionObserver' in window)) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            // O que revelar em cada seção .apple (em ordem de leitura)
+            const SELECTORS = [
+                '.section-heading', '.section-sub',
+                '#services .service-card',
+                '.step',
+                'h1', '.santa-hero',
+                '.ig-profile-header', '.ig-follow-btn', '.ig-grid-item',
+                '.immersive-video',
+                '.cta-final > *',
+            ];
+            const ICONS = ['.service-icon', '.step-num', 'a.rounded-full'];
+            const targets = new Set();
+
+            document.querySelectorAll('.apple').forEach((sec) => {
+                // tira a revelação antiga para não brigar com a nova
+                sec.classList.remove('reveal-up');
+                sec.querySelectorAll('.reveal-up').forEach((el) => el.classList.remove('reveal-up', 'revealed'));
+                SELECTORS.forEach((sel) => {
+                    sec.querySelectorAll(sel).forEach((el) => {
+                        targets.add(el);
+                    });
+                });
+                // rodapé: cada linha entra separada
+                if (sec.tagName === 'FOOTER') [...sec.children].forEach((el) => targets.add(el));
+                ICONS.forEach((sel) => sec.querySelectorAll(sel).forEach((el) => el.classList.add('ap-icon')));
+            });
+
+            const io = new IntersectionObserver((entries) => {
+                let i = 0;
+                entries
+                    .filter((e) => e.isIntersecting)
+                    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+                    .forEach((e) => {
+                        const el = e.target;
+                        el.style.setProperty('--ap-d', Math.min(i, 7) * 70 + 'ms');
+                        // ícones dentro herdam o atraso do cartão
+                        el.querySelectorAll('.ap-icon').forEach((ic) => ic.style.setProperty('--ap-d', Math.min(i, 7) * 70 + 'ms'));
+                        el.classList.add('ap-in');
+                        io.unobserve(el);
+                        i++;
+                    });
+            }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+            [...targets].forEach((el) => {
+                for (let a = el.parentElement; a; a = a.parentElement) if (targets.has(a)) { targets.delete(el); break; }
+            });
+            targets.forEach((el) => {
+                el.classList.add('ap-reveal');
+                io.observe(el);
+            });
+            // ícones soltos (fora de um alvo revelado), ex.: redes sociais do rodapé
+            document.querySelectorAll('.apple .ap-icon').forEach((ic) => {
+                if (!ic.closest('.ap-reveal')) io.observe(ic);
+            });
+        })();
+    </script>
+    <!-- Instagram: vídeos da grade tocam só quando visíveis -->
+    <script>
+        (function () {
+            const vids = document.querySelectorAll('.ig-grid video');
+            if (!vids.length) return;
+            if (!('IntersectionObserver' in window)) { vids.forEach(v => { v.preload = 'auto'; v.play().catch(() => {}); }); return; }
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((e) => {
+                    const v = e.target;
+                    if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); }
+                    else v.pause();
+                });
+            }, { threshold: 0.25 });
+            vids.forEach(v => io.observe(v));
+        })();
+    </script>
 </body>
 </html>
