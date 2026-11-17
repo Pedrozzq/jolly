@@ -11,13 +11,14 @@
       gtag('config', 'G-DBLZMMHE1V');
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#050b1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="The Jolly Washer installs your Christmas lights. Custom holiday lighting design, professional installation and takedown in South Jersey. Get a free quote.">
     <title>The Jolly Washer | Christmas Lights</title>
     <!-- Tailwind CSS for rapid styling -->
+    <link rel="preload" href="img/logo-christmas.webp" as="image" fetchpriority="high">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter (texto), IM Fell English SC (marca) e
          Mountains of Christmas (títulos natalinos) -->
@@ -1672,6 +1673,9 @@
             align-items: center;
             justify-content: center;
             transition: transform 1s cubic-bezier(0.32, 0.72, 0, 1), filter 1s ease;
+            width: min(56vw, 240px);
+            aspect-ratio: 600 / 540;
+            flex-shrink: 0;
         }
         #preloader.hidden .pre-stage { transform: scale(1.15); filter: blur(8px); }
         .pre-glow {
@@ -1690,7 +1694,8 @@
         #preloader.lit .pre-glow { opacity: 1; transform: scale(1.05); animation: none; }
         .pre-logo {
             position: relative;
-            width: min(56vw, 240px);
+            width: 100%;
+            max-width: none;
             height: auto;
             filter: drop-shadow(0 0 18px rgba(255, 220, 160, 0.35));
             animation: pre-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -2367,6 +2372,8 @@
         }
         .ig-reel svg { width: 100%; height: 100%; fill: #fff; }
         .apple .ig-follow-btn { background: #fff; color: #0b0b0d; }
+        /* sem zoom por toque duplo */
+        html, body { touch-action: pan-x pan-y; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     </style>
 </head>
 <body class="antialiased flex flex-col items-center p-4 pb-0 sm:p-8 sm:pb-0">
@@ -2412,7 +2419,7 @@
         <div class="pre-snow" id="preSnow"></div>
         <div class="pre-stage">
             <div class="pre-glow"></div>
-            <img class="pre-logo" src="img/logo-christmas.webp" alt="">
+            <img class="pre-logo" src="img/logo-christmas.webp" alt="" width="600" height="540" fetchpriority="high" decoding="async">
         </div>
         <div class="pre-lights"><svg viewBox="0 0 300 46" id="preLights"></svg></div>
         <div class="pre-caption">Lighting up <b>Christmas</b></div>
@@ -2712,15 +2719,15 @@
                     <i class="fa-brands fa-instagram"></i> Follow
                 </a>
                 <div class="ig-grid">
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/img_0628.mp4" poster="img/ig/img_0628-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 1"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2992.webp" alt="Christmas lights installed by The Jolly Washer, post 2" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/333f36eb.mp4" poster="img/ig/333f36eb-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 3"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2987.webp" alt="Christmas lights installed by The Jolly Washer, post 4" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/img_2997.mp4" poster="img/ig/img_2997-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 5"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2991.webp" alt="Christmas lights installed by The Jolly Washer, post 6" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2988.webp" alt="Christmas lights installed by The Jolly Washer, post 7" loading="lazy"></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/img_2998.mp4" poster="img/ig/img_2998-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 8"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
-                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><img src="img/ig/img_2986.webp" alt="Christmas lights installed by The Jolly Washer, post 9" loading="lazy"></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-1.mp4" poster="img/ig/reel-1-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 1"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-2.mp4" poster="img/ig/reel-2-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 2"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-3.mp4" poster="img/ig/reel-3-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 3"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-4.mp4" poster="img/ig/reel-4-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 4"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-5.mp4" poster="img/ig/reel-5-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 5"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-6.mp4" poster="img/ig/reel-6-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 6"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-7.mp4" poster="img/ig/reel-7-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 7"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-8.mp4" poster="img/ig/reel-8-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 8"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+                    <a href="https://instagram.com/thejollywasher" target="_blank" rel="noopener noreferrer" class="ig-grid-item"><video src="video/ig/reel-9.mp4" poster="img/ig/reel-9-poster.webp" muted loop playsinline preload="none" aria-label="Christmas lights video, post 9"></video><span class="ig-reel" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
                 </div>
             </div>
         </section>
@@ -3636,13 +3643,20 @@
             if (!modal) return;
             const open = () => { modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); };
             const close = () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); };
-            triggers.forEach(t => t.addEventListener('click', open));
+            if (typeof triggers === 'string') {
+                document.addEventListener('click', (e) => {
+                    const t = e.target.closest(triggers);
+                    if (t) { e.preventDefault(); open(); }
+                });
+            } else {
+                triggers.forEach(t => t.addEventListener('click', open));
+            }
             modal.querySelectorAll('[' + closeAttr + ']').forEach(el => el.addEventListener('click', close));
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape' && modal.classList.contains('open')) close();
             });
         }
-        setupModal('quoteModal', 'data-quote-close', document.querySelectorAll('[data-open-quote]'));
+        setupModal('quoteModal', 'data-quote-close', '[data-open-quote]');
         setupModal('areaModal', 'data-area-close', [document.getElementById('areaModalTrigger')].filter(Boolean));
 
         /* ---------- Text Us: nome + mensagem por SMS ---------- */
@@ -3836,6 +3850,24 @@
                 });
             }, { threshold: 0.25 });
             vids.forEach(v => io.observe(v));
+        })();
+    </script>
+    <!-- Bloqueia zoom (pinça, toque duplo e Ctrl + roda/teclas) -->
+    <script>
+        (function () {
+            ['gesturestart', 'gesturechange', 'gestureend'].forEach((ev) =>
+                document.addEventListener(ev, (e) => e.preventDefault(), { passive: false }));
+            document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+            let lastTouch = 0;
+            document.addEventListener('touchend', (e) => {
+                const now = Date.now();
+                if (now - lastTouch < 300 && !e.target.closest('input, textarea, select')) e.preventDefault();
+                lastTouch = now;
+            }, { passive: false });
+            window.addEventListener('wheel', (e) => { if (e.ctrlKey) e.preventDefault(); }, { passive: false });
+            window.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) e.preventDefault();
+            });
         })();
     </script>
 </body>
